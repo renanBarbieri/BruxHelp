@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Bruxism Helper</string>
+
+    <string name="notification_channel_name_default">Bruxism Helper</string>
+    <string name="notification_channel_description_default">Comunicações em geral sobre o aplicativo.</string>
+    <string name="notification_channel_name_bruxism">Seus Alertas</string>
+    <string name="notification_channel_description_bruxism">Seus alertas de bruxismo configurados.</string>
+
+    <string name="notification_alert_title_new_install">Seus alertas de bruxismo configurados.</string>
+    <string name="notification_alert_message_new_install">Seus alertas de bruxismo configurados.</string>
+    <string name="notification_alert_title_feature_request">Seus alertas de bruxismo configurados.</string>
+    <string name="notification_alert_title_feature_dependency">Seus alertas de bruxismo configurados.</string>
+    <string name="notification_alert_message_feature_dependency">Seus alertas de bruxismo configurados.</string>
+    <string name="notification_alert_message_feature_bruxism">Seus alertas de bruxismo configurados.</string>
+    <string name="notification_alert_message_feature_request">Seus alertas de bruxismo configurados %s.</string>
+
+</resources>
