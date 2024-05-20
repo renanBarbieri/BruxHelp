@@ -10,7 +10,7 @@ activityCompose = "1.9.0"
 composeBom = "2024.05.00"
 fragmentKtx = "1.7.1"
 uiTextGoogleFonts = "1.6.7"
-hilt = "2.44"
+hilt = "2.48"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }

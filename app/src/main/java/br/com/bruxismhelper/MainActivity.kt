@@ -17,7 +17,8 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-//    @Inject lateinit var notificationPermissionCheckerHelper: NotificationPermissionCheckerHelper
+    @Inject
+    lateinit var notificationPermissionCheckerHelper: NotificationPermissionCheckerHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
