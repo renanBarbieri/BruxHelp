@@ -69,32 +69,25 @@ class NotificationPermissionCheckerHelper @Inject constructor(){
         activity: ComponentActivity,
         grantedBlock: (() -> Unit)? = null,
         deniedBlock: (() -> Unit)? = null
-    ){ //: NotificationPermissionCheckerHelper {
+    ){
         _activity = activity
         activityResultLauncher =
             registerForNotificationPermissionResult(activity, grantedBlock, deniedBlock)
 
         _grantedBlock = grantedBlock
         _deniedBlock = deniedBlock
-
-//        registerInit()
-//        return this
     }
 
 
     fun registerForResult(
         fragment: Fragment, grantedBlock: (() -> Unit)? = null, deniedBlock: (() -> Unit)? = null
-    ){//: NotificationPermissionCheckerHelper {
+    ){
         _fragment = fragment
         activityResultLauncher =
             registerForNotificationPermissionResult(fragment, grantedBlock, deniedBlock)
 
         _grantedBlock = grantedBlock
         _deniedBlock = deniedBlock
-
-//        registerInit()
-
-//        return this
     }
 
     private fun registerForNotificationPermissionResult(
@@ -289,7 +282,7 @@ class NotificationPermissionCheckerHelper @Inject constructor(){
                         onCloseRequest()
                     }
                 ) {
-                    Text("Confirm")
+                    Text(text = stringResource(id = R.string.activate))
                 }
             },
             properties = DialogProperties(dismissOnClickOutside = false)
@@ -328,7 +321,7 @@ class NotificationPermissionCheckerHelper @Inject constructor(){
                         onCloseRequest()
                     }
                 ) {
-                    Text("Confirm")
+                    Text(text = stringResource(id = R.string.activate))
                 }
             },
             dismissButton = {
@@ -339,7 +332,7 @@ class NotificationPermissionCheckerHelper @Inject constructor(){
                             onCloseRequest()
                         }
                     ) {
-                        Text("Dismiss")
+                        Text(text = stringResource(id = R.string.ignore))
                     }
                 }
             }

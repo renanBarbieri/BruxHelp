@@ -1,17 +1,20 @@
 <resources>
     <string name="app_name">Bruxism Helper</string>
 
+    <string name="activate">Ativar</string>
+    <string name="ignore">Ignorar</string>
+
     <string name="notification_channel_name_default">Bruxism Helper</string>
     <string name="notification_channel_description_default">Comunicações em geral sobre o aplicativo.</string>
     <string name="notification_channel_name_bruxism">Seus Alertas</string>
     <string name="notification_channel_description_bruxism">Seus alertas de bruxismo configurados.</string>
 
-    <string name="notification_alert_title_new_install">Seus alertas de bruxismo configurados.</string>
-    <string name="notification_alert_message_new_install">Seus alertas de bruxismo configurados.</string>
-    <string name="notification_alert_title_feature_request">Seus alertas de bruxismo configurados.</string>
-    <string name="notification_alert_title_feature_dependency">Seus alertas de bruxismo configurados.</string>
-    <string name="notification_alert_message_feature_dependency">Seus alertas de bruxismo configurados.</string>
-    <string name="notification_alert_message_feature_bruxism">Seus alertas de bruxismo configurados.</string>
-    <string name="notification_alert_message_feature_request">Seus alertas de bruxismo configurados %s.</string>
+    <string name="notification_alert_title_new_install">Receba seus avisos!</string>
+    <string name="notification_alert_message_new_install">Para que possamos te ajudar com os avisos, ative as notificações do aplicativo.</string>
+    <string name="notification_alert_title_feature_request">Para cadastrar o novo alerta de bruxismo, ative as notificações do aplicativo.</string>
+    <string name="notification_alert_title_feature_dependency">Permita receber notificações!</string>
+    <string name="notification_alert_message_feature_dependency">Precisamos da sua permissão para te notificar. Ative as notificações do aplicativo.</string>
+    <string name="notification_alert_message_feature_bruxism">bruxismo</string>
+    <string name="notification_alert_message_feature_request">Seus alertas de %s precisam de permissão para serem enviados.</string>
 
 </resources>
