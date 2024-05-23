@@ -27,7 +27,7 @@ class MainActivity : ComponentActivity() {
         )
 
         setContent {
-            notificationPermissionCheckerHelper.collectState().checkNotificationStatus()
+            notificationPermissionCheckerHelper.composeInit().checkNotificationStatus()
 
             BruxismHelperTheme {
                 // A surface container using the 'background' color from the theme

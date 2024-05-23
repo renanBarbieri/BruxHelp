@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import br.com.bruxismhelper.platform.notification.data.AppChannel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,7 +19,7 @@ class NotificationViewModel @Inject constructor() : ViewModel() {
     /**
      * represents the denied state of notification permission
      */
-    val notificationViewEvent = MutableSharedFlow<NotificationViewEvent>()
+    val notificationViewEvent = MutableStateFlow(NotificationViewEvent())
 
     /**
      * Checks app notification permission status and features notification channels status.

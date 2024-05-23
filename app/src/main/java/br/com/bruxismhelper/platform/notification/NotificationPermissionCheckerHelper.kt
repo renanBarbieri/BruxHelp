@@ -133,12 +133,8 @@ class NotificationPermissionCheckerHelper @Inject constructor(){
     }
 
     @Composable
-    fun collectState(): NotificationPermissionCheckerHelper {
+    fun composeInit(): NotificationPermissionCheckerHelper {
         _viewModel = hiltViewModel<NotificationViewModel>()
-
-        notificationViewEvent = _viewModel?.notificationViewEvent?.collectAsState(
-            initial = NotificationViewEvent()
-        )
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             shouldShowNotificationRationale = _activity?.shouldShowNotificationRationale()
@@ -208,10 +204,11 @@ class NotificationPermissionCheckerHelper @Inject constructor(){
 
     @Composable
     fun NotificationAlert() {
-        //TODO COMO FAZER ESSA LÓGICA?
-        val notificationViewEventState = remember { mutableStateOf(notificationViewEvent) }
+        val notificationFlowState = _viewModel?.notificationViewEvent?.collectAsState(
+            initial = NotificationViewEvent()
+        )
 
-        when (notificationViewEventState.value?.value?.state) {
+        when (notificationFlowState?.value?.state) {
             NotificationFlowState.DENIED_SHOW_EXPLANATION -> {
                 NotificationPermissionExplanation(
                     onCloseRequest = { _viewModel?.clearNotificationViewEvent() },
