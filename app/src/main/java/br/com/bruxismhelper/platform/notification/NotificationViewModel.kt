@@ -122,7 +122,7 @@ class NotificationViewModel @Inject constructor() : ViewModel() {
 }
 
 data class NotificationViewEvent(
-    val state: NotificationFlowState,
+    val state: NotificationFlowState = NotificationFlowState.NONE,
     val channelBlocked: AppChannel.ChannelID? = null
 )
 

@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.provider.Settings
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
@@ -16,13 +17,17 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import br.com.bruxismhelper.R
 import br.com.bruxismhelper.platform.notification.data.AppChannel
@@ -48,7 +53,7 @@ class NotificationPermissionCheckerHelper @Inject constructor(){
     private var _viewModel: NotificationViewModel? = null
     private var shouldShowNotificationRationale: Boolean = false
 
-    private var notificationViewEvent: NotificationViewEvent? = null
+    private var notificationViewEvent: State<NotificationViewEvent>? = null
 
     //region REGISTER FOR RESULT
 
@@ -64,7 +69,7 @@ class NotificationPermissionCheckerHelper @Inject constructor(){
         activity: ComponentActivity,
         grantedBlock: (() -> Unit)? = null,
         deniedBlock: (() -> Unit)? = null
-    ): NotificationPermissionCheckerHelper {
+    ){ //: NotificationPermissionCheckerHelper {
         _activity = activity
         activityResultLauncher =
             registerForNotificationPermissionResult(activity, grantedBlock, deniedBlock)
@@ -72,22 +77,14 @@ class NotificationPermissionCheckerHelper @Inject constructor(){
         _grantedBlock = grantedBlock
         _deniedBlock = deniedBlock
 
-        registerInit()
-
-        return this
+//        registerInit()
+//        return this
     }
 
-    /**
-     * Register the [fragment] to get the result of notification request permission.
-     * If user allows to send notification, [grantedBlock] will be invoked. Otherwise [deniedBlock] will be invoked
-     *
-     * @param fragment Owner of permission request
-     * @param grantedBlock Function to be invoked when user allows to send notifications
-     * @param deniedBlock Function to be invoked when user denies to send notifications
-     */
+
     fun registerForResult(
         fragment: Fragment, grantedBlock: (() -> Unit)? = null, deniedBlock: (() -> Unit)? = null
-    ): NotificationPermissionCheckerHelper {
+    ){//: NotificationPermissionCheckerHelper {
         _fragment = fragment
         activityResultLauncher =
             registerForNotificationPermissionResult(fragment, grantedBlock, deniedBlock)
@@ -95,9 +92,9 @@ class NotificationPermissionCheckerHelper @Inject constructor(){
         _grantedBlock = grantedBlock
         _deniedBlock = deniedBlock
 
-        registerInit()
+//        registerInit()
 
-        return this
+//        return this
     }
 
     private fun registerForNotificationPermissionResult(
@@ -135,23 +132,20 @@ class NotificationPermissionCheckerHelper @Inject constructor(){
         }
     }
 
-    private fun registerInit() {
-        //TODO KOIN
-//        _viewModel = _activity?.getViewModel() ?: _fragment?.getViewModel()
+    @Composable
+    fun collectState(): NotificationPermissionCheckerHelper {
+        _viewModel = hiltViewModel<NotificationViewModel>()
 
-        val owner: LifecycleOwner = _activity ?: _fragment?.viewLifecycleOwner
-        ?: throw NullPointerException("Activity and fragment are null. Check NotificationPermissionCheckerHelper initialization")
-
-        owner.lifecycleScope.launch {
-            _viewModel?.notificationViewEvent?.collectLatest {
-                notificationViewEvent = it
-            }
-        }
+        notificationViewEvent = _viewModel?.notificationViewEvent?.collectAsState(
+            initial = NotificationViewEvent()
+        )
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             shouldShowNotificationRationale = _activity?.shouldShowNotificationRationale()
                 ?: _fragment?.shouldShowNotificationRationale() ?: false
         }
+
+        return this
     }
     //endregion
 
@@ -214,9 +208,10 @@ class NotificationPermissionCheckerHelper @Inject constructor(){
 
     @Composable
     fun NotificationAlert() {
-        val notificationViewEventState = remember {mutableStateOf(notificationViewEvent)}
+        //TODO COMO FAZER ESSA LÓGICA?
+        val notificationViewEventState = remember { mutableStateOf(notificationViewEvent) }
 
-        when (notificationViewEventState.value?.state) {
+        when (notificationViewEventState.value?.value?.state) {
             NotificationFlowState.DENIED_SHOW_EXPLANATION -> {
                 NotificationPermissionExplanation(
                     onCloseRequest = { _viewModel?.clearNotificationViewEvent() },
@@ -229,7 +224,7 @@ class NotificationPermissionCheckerHelper @Inject constructor(){
                 RedirectToNotificationSettingAlert(
                     onCloseRequest = { _viewModel?.clearNotificationViewEvent() },
                     R.string.notification_alert_title_feature_request,
-                    getFeatureMessage(notificationViewEvent!!.channelBlocked),
+                    getFeatureMessage(notificationViewEvent!!.value.channelBlocked),
                     showDenyButton = true
                 )
             }
@@ -242,7 +237,10 @@ class NotificationPermissionCheckerHelper @Inject constructor(){
                     showDenyButton = false
                 )
             }
-            else -> { /* DIALOG NOT SHOWN */ }
+            else -> {
+                /* DIALOG NOT SHOWN */
+                Log.d(this::class.java.name, "Nothing to show")
+            }
         }
     }
 
