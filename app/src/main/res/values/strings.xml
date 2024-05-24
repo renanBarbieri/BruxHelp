@@ -17,7 +17,7 @@
     <string name="notification_alert_message_feature_bruxism">bruxismo</string>
     <string name="notification_alert_message_feature_request">Seus alertas de %s precisam de permissão para serem enviados.</string>
 
-    <!--region -->
+    <!--region User Register-->
     <string name="register_title">Cadastre-se!</string>
     <string name="register_button">Cadastrar</string>
     <string name="register_label_name">Nome Completo</string>
@@ -27,7 +27,16 @@
         <item>Dra. Nathalia Celestino</item>
         <item>Outro</item>
     </string-array>
-
     <!--endregion -->
+
+    <!--region Bruxism Register-->
+    <string-array name="register_bruxism_activity">
+        <item>Relaxado</item>
+        <item>Apertamento dentário</item>
+        <item>Contração da musculatura sem contato dos dentes</item>
+        <item>Dentes em contato</item>
+        <item>Ranger de dentes</item>
+    </string-array>
+    <!--endregion-->
 
 </resources>
