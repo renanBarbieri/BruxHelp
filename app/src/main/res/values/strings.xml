@@ -17,4 +17,17 @@
     <string name="notification_alert_message_feature_bruxism">bruxismo</string>
     <string name="notification_alert_message_feature_request">Seus alertas de %s precisam de permissão para serem enviados.</string>
 
+    <!--region -->
+    <string name="register_title">Cadastre-se!</string>
+    <string name="register_button">Cadastrar</string>
+    <string name="register_label_name">Nome Completo</string>
+    <string name="register_label_email">Email</string>
+    <string name="register_label_doctor">Doutor(a)</string>
+    <string-array name="register_doctors">
+        <item>Dra. Nathalia Celestino</item>
+        <item>Outro</item>
+    </string-array>
+
+    <!--endregion -->
+
 </resources>
