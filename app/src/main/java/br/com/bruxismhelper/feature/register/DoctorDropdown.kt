@@ -22,6 +22,7 @@ import br.com.bruxismhelper.R
 @Composable
 fun DoctorDropdown(
     selectedDoctor: MutableState<String>,
+    doctorOptions: Array<String> = stringArrayResource(id = R.array.register_doctors)
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -43,7 +44,7 @@ fun DoctorDropdown(
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
-            stringArrayResource(id = R.array.register_doctors).forEach { option ->
+            doctorOptions.forEach { option ->
                 DropdownMenuItem(
                     text = { Text(option) },
                     onClick = {
