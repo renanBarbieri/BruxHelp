@@ -30,6 +30,9 @@
     <!--endregion -->
 
     <!--region Bruxism Register-->
+    <string name="register_bruxism_title">Formulário de Atividade</string>
+    <string name="register_bruxism_eating_switch">Estou em refeição</string>
+    <string name="register_bruxism_label_activity">Tipo de Atividade</string>
     <string-array name="register_bruxism_activity">
         <item>Relaxado</item>
         <item>Apertamento dentário</item>
@@ -37,6 +40,10 @@
         <item>Dentes em contato</item>
         <item>Ranger de dentes</item>
     </string-array>
+    <string name="register_bruxism_pain_switch">Estou sentindo dor</string>
+    <string name="register_bruxism_label_pain_level">Grau de dor (0 a 10):</string>
+    <string name="register_bruxism_label_pain_level_result">Nível de dor: %s</string>
+    <string name="register_bruxism_send_button">Enviar</string>
     <!--endregion-->
 
 </resources>
