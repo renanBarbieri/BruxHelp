@@ -26,7 +26,9 @@ import br.com.bruxismhelper.ui.theme.BruxismHelperTheme
 
 @Composable
 fun RegisterBruxism(
-    activityOptions: Array<String> = stringArrayResource(id = R.array.register_bruxism_activity)
+    modifier: Modifier = Modifier,
+    activityOptions: Array<String> = stringArrayResource(id = R.array.register_bruxism_activity),
+    onActivityRegistrationFinished: () -> Unit = {},
 ) {
     var isEating by remember { mutableStateOf(false) }
     val selectedActivity = remember { mutableStateOf("") }
@@ -34,7 +36,7 @@ fun RegisterBruxism(
     val painLevel = remember { mutableIntStateOf(0) }
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(RegisterBruxismDefaults.fieldsOutsidePadding),
         verticalArrangement = Arrangement.Top,
@@ -63,7 +65,11 @@ fun RegisterBruxism(
         Spacer(modifier = Modifier.weight(1F))
 
         Button(
-            onClick = { /* Handle form submission */ },
+            onClick = {
+                /* Handle form submission */
+                //TODO submitForm
+                onActivityRegistrationFinished()
+            },
             modifier = Modifier.align(Alignment.End)
         ) {
             Text(stringResource(id = R.string.register_bruxism_send_button))

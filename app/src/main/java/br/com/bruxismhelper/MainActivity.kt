@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -13,11 +14,15 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableIntState
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import br.com.bruxismhelper.feature.register.RegisterForm
+import br.com.bruxismhelper.feature.navigation.NavigationHost
 import br.com.bruxismhelper.platform.notification.NotificationPermissionCheckerHelper
 import br.com.bruxismhelper.ui.theme.BruxismHelperTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,14 +50,20 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun App(
-    notificationAlert: (@Composable () -> Unit)? = null,
-) {
+fun App(notificationAlert: (@Composable () -> Unit)? = null) {
+    val appBarTitle: MutableIntState = remember { mutableIntStateOf(R.string.app_name) }
+
     BruxismHelperTheme {
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text(text = stringResource(id = R.string.app_name)) },
+                    title = {
+                        Text(
+                            text = stringResource(id = appBarTitle.intValue),
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    },
                     colors = topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.primaryContainer,
                         titleContentColor = MaterialTheme.colorScheme.primary
@@ -66,8 +77,24 @@ fun App(
                     .background(MaterialTheme.colorScheme.background)
             ) {
                 notificationAlert?.invoke()
-                RegisterForm(modifier = Modifier.padding(26.dp))
+                NavigationHost(appBarTitle)
             }
+        }
+    }
+}
+
+@Composable
+fun MainScreen(
+    isRegistered: Boolean,
+    onNewUser: () -> Unit,
+    onUserRegistered: () -> Unit,
+) {
+    LaunchedEffect(Unit) {
+        if (isRegistered) {
+            onUserRegistered()
+        } else {
+            //TODO Show app explanation
+            onNewUser()
         }
     }
 }

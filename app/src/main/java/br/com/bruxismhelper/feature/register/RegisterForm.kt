@@ -29,7 +29,10 @@ import br.com.bruxismhelper.ui.common.FieldSpacer
 import br.com.bruxismhelper.ui.theme.BruxismHelperTheme
 
 @Composable
-fun RegisterForm(modifier: Modifier = Modifier) {
+fun RegisterForm(
+    modifier: Modifier = Modifier,
+    onRegistrationFinished: () -> Unit = {},
+) {
     var fullName by remember { mutableStateOf(emptyString()) }
     var email by remember { mutableStateOf(emptyString()) }
     val selectedDoctor = remember { mutableStateOf(emptyString()) }
@@ -72,7 +75,11 @@ fun RegisterForm(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(RegisterDefaults.fieldsOutsidePadding))
 
         Button(
-            onClick = { /* Handle form submission */ },
+            onClick = {
+                /* Handle form submission */
+                //TODO submitForm
+                onRegistrationFinished()
+            },
             modifier = Modifier.align(Alignment.End)
         ) {
             Text(stringResource(id = R.string.register_button))
