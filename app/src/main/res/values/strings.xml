@@ -20,6 +20,7 @@
     <!--region User Register-->
     <string name="register_title">Cadastre-se!</string>
     <string name="register_button">Cadastrar</string>
+    <string name="register_ignore_button">Ignorar</string>
     <string name="register_label_name">Nome Completo</string>
     <string name="register_label_email">Email</string>
     <string name="register_label_doctor">Doutor(a)</string>
@@ -43,7 +44,7 @@
     <string name="register_bruxism_pain_switch">Estou sentindo dor</string>
     <string name="register_bruxism_label_pain_level">Grau de dor (0 a 10):</string>
     <string name="register_bruxism_label_pain_level_result">Nível de dor: %s</string>
-    <string name="register_bruxism_send_button">Enviar</string>
+    <string name="register_bruxism_send_button">Responder</string>
     <!--endregion-->
 
 </resources>
