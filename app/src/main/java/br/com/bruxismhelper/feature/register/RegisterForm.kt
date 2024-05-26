@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,9 +23,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import br.com.bruxismhelper.R
 import br.com.bruxismhelper.emptyString
+import br.com.bruxismhelper.ui.common.FieldSpacer
 import br.com.bruxismhelper.ui.theme.BruxismHelperTheme
 
 @Composable
@@ -41,7 +41,7 @@ fun RegisterForm(modifier: Modifier = Modifier) {
     ) {
         Text(
             text = stringResource(id = R.string.register_title),
-            fontSize = RegisterDefaults.formTitleSize,
+            style = MaterialTheme.typography.headlineSmall,
             modifier = Modifier.padding(bottom = RegisterDefaults.fieldsOutsidePadding)
         )
 
@@ -78,11 +78,6 @@ fun RegisterForm(modifier: Modifier = Modifier) {
             Text(stringResource(id = R.string.register_button))
         }
     }
-}
-
-@Composable
-fun FieldSpacer() {
-    Spacer(modifier = Modifier.height(RegisterDefaults.fieldsSpacerHeight))
 }
 
 @Preview(showBackground = true)
