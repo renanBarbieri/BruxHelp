@@ -24,8 +24,16 @@ fun NavigationHost(appBarTitle: MutableIntState = mutableIntStateOf(R.string.app
         composable(route = AppRoute.Main) {
             MainScreen(
                 isRegistered = false, //TODO get register from db
-                onNewUser = { navController.navigate(AppRoute.Register) },
-                onUserRegistered = { navController.navigate(AppRoute.BruxismRegister) }
+                onNewUser = {
+                    navController.navigate(AppRoute.Register) {
+                        popUpTo(AppRoute.Main) { inclusive = true }
+                    }
+                },
+                onUserRegistered = {
+                    navController.navigate(AppRoute.BruxismRegister) {
+                        popUpTo(AppRoute.Main) { inclusive = true }
+                    }
+                }
             )
         }
         composable(route = AppRoute.Register) {
@@ -42,6 +50,8 @@ fun NavigationHost(appBarTitle: MutableIntState = mutableIntStateOf(R.string.app
                 onActivityRegistrationFinished = {}
             )
         }
+
+        //TODO CREATE WAITING NEXT ALARM/SUCCESS SCREEN
     }
 }
 

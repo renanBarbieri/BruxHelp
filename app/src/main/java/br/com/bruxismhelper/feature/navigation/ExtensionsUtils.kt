@@ -8,10 +8,19 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptionsBuilder
+import androidx.navigation.PopUpToBuilder
 import androidx.navigation.compose.composable
 
-internal fun NavController.navigate(route: AppRoute) {
-    navigate(route.name)
+internal fun NavController.navigate(
+    route: AppRoute,
+    builder: NavOptionsBuilder.() -> Unit = {}
+) {
+    navigate(route.name, builder)
+}
+
+internal fun NavOptionsBuilder.popUpTo(route: AppRoute, popUpToBuilder: PopUpToBuilder.() -> Unit = {}) {
+    popUpTo(route.name, popUpToBuilder)
 }
 
 internal fun NavGraphBuilder.composable(

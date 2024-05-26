@@ -89,11 +89,12 @@ fun MainScreen(
     onNewUser: () -> Unit,
     onUserRegistered: () -> Unit,
 ) {
+    //TODO Show app explanation
+
     LaunchedEffect(Unit) {
         if (isRegistered) {
             onUserRegistered()
         } else {
-            //TODO Show app explanation
             onNewUser()
         }
     }
