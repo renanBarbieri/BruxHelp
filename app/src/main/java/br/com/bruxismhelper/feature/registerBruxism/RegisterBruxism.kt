@@ -4,11 +4,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -27,9 +28,12 @@ import br.com.bruxismhelper.ui.theme.BruxismHelperTheme
 @Composable
 fun RegisterBruxism(
     modifier: Modifier = Modifier,
+    appBarTitle: MutableIntState = mutableIntStateOf(R.string.register_bruxism_title),
     activityOptions: Array<String> = stringArrayResource(id = R.array.register_bruxism_activity),
     onActivityRegistrationFinished: () -> Unit = {},
 ) {
+    appBarTitle.intValue = R.string.register_bruxism_title
+
     var isEating by remember { mutableStateOf(false) }
     val selectedActivity = remember { mutableStateOf("") }
     val isInPain = remember { mutableStateOf(false) }
@@ -42,12 +46,6 @@ fun RegisterBruxism(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = stringResource(id = R.string.register_bruxism_title),
-            style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier.padding(RegisterBruxismDefaults.fieldsOutsidePadding)
-        )
-
         FieldSwitch(
             name = R.string.register_bruxism_eating_switch,
             checked = isEating,
@@ -62,7 +60,7 @@ fun RegisterBruxism(
             PainForm(isInPain, painLevel)
         }
 
-        Spacer(modifier = Modifier.weight(1F))
+        Spacer(modifier = Modifier.height(RegisterBruxismDefaults.fieldsOutsidePadding))
 
         Button(
             onClick = {
@@ -70,7 +68,7 @@ fun RegisterBruxism(
                 //TODO submitForm
                 onActivityRegistrationFinished()
             },
-            modifier = Modifier.align(Alignment.End)
+            modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
             Text(stringResource(id = R.string.register_bruxism_send_button))
         }

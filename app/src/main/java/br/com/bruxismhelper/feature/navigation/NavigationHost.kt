@@ -37,7 +37,10 @@ fun NavigationHost(appBarTitle: MutableIntState = mutableIntStateOf(R.string.app
             )
         }
         composable(route = AppRoute.BruxismRegister) {
-            RegisterBruxism(onActivityRegistrationFinished = {})
+            RegisterBruxism(
+                appBarTitle = appBarTitle,
+                onActivityRegistrationFinished = {}
+            )
         }
     }
 }
