@@ -32,7 +32,7 @@
 
     <!--region Bruxism Register-->
     <string name="register_bruxism_title">Formulário de Atividade</string>
-    <string name="register_bruxism_eating_switch">Estou em refeição</string>
+    <string name="register_bruxism_eating_switch">Estou em refeição ou conversando</string>
     <string name="register_bruxism_label_activity">Tipo de Atividade</string>
     <string-array name="register_bruxism_activity">
         <item>Relaxado</item>

@@ -28,23 +28,24 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import br.com.bruxismhelper.R
 import br.com.bruxismhelper.emptyString
 import br.com.bruxismhelper.ui.common.FieldSpacer
 import br.com.bruxismhelper.ui.theme.BruxismHelperTheme
 
+
 @Composable
 fun RegisterForm(
     modifier: Modifier = Modifier,
+    viewModel: RegisterViewModel = hiltViewModel(),
     appBarTitle: MutableIntState = mutableIntStateOf(R.string.register_title),
     onRegistrationFinished: () -> Unit = {},
     onRegistrationIgnored: () -> Unit = {},
 ) {
     appBarTitle.intValue = R.string.register_title
 
-    var fullName by remember { mutableStateOf(emptyString()) }
-    var email by remember { mutableStateOf(emptyString()) }
-    val selectedDoctor = remember { mutableStateOf(emptyString()) }
+    val formState by viewModel::viewState
 
     Column(
         modifier = modifier.fillMaxSize(),
@@ -52,8 +53,8 @@ fun RegisterForm(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         OutlinedTextField(
-            value = fullName,
-            onValueChange = { fullName = it },
+            value = formState.formFilled.fullName,
+            onValueChange = { viewModel.updateField(RegisterFormField.FULL_NAME, it) },
             label = { Text(stringResource(id = R.string.register_label_name)) },
             modifier = Modifier.fillMaxWidth()
         )
@@ -61,8 +62,8 @@ fun RegisterForm(
         FieldSpacer()
 
         OutlinedTextField(
-            value = email,
-            onValueChange = { email = it },
+            value = formState.formFilled.email,
+            onValueChange = { viewModel.updateField(RegisterFormField.EMAIL, it) },
             label = { Text(stringResource(id = R.string.register_label_email)) },
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(
@@ -73,7 +74,12 @@ fun RegisterForm(
 
         FieldSpacer()
 
-        DoctorDropdown(selectedDoctor = selectedDoctor)
+        DoctorDropdown(
+            selectedDoctor = formState.formFilled.dentist.name,
+            onDoctorSelected = {
+                viewModel.updateField(RegisterFormField.DENTIST, it)
+            }
+        )
 
         Spacer(modifier = Modifier.height(RegisterDefaults.fieldsOutsidePadding))
 
@@ -89,7 +95,8 @@ fun RegisterForm(
                 onClick = {
                     /* Handle form submission */
                     //TODO submitForm
-                    onRegistrationFinished()
+                    viewModel.submitForm()
+                    //onRegistrationFinished()
                 },
             ) {
                 Text(stringResource(id = R.string.register_button))

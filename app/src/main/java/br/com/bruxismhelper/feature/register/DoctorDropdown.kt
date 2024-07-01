@@ -21,8 +21,9 @@ import br.com.bruxismhelper.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DoctorDropdown(
-    selectedDoctor: MutableState<String>,
-    doctorOptions: Array<String> = stringArrayResource(id = R.array.register_doctors)
+    selectedDoctor: String,
+    doctorOptions: Array<String> = stringArrayResource(id = R.array.register_doctors),
+    onDoctorSelected: (selectedDoctor: String) -> Unit = {}
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -31,8 +32,8 @@ fun DoctorDropdown(
         onExpandedChange = { expanded = !expanded }
     ) {
         OutlinedTextField(
-            value = selectedDoctor.value,
-            onValueChange = { selectedDoctor.value = it },
+            value = selectedDoctor,
+            onValueChange = { /* TODO onDoctorSelected talvez? */ },
             label = { Text(stringResource(id = R.string.register_label_doctor)) },
             modifier = Modifier
                 .fillMaxWidth()
@@ -48,7 +49,7 @@ fun DoctorDropdown(
                 DropdownMenuItem(
                     text = { Text(option) },
                     onClick = {
-                        selectedDoctor.value = option
+                        onDoctorSelected(option)
                         expanded = false
                     }
                 )
