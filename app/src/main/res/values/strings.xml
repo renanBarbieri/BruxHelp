@@ -28,6 +28,13 @@
         <item>Dra. Nathalia Celestino</item>
         <item>Outro</item>
     </string-array>
+
+    <string name="register_label_medicine">Medicamentos de uso contínuo</string>
+    <string name="register_label_caffeine_quantity">Consumo de cafeína (quantidade)</string>
+    <string name="register_label_caffeine_frequency">Consumo de cafeína (frequência)</string>
+    <string name="register_label_smoking_quantity">Fumo (quantidade)</string>
+    <string name="register_label_smoking_frequency">Fumo (frequência)</string>
+    <string name="register_label_habit">Hábitos orais</string>
     <!--endregion -->
 
     <!--region Bruxism Register-->
