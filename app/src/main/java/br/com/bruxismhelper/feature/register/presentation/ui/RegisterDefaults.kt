@@ -1,4 +1,4 @@
-package br.com.bruxismhelper.feature.register
+package br.com.bruxismhelper.feature.register.presentation.ui
 
 import androidx.compose.ui.unit.dp
 

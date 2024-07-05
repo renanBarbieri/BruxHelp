@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import br.com.bruxismhelper.MainScreen
 import br.com.bruxismhelper.R
-import br.com.bruxismhelper.feature.register.RegisterForm
+import br.com.bruxismhelper.feature.register.presentation.ui.RegisterForm
 import br.com.bruxismhelper.feature.registerBruxism.RegisterBruxism
 import br.com.bruxismhelper.ui.theme.BruxismHelperTheme
 
