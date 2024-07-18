@@ -38,7 +38,7 @@ fun NavigationHost(appBarTitle: MutableIntState = mutableIntStateOf(R.string.app
         }
         composable(route = AppRoute.Register) {
             RegisterForm(
-                modifier = Modifier.padding(26.dp),
+                modifier = Modifier.padding(start = 26.dp, end = 26.dp),
                 appBarTitle = appBarTitle,
                 onRegistrationFinished = { navController.navigate(AppRoute.BruxismRegister) },
                 onRegistrationIgnored = { navController.navigate(AppRoute.BruxismRegister) },

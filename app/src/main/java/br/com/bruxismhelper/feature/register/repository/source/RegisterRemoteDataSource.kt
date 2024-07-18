@@ -8,6 +8,13 @@ import javax.inject.Inject
 class RegisterRemoteDataSource @Inject constructor() {
     private val firestoreDB = FirebaseFirestore.getInstance();
 
+    /**
+     * TODO
+     *
+     * https://firebase.google.com/docs/firestore/quickstart#java_1
+     *
+     * @param fieldsMap
+     */
     fun submitForm(fieldsMap: Map<String, Any>) {
         firestoreDB
             .collection("user")

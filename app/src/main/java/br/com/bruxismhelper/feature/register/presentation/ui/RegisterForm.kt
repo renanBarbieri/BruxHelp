@@ -37,9 +37,9 @@ import br.com.bruxismhelper.feature.register.presentation.model.OralHabitViewObj
 import br.com.bruxismhelper.feature.register.presentation.model.RegisterFields
 import br.com.bruxismhelper.feature.register.presentation.model.RegisterFormField
 import br.com.bruxismhelper.feature.register.presentation.model.RegisterViewState
+import br.com.bruxismhelper.ui.common.FieldSpacer
 import br.com.bruxismhelper.ui.common.spacerField
 import br.com.bruxismhelper.ui.theme.BruxismHelperTheme
-
 
 @Composable
 fun RegisterForm(
@@ -54,8 +54,7 @@ fun RegisterForm(
     val formState by viewModel::viewState
 
     Column(
-        modifier = modifier
-            .fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -237,6 +236,8 @@ private fun FormView(
                 }
             }
         }
+
+        spacerField()
     }
 }
 
