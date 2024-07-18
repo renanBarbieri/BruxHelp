@@ -52,7 +52,7 @@ class RegisterViewModel @Inject constructor(
 
             RegisterFormField.CAFFEINE_CONSUMPTION_QUANTITY -> viewState = viewState.copy(
                 registerForm = viewState.registerForm.copy(
-                    caffeineConsumption = viewState.registerForm.caffeineConsumption.copy(quantity = value as Int)
+                    caffeineConsumption = viewState.registerForm.caffeineConsumption.copy(quantity = value.asStringToIntOrNull())
                 )
             )
 
@@ -68,7 +68,7 @@ class RegisterViewModel @Inject constructor(
 
             RegisterFormField.SMOKING_QUANTITY -> viewState = viewState.copy(
                 registerForm = viewState.registerForm.copy(
-                    smoking = viewState.registerForm.smoking.copy(quantity = value as Int)
+                    smoking = viewState.registerForm.smoking.copy(quantity = value.asStringToIntOrNull())
                 )
             )
 
@@ -102,6 +102,16 @@ class RegisterViewModel @Inject constructor(
                     )
                 )
             }
+        }
+    }
+
+    private fun Any.asStringToIntOrNull(): Int? {
+        val thisAsString = this as? String
+
+        return if(thisAsString.isNullOrBlank().not()) {
+            thisAsString!!.toInt()
+        } else {
+            null
         }
     }
 

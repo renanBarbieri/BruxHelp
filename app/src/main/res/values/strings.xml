@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Bruxism Helper</string>
 
+    <string name="empty"/>
+
     <string name="activate">Ativar</string>
     <string name="ignore">Ignorar</string>
 

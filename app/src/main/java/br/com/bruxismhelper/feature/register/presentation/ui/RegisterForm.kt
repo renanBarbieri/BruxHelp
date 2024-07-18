@@ -69,7 +69,7 @@ fun RegisterForm(
             onCaffeineQuantityChanged = { viewModel.updateField(RegisterFormField.CAFFEINE_CONSUMPTION_QUANTITY, it) },
             onCaffeineFrequencyChanged = { viewModel.updateField(RegisterFormField.CAFFEINE_CONSUMPTION_FREQUENCY, it) },
             onSmokingQuantityChanged = { viewModel.updateField(RegisterFormField.SMOKING_QUANTITY, it) },
-            onSmokingFrequencyChanged = { viewModel.updateField(RegisterFormField.SMOKING_QUANTITY, it) },
+            onSmokingFrequencyChanged = { viewModel.updateField(RegisterFormField.SMOKING_FREQUENCY, it) },
             onHabitChanged = { habit, checked ->
                 viewModel.updateField(RegisterFormField.ORAL_HABITS, Pair(habit, checked))
             },
@@ -163,7 +163,7 @@ private fun FormView(
 
         item {
             FieldDropdown(
-                selectedOption = viewState.registerForm.caffeineConsumption.frequencyToStringOrEmpty(),
+                selectedOption = stringResource(id = viewState.registerForm.caffeineConsumption.frequencyToResStringOrEmpty()),
                 label = R.string.register_label_caffeine_frequency,
                 options = FrequencyViewObject.entries.map { stringResource(id = it.fieldNameRes) }.toTypedArray(),
                 onOptionSelected = {
@@ -187,7 +187,7 @@ private fun FormView(
 
         item {
             FieldDropdown(
-                selectedOption = viewState.registerForm.caffeineConsumption.frequencyToStringOrEmpty(),
+                selectedOption = stringResource(id = viewState.registerForm.smoking.frequencyToResStringOrEmpty()),
                 label = R.string.register_label_smoking_frequency,
                 options = FrequencyViewObject.entries.map { stringResource(id = it.fieldNameRes) }.toTypedArray(),
                 onOptionSelected = {
