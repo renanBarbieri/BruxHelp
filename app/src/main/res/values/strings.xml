@@ -24,10 +24,6 @@
     <string name="register_label_name">Nome Completo</string>
     <string name="register_label_email">Email</string>
     <string name="register_label_doctor">Doutor(a)</string>
-    <string-array name="register_doctors">
-        <item>Dra. Nathalia Celestino</item>
-        <item>Outro</item>
-    </string-array>
 
     <string name="register_label_medicine">Medicamentos de uso contínuo</string>
     <string name="register_label_caffeine_quantity">Consumo de cafeína (quantidade)</string>
@@ -35,6 +31,12 @@
     <string name="register_label_smoking_quantity">Fumo (quantidade)</string>
     <string name="register_label_smoking_frequency">Fumo (frequência)</string>
     <string name="register_label_habit">Hábitos orais</string>
+    <string name="register_option_habit_nail_biting">Roer unha</string>
+    <string name="register_option_habit_object_biting">Morder objetos</string>
+    <string name="register_option_habit_lip_biting">Morder lábios</string>
+    <string name="register_option_frequency_daily">Diária</string>
+    <string name="register_option_frequency_weekly">Semanal</string>
+    <string name="register_option_frequency_by_week">Quinzenal</string>
     <!--endregion -->
 
     <!--region Bruxism Register-->

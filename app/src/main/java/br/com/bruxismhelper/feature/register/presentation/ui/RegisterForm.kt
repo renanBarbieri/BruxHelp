@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
@@ -20,6 +19,7 @@ import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
@@ -31,12 +31,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import br.com.bruxismhelper.R
 import br.com.bruxismhelper.emptyString
 import br.com.bruxismhelper.feature.register.domain.model.Dentist
-import br.com.bruxismhelper.feature.register.domain.model.OralHabit
-import br.com.bruxismhelper.feature.register.presentation.model.RegisterFormField
 import br.com.bruxismhelper.feature.register.presentation.RegisterViewModel
+import br.com.bruxismhelper.feature.register.presentation.model.FrequencyViewObject
+import br.com.bruxismhelper.feature.register.presentation.model.OralHabitViewObject
 import br.com.bruxismhelper.feature.register.presentation.model.RegisterFields
+import br.com.bruxismhelper.feature.register.presentation.model.RegisterFormField
 import br.com.bruxismhelper.feature.register.presentation.model.RegisterViewState
-import br.com.bruxismhelper.ui.common.FieldSpacer
+import br.com.bruxismhelper.ui.common.spacerField
 import br.com.bruxismhelper.ui.theme.BruxismHelperTheme
 
 
@@ -90,7 +91,7 @@ private fun FormView(
     onCaffeineFrequencyChanged: (String) -> Unit = {},
     onSmokingQuantityChanged: (String) -> Unit = {},
     onSmokingFrequencyChanged: (String) -> Unit = {},
-    onHabitChanged: (OralHabit, Boolean) -> Unit = { _, _ -> },
+    onHabitChanged: (OralHabitViewObject, Boolean) -> Unit = { _, _ -> },
     onFormIgnored: () -> Unit = {},
     onFormSubmit: () -> Unit = {},
 ) {
@@ -108,9 +109,7 @@ private fun FormView(
             )
         }
 
-        item {
-            FieldSpacer()
-        }
+        spacerField()
 
         item {
             OutlinedTextField(
@@ -125,22 +124,20 @@ private fun FormView(
             )
         }
 
-        item {
-            FieldSpacer()
-        }
+        spacerField()
 
         item {
-            DoctorDropdown(
-                selectedDoctor = viewState.registerForm.dentist.name,
-                onDoctorSelected = {
+            FieldDropdown(
+                selectedOption = viewState.registerForm.dentist.name,
+                label = R.string.register_label_doctor,
+                options = viewState.formFields.dentists.map { it.name }.toTypedArray(),
+                onOptionSelected = {
                     onDoctorChanged(it)
                 }
             )
         }
 
-        item {
-            FieldSpacer()
-        }
+        spacerField()
 
         item {
             OutlinedTextField(
@@ -151,9 +148,7 @@ private fun FormView(
             )
         }
 
-        item {
-            FieldSpacer()
-        }
+        spacerField()
 
         item {
             OutlinedTextField(
@@ -164,23 +159,20 @@ private fun FormView(
             )
         }
 
-        item {
-            FieldSpacer()
-        }
+        spacerField()
 
         item {
-            OutlinedTextField(
-                value = viewState.registerForm.caffeineConsumption.frequency.toString(), //TODO MAPEAMENTO PARA VIEW
-                onValueChange = { onCaffeineFrequencyChanged(it) },
-                label = { Text(stringResource(id = R.string.register_label_caffeine_frequency)) },
-                modifier = Modifier.fillMaxWidth()
+            FieldDropdown(
+                selectedOption = viewState.registerForm.caffeineConsumption.frequencyToStringOrEmpty(),
+                label = R.string.register_label_caffeine_frequency,
+                options = FrequencyViewObject.entries.map { stringResource(id = it.fieldNameRes) }.toTypedArray(),
+                onOptionSelected = {
+                    onCaffeineFrequencyChanged(it)
+                }
             )
         }
 
-
-        item {
-            FieldSpacer()
-        }
+        spacerField()
 
         item {
             OutlinedTextField(
@@ -191,22 +183,20 @@ private fun FormView(
             )
         }
 
-        item {
-            FieldSpacer()
-        }
+        spacerField()
 
         item {
-            OutlinedTextField(
-                value = viewState.registerForm.smoking.frequency.toString(), //TODO MAPEAMENTO PARA VIEW
-                onValueChange = { onSmokingFrequencyChanged(it) },
-                label = { Text(stringResource(id = R.string.register_label_smoking_frequency)) },
-                modifier = Modifier.fillMaxWidth()
+            FieldDropdown(
+                selectedOption = viewState.registerForm.caffeineConsumption.frequencyToStringOrEmpty(),
+                label = R.string.register_label_smoking_frequency,
+                options = FrequencyViewObject.entries.map { stringResource(id = it.fieldNameRes) }.toTypedArray(),
+                onOptionSelected = {
+                    onSmokingFrequencyChanged(it)
+                }
             )
         }
 
-        item {
-            FieldSpacer()
-        }
+        spacerField()
 
         item {
             Text(text = stringResource(id = R.string.register_label_habit))
@@ -214,22 +204,20 @@ private fun FormView(
 
         item {
             Column {
-                OralHabit.entries.forEach { habit ->
+                OralHabitViewObject.entries.forEach { habit ->
                     val isSelected = viewState.registerForm.oralHabits.contains(habit)
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Checkbox(
                             checked = isSelected,
                             onCheckedChange = { isChecked -> onHabitChanged(habit, isChecked) }
                         )
-                        Text(text = habit.name)
+                        Text(text = stringResource(id = habit.fieldNameRes))
                     }
                 }
             }
         }
 
-        item {
-            Spacer(modifier = Modifier.height(RegisterDefaults.fieldsOutsidePadding))
-        }
+        spacerField()
 
         item {
             Row {

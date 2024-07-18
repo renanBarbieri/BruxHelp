@@ -1,5 +1,6 @@
 package br.com.bruxismhelper.feature.register.presentation.ui
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -13,16 +14,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import br.com.bruxismhelper.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DoctorDropdown(
-    selectedDoctor: String,
-    doctorOptions: Array<String> = stringArrayResource(id = R.array.register_doctors),
-    onDoctorSelected: (selectedDoctor: String) -> Unit = {}
+fun FieldDropdown(
+    selectedOption: String,
+    @StringRes label: Int,
+    options: Array<String>,
+    onOptionSelected: (selectedOption: String) -> Unit = {}
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -31,9 +32,9 @@ fun DoctorDropdown(
         onExpandedChange = { expanded = !expanded }
     ) {
         OutlinedTextField(
-            value = selectedDoctor,
+            value = selectedOption,
             onValueChange = { /* TODO onDoctorSelected talvez? */ },
-            label = { Text(stringResource(id = R.string.register_label_doctor)) },
+            label = { Text(stringResource(label)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .menuAnchor(),
@@ -44,11 +45,11 @@ fun DoctorDropdown(
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
-            doctorOptions.forEach { option ->
+            options.forEach { option ->
                 DropdownMenuItem(
                     text = { Text(option) },
                     onClick = {
-                        onDoctorSelected(option)
+                        onOptionSelected(option)
                         expanded = false
                     }
                 )
