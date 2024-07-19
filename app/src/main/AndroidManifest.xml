@@ -15,7 +15,7 @@
         android:theme="@style/Theme.BruxismHelper"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".AppActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize"
             android:theme="@style/Theme.BruxismHelper">

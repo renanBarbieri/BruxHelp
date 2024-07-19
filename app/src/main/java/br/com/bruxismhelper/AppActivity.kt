@@ -14,7 +14,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -29,7 +28,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class AppActivity : ComponentActivity() {
     @Inject
     lateinit var notificationPermissionCheckerHelper: NotificationPermissionCheckerHelper
 
@@ -79,23 +78,6 @@ fun App(notificationAlert: (@Composable () -> Unit)? = null) {
                 notificationAlert?.invoke()
                 NavigationHost(appBarTitle)
             }
-        }
-    }
-}
-
-@Composable
-fun MainScreen(
-    isRegistered: Boolean,
-    onNewUser: () -> Unit,
-    onUserRegistered: () -> Unit,
-) {
-    //TODO Show app explanation
-
-    LaunchedEffect(Unit) {
-        if (isRegistered) {
-            onUserRegistered()
-        } else {
-            onNewUser()
         }
     }
 }

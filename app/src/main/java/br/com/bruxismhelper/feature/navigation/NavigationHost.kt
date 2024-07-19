@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
-import br.com.bruxismhelper.MainScreen
+import br.com.bruxismhelper.main.MainScreen
 import br.com.bruxismhelper.R
 import br.com.bruxismhelper.feature.register.presentation.ui.RegisterForm
 import br.com.bruxismhelper.feature.registerBruxism.RegisterBruxism
