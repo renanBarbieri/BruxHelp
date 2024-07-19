@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import br.com.bruxismhelper.feature.register.domain.model.Dentist
 import br.com.bruxismhelper.feature.register.domain.repository.RegisterRepository
 import br.com.bruxismhelper.feature.register.presentation.model.FrequencyViewObject
@@ -12,6 +13,7 @@ import br.com.bruxismhelper.feature.register.presentation.model.RegisterFields
 import br.com.bruxismhelper.feature.register.presentation.model.RegisterFormField
 import br.com.bruxismhelper.feature.register.presentation.model.RegisterViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -116,6 +118,8 @@ class RegisterViewModel @Inject constructor(
     }
 
     fun submitForm() {
-        repository.submitForm(mapper.fromViewToDomain(viewState.registerForm))
+        viewModelScope.launch {
+            repository.submitForm(mapper.fromViewToDomain(viewState.registerForm))
+        }
     }
 }

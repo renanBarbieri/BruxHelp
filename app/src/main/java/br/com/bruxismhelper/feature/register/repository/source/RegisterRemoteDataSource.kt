@@ -15,15 +15,21 @@ class RegisterRemoteDataSource @Inject constructor() {
      *
      * @param fieldsMap
      */
-    fun submitForm(fieldsMap: Map<String, Any>) {
+    fun submitForm(
+        fieldsMap: Map<String, Any>,
+        onFormSubmitted: suspend (userRegisterId: String) -> Unit = {},
+        onFormSubmitFailure: suspend (exception: Exception) -> Unit = {},
+    ) {
         firestoreDB
             .collection("user")
             .add(fieldsMap)
             .addOnSuccessListener { documentReference ->
                 logcat { "User created with success: ${documentReference.id}" }
+                suspend { onFormSubmitted(documentReference.id) }
             }
             .addOnFailureListener { exception ->
                 logcat { "Error while creating user: ${exception.asLog()}" }
+                suspend { onFormSubmitFailure(exception) }
             }
     }
 }
