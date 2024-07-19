@@ -62,9 +62,10 @@ kapt {
 
 dependencies {
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.hilt.navigation)
     implementation(libs.androidx.ui)
@@ -77,6 +78,7 @@ dependencies {
     implementation(platform(libs.google.firebase.bom))
     implementation(libs.google.firebase.analytics)
     implementation(libs.google.firebase.firestore)
+    implementation(libs.google.gson)
     implementation(libs.squareup.logcat)
     kapt(libs.google.dagger.hilt.compiler)
     testImplementation(libs.junit)
