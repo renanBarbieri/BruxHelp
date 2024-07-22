@@ -55,6 +55,12 @@
     <string name="register_bruxism_pain_switch">Estou sentindo dor</string>
     <string name="register_bruxism_label_pain_level">Grau de dor (0 a 10):</string>
     <string name="register_bruxism_label_pain_level_result">Nível de dor: %s</string>
+    <string name="register_bruxism_label_pain_region">Região da dor:</string>
+    <string name="register_bruxism_label_stress_level">Nível de estresse:</string>
+    <string name="register_bruxism_label_stress_level_low">Relaxado</string>
+    <string name="register_bruxism_label_stress_level_medium">Pouco ansioso ou estressado</string>
+    <string name="register_bruxism_label_stress_level_high">Muito ansioso ou estressado</string>
+
     <string name="register_bruxism_send_button">Responder</string>
     <!--endregion-->
 

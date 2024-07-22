@@ -13,3 +13,6 @@ class BruxismApplication: Application() {
         AndroidLogcatLogger.installOnDebuggableApp(this, minPriority = LogPriority.VERBOSE)
     }
 }
+
+//Icons attributions
+//<a href="https://www.flaticon.com/free-icons/sad" title="sad icons">Sad icons created by Freepik - Flaticon</a>

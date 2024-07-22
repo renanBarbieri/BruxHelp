@@ -24,6 +24,8 @@ fun PainForm(
 
     if (isInPain.value) {
         FieldSpacer()
+
+        //TODO externalizar o slider de dor
         Text(stringResource(id = R.string.register_bruxism_label_pain_level))
         Slider(
             value = painLevel.value.toFloat(),
@@ -36,5 +38,21 @@ fun PainForm(
             id = R.string.register_bruxism_label_pain_level_result,
             painLevel.value
         ))
+
+        FieldSpacer()
+
+        //TODO Trocar pelas imagens reais
+        ImageGridWithCheckboxes(
+            images = listOf(
+                R.drawable.pain_test,
+                R.drawable.pain_test,
+                R.drawable.pain_test,
+                R.drawable.pain_test,
+            )
+        )
+
+        FieldSpacer()
+
+        StressLevelSlider()
     }
 }
