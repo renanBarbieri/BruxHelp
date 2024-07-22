@@ -33,15 +33,15 @@ class DataStoreManager @Inject constructor(
         }
     }
 
-    fun read(key: String, defaultValue: Int = -1): Flow<Int> {
+    fun readInt(key: String, defaultValue: Int = -1): Flow<Int> {
         return read(intPreferencesKey(key), defaultValue)
     }
 
-    fun read(key: String, defaultValue: String = emptyString()): Flow<String> {
+    fun readString(key: String, defaultValue: String = emptyString()): Flow<String> {
         return read(stringPreferencesKey(key), defaultValue)
     }
 
-    fun read(key: String, defaultValue: Boolean = false): Flow<Boolean> {
+    fun readBoolean(key: String, defaultValue: Boolean = false): Flow<Boolean> {
         return read(booleanPreferencesKey(key), defaultValue)
     }
 
@@ -59,19 +59,19 @@ class DataStoreManager @Inject constructor(
         }
     }
 
-    suspend fun write(key: String, value: Int) {
+    suspend fun writeInt(key: String, value: Int) {
         preferencesStore.edit { settings ->
             settings[intPreferencesKey(key)] = value
         }
     }
 
-    suspend fun write(key: String, value: String) {
+    suspend fun writeString(key: String, value: String) {
         preferencesStore.edit { settings ->
             settings[stringPreferencesKey(key)] = value
         }
     }
 
-    suspend fun write(key: String, value: Boolean) {
+    suspend fun writeBoolean(key: String, value: Boolean) {
         preferencesStore.edit { settings ->
             settings[booleanPreferencesKey(key)] = value
         }
