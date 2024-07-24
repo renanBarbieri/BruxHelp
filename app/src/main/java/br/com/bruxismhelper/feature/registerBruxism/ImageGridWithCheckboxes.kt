@@ -20,18 +20,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.bruxismhelper.R
 import br.com.bruxismhelper.ui.theme.BruxismHelperTheme
 
 @Composable
-fun ImageGridWithCheckboxes(images: List<Int>) {
+fun ImageGridWithCheckboxes(modifier: Modifier = Modifier, images: List<Int>) {
     //TODO observar as mudanças de estado dos itens selecionados
     val checkedStates = remember { mutableStateListOf(false, false, false, false) }
 
-    Column {
-        Text(stringResource(id = R.string.register_bruxism_label_pain_region))
+    Column(modifier = modifier) {
+        Text(
+            fontWeight = FontWeight.Bold,
+            text = stringResource(id = R.string.register_bruxism_label_pain_region)
+        )
 
         images.chunked(2).forEachIndexed { rowIndex, rowImages ->
             Row(
@@ -72,7 +76,7 @@ fun ImageGridWithCheckboxes(images: List<Int>) {
 private fun GridPreview() {
     BruxismHelperTheme {
         ImageGridWithCheckboxes(
-            listOf(
+            images = listOf(
                 R.drawable.pain_test,
                 R.drawable.pain_test,
                 R.drawable.pain_test,
