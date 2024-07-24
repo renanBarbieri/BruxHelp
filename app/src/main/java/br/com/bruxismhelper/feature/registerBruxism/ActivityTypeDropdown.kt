@@ -19,7 +19,7 @@ import br.com.bruxismhelper.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NotEatingForm(
+fun ActivityTypeDropdown(
     activityOptions: Array<String>,
     selectedActivity: MutableState<String>,
 ) {
