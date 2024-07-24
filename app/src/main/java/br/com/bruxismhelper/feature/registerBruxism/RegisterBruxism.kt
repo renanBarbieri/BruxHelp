@@ -1,11 +1,13 @@
 package br.com.bruxismhelper.feature.registerBruxism
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,39 +40,51 @@ fun RegisterBruxism(
     val selectedActivity = remember { mutableStateOf("") }
     val isInPain = remember { mutableStateOf(false) }
     val painLevel = remember { mutableIntStateOf(0) }
+    val stressLevel = remember { mutableIntStateOf(0) }
+    val anxietyLevel = remember { mutableIntStateOf(0) }
 
-    Column(
+    LazyColumn(
         modifier = modifier
             .fillMaxSize()
-            .padding(RegisterBruxismDefaults.fieldsOutsidePadding),
+            .padding(
+                start = RegisterBruxismDefaults.fieldsOutsidePadding,
+                end = RegisterBruxismDefaults.fieldsOutsidePadding,
+            ),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        FieldSwitch(
-            name = R.string.register_bruxism_eating_switch,
-            checked = isEating,
-            onCheckedChange = { isEating = it }
-        )
+        item {
+            FieldSwitch(
+                name = R.string.register_bruxism_eating_switch,
+                checked = isEating,
+                onCheckedChange = { isEating = it }
+            )
 
-        FieldSpacer()
-
-        if (!isEating) {
-            NotEatingForm(activityOptions, selectedActivity)
             FieldSpacer()
-            PainForm(isInPain, painLevel)
         }
 
-        Spacer(modifier = Modifier.height(RegisterBruxismDefaults.fieldsOutsidePadding))
+        item {
+            AnimatedVisibility(visible = isEating.not()) {
+                Column {
+                    ActivityTypeDropdown(activityOptions, selectedActivity)
+                    FieldSpacer()
+                    PainForm(isInPain, painLevel, stressLevel, anxietyLevel)
+                }
+            }
 
-        Button(
-            onClick = {
-                /* Handle form submission */
-                //TODO submitForm
-                onActivityRegistrationFinished()
-            },
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        ) {
-            Text(stringResource(id = R.string.register_bruxism_send_button))
+            Spacer(modifier = Modifier.height(RegisterBruxismDefaults.fieldsOutsidePadding))
+        }
+
+        item {
+            Button(
+                onClick = {
+                    /* Handle form submission */
+                    //TODO submitForm
+                    onActivityRegistrationFinished()
+                },
+            ) {
+                Text(stringResource(id = R.string.register_bruxism_send_button))
+            }
         }
     }
 }
