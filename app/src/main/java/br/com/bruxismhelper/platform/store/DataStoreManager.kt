@@ -16,21 +16,16 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
 
-
-private val Context.dataStore by preferencesDataStore("user_preferences")
-
 @Singleton
 class DataStoreManager @Inject constructor(
-    @ApplicationContext context: Context,
+    @ApplicationContext private val context: Context,
     private val gson: Gson
 ) {
-    private val preferencesStore = context.dataStore
+    private val Context.dataStore by preferencesDataStore("user_preferences")
 
     //region read
     private inline fun <reified T> read(key: Key<T>, defaultValue: T): Flow<T> {
-        return preferencesStore.data.map { preferences ->
-            preferences[key] ?: defaultValue
-        }
+        return context.dataStore.data.map { it[key] ?: defaultValue }
     }
 
     fun readInt(key: String, defaultValue: Int = -1): Flow<Int> {
@@ -45,43 +40,33 @@ class DataStoreManager @Inject constructor(
         return read(booleanPreferencesKey(key), defaultValue)
     }
 
-    fun <T> read(key: String, defaultValue: T? = null): Flow<T> {
+    fun <T> readObject(key: String, defaultValue: T? = null): Flow<T> {
         val typeToken: TypeToken<T> = object : TypeToken<T>(javaClass){}
         val defaultValueString = gson.toJson(defaultValue)
-        return read(stringPreferencesKey(key), defaultValueString).map { gson.fromJson(it, typeToken.type) }
+        return readString(key, defaultValueString).map { gson.fromJson(it, typeToken.type) }
     }
     //endregion
 
     //region write
     private suspend inline fun <reified T> write(key: Key<T>, value: T) {
-        preferencesStore.edit { preferences ->
-            preferences[key] = value
-        }
+        context.dataStore.edit { it[key] = value }
     }
 
     suspend fun writeInt(key: String, value: Int) {
-        preferencesStore.edit { settings ->
-            settings[intPreferencesKey(key)] = value
-        }
+        write(intPreferencesKey(key), value)
     }
 
     suspend fun writeString(key: String, value: String) {
-        preferencesStore.edit { settings ->
-            settings[stringPreferencesKey(key)] = value
-        }
+        write(stringPreferencesKey(key), value)
     }
 
     suspend fun writeBoolean(key: String, value: Boolean) {
-        preferencesStore.edit { settings ->
-            settings[booleanPreferencesKey(key)] = value
-        }
+        write(booleanPreferencesKey(key), value)
     }
 
-    suspend fun <T>write(key: String, value: T) {
-        preferencesStore.edit { settings ->
-            val valueString = gson.toJson(value)
-            settings[stringPreferencesKey(key)] = valueString
-        }
+    suspend fun <T>writeObject(key: String, value: T) {
+        val valueString = gson.toJson(value)
+        writeString(key, valueString)
     }
     //endregion
 }
