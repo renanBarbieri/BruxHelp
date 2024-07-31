@@ -20,8 +20,7 @@ import javax.inject.Inject
 class RegisterViewModel @Inject constructor(
     private val repository: RegisterRepository,
     private val mapper: RegisterViewMapper
-) :
-    ViewModel() {
+) : ViewModel() {
 
     var viewState by mutableStateOf(RegisterViewState(RegisterFields(repository.getAvailableDentists())))
         private set

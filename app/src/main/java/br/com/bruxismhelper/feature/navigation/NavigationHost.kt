@@ -11,14 +11,14 @@ import androidx.navigation.compose.rememberNavController
 import br.com.bruxismhelper.main.MainScreen
 import br.com.bruxismhelper.R
 import br.com.bruxismhelper.feature.register.presentation.ui.RegisterForm
-import br.com.bruxismhelper.feature.registerBruxism.RegisterBruxism
+import br.com.bruxismhelper.feature.registerBruxism.presentation.ui.RegisterBruxismForm
 import br.com.bruxismhelper.ui.theme.BruxismHelperTheme
 
 @Composable
 fun NavigationHost(appBarTitle: MutableIntState = mutableIntStateOf(R.string.app_name)) {
     val navController = rememberNavController()
     NavHost(
-        startDestination = AppRoute.Main,
+        startDestination = AppRoute.BruxismRegister,
         navController = navController,
     ) {
         composable(route = AppRoute.Main) {
@@ -45,7 +45,7 @@ fun NavigationHost(appBarTitle: MutableIntState = mutableIntStateOf(R.string.app
             )
         }
         composable(route = AppRoute.BruxismRegister) {
-            RegisterBruxism(
+            RegisterBruxismForm(
                 appBarTitle = appBarTitle,
                 onActivityRegistrationFinished = {}
             )

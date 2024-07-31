@@ -1,4 +1,4 @@
-package br.com.bruxismhelper.feature.registerBruxism
+package br.com.bruxismhelper.feature.registerBruxism.presentation.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
@@ -23,12 +23,17 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import br.com.bruxismhelper.R
+import br.com.bruxismhelper.feature.registerBruxism.presentation.model.BottomLeftIdentifier
+import br.com.bruxismhelper.feature.registerBruxism.presentation.model.BottomRightIdentifier
+import br.com.bruxismhelper.feature.registerBruxism.presentation.model.SelectableImage
+import br.com.bruxismhelper.feature.registerBruxism.presentation.model.TopLeftIdentifier
+import br.com.bruxismhelper.feature.registerBruxism.presentation.model.TopRightIdentifier
 import br.com.bruxismhelper.ui.common.FieldSpacer
 import br.com.bruxismhelper.ui.common.FieldSwitch
 import br.com.bruxismhelper.ui.theme.BruxismHelperTheme
 
 @Composable
-fun RegisterBruxism(
+fun RegisterBruxismForm(
     modifier: Modifier = Modifier,
     appBarTitle: MutableIntState = mutableIntStateOf(R.string.register_bruxism_title),
     activityOptions: Array<String> = stringArrayResource(id = R.array.register_bruxism_activity),
@@ -42,6 +47,32 @@ fun RegisterBruxism(
     val painLevel = remember { mutableIntStateOf(0) }
     val stressLevel = remember { mutableIntStateOf(0) }
     val anxietyLevel = remember { mutableIntStateOf(0) }
+    val selectableImagesState = remember {
+        mutableStateOf(
+            listOf(
+                SelectableImage(
+                    id = TopLeftIdentifier,
+                    isSelected = false,
+                    imageRes = R.drawable.pain_test
+                ),
+                SelectableImage(
+                    id = TopRightIdentifier,
+                    isSelected = false,
+                    imageRes = R.drawable.pain_test
+                ),
+                SelectableImage(
+                    id = BottomLeftIdentifier,
+                    isSelected = false,
+                    imageRes = R.drawable.pain_test
+                ),
+                SelectableImage(
+                    id = BottomRightIdentifier,
+                    isSelected = false,
+                    imageRes = R.drawable.pain_test
+                ),
+            )
+        )
+    }
 
     LazyColumn(
         modifier = modifier
@@ -68,7 +99,7 @@ fun RegisterBruxism(
                 Column {
                     ActivityTypeDropdown(activityOptions, selectedActivity)
                     FieldSpacer()
-                    PainForm(isInPain, painLevel, stressLevel, anxietyLevel)
+                    PainForm(selectableImagesState, isInPain, painLevel, stressLevel, anxietyLevel)
                 }
             }
 
@@ -93,6 +124,6 @@ fun RegisterBruxism(
 @Composable
 private fun RegisterBruxismPrev() {
     BruxismHelperTheme {
-        RegisterBruxism()
+        RegisterBruxismForm()
     }
 }

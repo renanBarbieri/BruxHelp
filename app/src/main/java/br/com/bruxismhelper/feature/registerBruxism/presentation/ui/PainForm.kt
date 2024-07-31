@@ -1,4 +1,4 @@
-package br.com.bruxismhelper.feature.registerBruxism
+package br.com.bruxismhelper.feature.registerBruxism.presentation.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
@@ -7,22 +7,25 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.bruxismhelper.R
+import br.com.bruxismhelper.feature.registerBruxism.presentation.model.SelectableImage
 import br.com.bruxismhelper.ui.common.FieldSpacer
 import br.com.bruxismhelper.ui.common.FieldSwitch
+import br.com.bruxismhelper.ui.theme.BruxismHelperTheme
 
 @Composable
 fun PainForm(
-    isInPain: MutableState<Boolean>,
-    painLevel: MutableState<Int>,
-    stressLevel: MutableState<Int>,
-    anxietyLevel: MutableState<Int>,
+    selectableImages: MutableState<List<SelectableImage>> = mutableStateOf(listOf()),
+    isInPain: MutableState<Boolean> = mutableStateOf(true),
+    painLevel: MutableState<Int> = mutableIntStateOf(0),
+    stressLevel: MutableState<Int> = mutableIntStateOf(0),
+    anxietyLevel: MutableState<Int> = mutableIntStateOf(0),
 ) {
     FieldSwitch(
         name = R.string.register_bruxism_pain_switch,
@@ -56,15 +59,9 @@ fun PainForm(
             Card(elevation = CardDefaults.cardElevation(
                 defaultElevation = 2.dp
             )) {
-                //TODO Trocar pelas imagens reais
                 ImageGridWithCheckboxes(
                     modifier = Modifier.cardPadding(),
-                    images = listOf(
-                        R.drawable.pain_test,
-                        R.drawable.pain_test,
-                        R.drawable.pain_test,
-                        R.drawable.pain_test,
-                    )
+                    selectableImages = selectableImages
                 )
             }
 
@@ -119,3 +116,11 @@ private fun Modifier.cardPadding() = this.padding(
     top = 8.dp, bottom = 8.dp,
     start = 8.dp, end = 8.dp
 )
+
+@Preview
+@Composable
+private fun PainFormPreview() {
+    BruxismHelperTheme {
+        PainForm()
+    }
+}
