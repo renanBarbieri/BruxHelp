@@ -18,7 +18,7 @@ import br.com.bruxismhelper.ui.theme.BruxismHelperTheme
 fun NavigationHost(appBarTitle: MutableIntState = mutableIntStateOf(R.string.app_name)) {
     val navController = rememberNavController()
     NavHost(
-        startDestination = AppRoute.BruxismRegister,
+        startDestination = AppRoute.Main,
         navController = navController,
     ) {
         composable(route = AppRoute.Main) {
