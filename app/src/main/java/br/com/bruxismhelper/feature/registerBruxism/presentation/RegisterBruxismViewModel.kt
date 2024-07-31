@@ -1,21 +1,21 @@
 package br.com.bruxismhelper.feature.registerBruxism.presentation
 
 import androidx.lifecycle.ViewModel
-import br.com.bruxismhelper.R
-import br.com.bruxismhelper.feature.registerBruxism.presentation.model.BottomLeftIdentifier
-import br.com.bruxismhelper.feature.registerBruxism.presentation.model.BottomRightIdentifier
+import androidx.lifecycle.viewModelScope
+import br.com.bruxismhelper.feature.registerBruxism.domain.repository.RegisterBruxismRepository
 import br.com.bruxismhelper.feature.registerBruxism.presentation.model.RegisterBruxismViewState
-import br.com.bruxismhelper.feature.registerBruxism.presentation.model.SelectableImage
-import br.com.bruxismhelper.feature.registerBruxism.presentation.model.TopLeftIdentifier
-import br.com.bruxismhelper.feature.registerBruxism.presentation.model.TopRightIdentifier
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RegisterBruxismViewModel @Inject constructor() : ViewModel() {
+class RegisterBruxismViewModel @Inject constructor(
+    val repository: RegisterBruxismRepository,
+    val mapper: RegsiterBruxismViewMapper
+) : ViewModel() {
     private val _viewState = MutableStateFlow(RegisterBruxismViewState())
     val viewState: StateFlow<RegisterBruxismViewState> = _viewState
 
@@ -51,4 +51,11 @@ class RegisterBruxismViewModel @Inject constructor() : ViewModel() {
             state.copy(selectableImages = updatedImages)
         }
     }
+
+    fun submitForm() {
+        viewModelScope.launch {
+            repository.submitForm(mapper.fromViewToDomain(_viewState.value))
+        }
+    }
 }
+

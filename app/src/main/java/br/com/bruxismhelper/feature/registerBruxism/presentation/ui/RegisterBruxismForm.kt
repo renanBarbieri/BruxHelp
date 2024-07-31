@@ -91,6 +91,7 @@ fun RegisterBruxismForm(
         item {
             Button(
                 onClick = {
+                    viewModel.submitForm()
                     // Handle form submission
                     onActivityRegistrationFinished()
                 },
