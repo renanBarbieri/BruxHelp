@@ -15,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.bruxismhelper.R
 import br.com.bruxismhelper.feature.registerBruxism.presentation.model.SelectableImage
+import br.com.bruxismhelper.feature.registerBruxism.presentation.ui.RegisterBruxismDefaults.cardPadding
 import br.com.bruxismhelper.ui.common.FieldSpacer
 import br.com.bruxismhelper.ui.common.FieldSwitch
 import br.com.bruxismhelper.ui.theme.BruxismHelperTheme
@@ -25,10 +26,6 @@ fun PainForm(
     onPainChanged: (isInPain: Boolean) -> Unit = {},
     painLevel: Int = 0,
     onPainLevelChanged: (level: Int) -> Unit = {},
-    stressLevel: Int = 0,
-    onStressLevelChanged: (level: Int) -> Unit = {},
-    anxietyLevel: Int = 0,
-    onAnxietyLevelChanged: (level: Int) -> Unit = {},
     selectableImages: List<SelectableImage> = listOf(),
     onImageSelected: (index: Int) -> Unit = {}
 ) {
@@ -70,58 +67,9 @@ fun PainForm(
                     onImageSelectionChanged = onImageSelected
                 )
             }
-
-            FieldSpacer()
-
-            Card(elevation = CardDefaults.cardElevation(
-                defaultElevation = 2.dp
-            )) {
-                LevelSlider(
-                    modifier = Modifier.cardPadding(),
-                    titleRes = R.string.register_bruxism_label_stress_level,
-                    resultLevelText = when (stressLevel) {
-                        in 0..3 -> stringResource(id = R.string.register_bruxism_label_stress_level_low)
-                        in 4..7 -> stringResource(id = R.string.register_bruxism_label_stress_level_medium)
-                        else -> stringResource(id = R.string.register_bruxism_label_stress_level_high)
-                    },
-                    lowLevelIconRes = R.drawable.smile_friendly,
-                    highLevelIconRes = R.drawable.smile_stress,
-                    levelValue = stressLevel,
-                    onLevelChange = {
-                        onStressLevelChanged(it)
-                    }
-                )
-            }
-
-            FieldSpacer()
-
-            Card(elevation = CardDefaults.cardElevation(
-                defaultElevation = 2.dp
-            )) {
-                LevelSlider(
-                    modifier = Modifier.cardPadding(),
-                    titleRes = R.string.register_bruxism_label_anxiety_level,
-                    resultLevelText = when (anxietyLevel) {
-                        in 0..3 -> stringResource(id = R.string.register_bruxism_label_anxiety_level_low)
-                        in 4..7 -> stringResource(id = R.string.register_bruxism_label_anxiety_level_medium)
-                        else -> stringResource(id = R.string.register_bruxism_label_anxiety_level_high)
-                    },
-                    lowLevelIconRes = R.drawable.smile_friendly,
-                    highLevelIconRes = R.drawable.smile_stress,
-                    levelValue = anxietyLevel,
-                    onLevelChange = {
-                        onAnxietyLevelChanged(it)
-                    }
-                )
-            }
         }
     }
 }
-
-private fun Modifier.cardPadding() = this.padding(
-    top = 8.dp, bottom = 8.dp,
-    start = 8.dp, end = 8.dp
-)
 
 @Preview
 @Composable

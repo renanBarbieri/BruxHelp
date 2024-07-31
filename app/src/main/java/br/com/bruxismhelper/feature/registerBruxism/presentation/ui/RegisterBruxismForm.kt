@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableIntState
@@ -20,9 +22,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import br.com.bruxismhelper.R
 import br.com.bruxismhelper.feature.registerBruxism.presentation.RegisterBruxismViewModel
+import br.com.bruxismhelper.feature.registerBruxism.presentation.model.RegisterBruxismViewState
+import br.com.bruxismhelper.feature.registerBruxism.presentation.ui.RegisterBruxismDefaults.cardPadding
 import br.com.bruxismhelper.ui.common.FieldSpacer
 import br.com.bruxismhelper.ui.common.FieldSwitch
 import br.com.bruxismhelper.ui.theme.BruxismHelperTheme
@@ -30,17 +35,46 @@ import br.com.bruxismhelper.ui.theme.BruxismHelperTheme
 @Composable
 fun RegisterBruxismForm(
     modifier: Modifier = Modifier,
-    viewModel: RegisterBruxismViewModel = hiltViewModel(),
     appBarTitle: MutableIntState = mutableIntStateOf(R.string.register_bruxism_title),
+    viewModel: RegisterBruxismViewModel = hiltViewModel(),
     activityOptions: Array<String> = stringArrayResource(id = R.array.register_bruxism_activity),
     onActivityRegistrationFinished: () -> Unit = {},
 ) {
-    // Setting the app bar title
+//    // Setting the app bar title
     appBarTitle.intValue = R.string.register_bruxism_title
 
     // Observing the state from ViewModel
     val viewState by viewModel.viewState.collectAsState()
 
+    FormView(
+        viewState = viewState,
+        activityOptions = activityOptions,
+        onIsEatingChanged = { viewModel.updateIsEating(it) },
+        onBruxismActivitySelected = { viewModel.updateSelectedActivity(it) },
+        onStressLevelUpdated = { viewModel.updateStressLevel(it) },
+        onAnxietyLevelUpdated = { viewModel.updateAnxietyLevel(it) },
+        onIsInPainChanged = { viewModel.updateIsInPain(it) },
+        onPainLevelUpdated = { viewModel.updatePainLevel(it) },
+        onPainImageSelected = { viewModel.updateSelectableImageCheck(it) },
+        onSubmitFormClick = { viewModel.submitForm() },
+    )
+}
+
+@Composable
+fun FormView(
+    modifier: Modifier = Modifier,
+    viewState: RegisterBruxismViewState = RegisterBruxismViewState(),
+    activityOptions: Array<String> = stringArrayResource(id = R.array.register_bruxism_activity),
+    onIsEatingChanged: (isEating: Boolean) -> Unit = {},
+    onBruxismActivitySelected: (activity: String) -> Unit = {},
+    onStressLevelUpdated: (level: Int) -> Unit = {},
+    onAnxietyLevelUpdated: (level: Int) -> Unit = {},
+    onIsInPainChanged: (isEating: Boolean) -> Unit = {},
+    onPainLevelUpdated: (level: Int) -> Unit = {},
+    onPainImageSelected: (index: Int) -> Unit = {},
+    onSubmitFormClick: () -> Unit = {},
+    onActivityRegistrationFinished: () -> Unit = {},
+) {
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
@@ -55,7 +89,7 @@ fun RegisterBruxismForm(
             FieldSwitch(
                 name = R.string.register_bruxism_eating_switch,
                 checked = viewState.isEating,
-                onCheckedChange = { viewModel.updateIsEating(it) }
+                onCheckedChange = { onIsEatingChanged(it) }
             )
 
             FieldSpacer()
@@ -67,20 +101,59 @@ fun RegisterBruxismForm(
                     ActivityTypeDropdown(
                         activityOptions = activityOptions,
                         selectedActivity = viewState.selectedActivity,
-                        onActivitySelected = { viewModel.updateSelectedActivity(it) }
+                        onActivitySelected = { onBruxismActivitySelected(it) }
                     )
+                    FieldSpacer()
+
+                    Card(elevation = CardDefaults.cardElevation(
+                        defaultElevation = 2.dp
+                    )) {
+                        LevelSlider(
+                            modifier = Modifier.cardPadding(),
+                            titleRes = R.string.register_bruxism_label_stress_level,
+                            resultLevelText = when (viewState.stressLevel) {
+                                in 0..3 -> stringResource(id = R.string.register_bruxism_label_stress_level_low)
+                                in 4..7 -> stringResource(id = R.string.register_bruxism_label_stress_level_medium)
+                                else -> stringResource(id = R.string.register_bruxism_label_stress_level_high)
+                            },
+                            lowLevelIconRes = R.drawable.smile_friendly,
+                            highLevelIconRes = R.drawable.smile_stress,
+                            levelValue = viewState.stressLevel,
+                            onLevelChange = {
+                                onStressLevelUpdated(it)
+                            }
+                        )
+                    }
+
+                    FieldSpacer()
+
+                    Card(elevation = CardDefaults.cardElevation(
+                        defaultElevation = 2.dp
+                    )) {
+                        LevelSlider(
+                            modifier = Modifier.cardPadding(),
+                            titleRes = R.string.register_bruxism_label_anxiety_level,
+                            resultLevelText = when (viewState.anxietyLevel) {
+                                in 0..3 -> stringResource(id = R.string.register_bruxism_label_anxiety_level_low)
+                                in 4..7 -> stringResource(id = R.string.register_bruxism_label_anxiety_level_medium)
+                                else -> stringResource(id = R.string.register_bruxism_label_anxiety_level_high)
+                            },
+                            lowLevelIconRes = R.drawable.smile_friendly,
+                            highLevelIconRes = R.drawable.smile_stress,
+                            levelValue = viewState.anxietyLevel,
+                            onLevelChange = {
+                                onAnxietyLevelUpdated(it)
+                            }
+                        )
+                    }
                     FieldSpacer()
                     PainForm(
                         isInPain = viewState.isInPain,
-                        onPainChanged = { viewModel.updateIsInPain(it) },
+                        onPainChanged = { onIsInPainChanged(it) },
                         painLevel = viewState.painLevel,
-                        onPainLevelChanged = { viewModel.updatePainLevel(it) },
-                        stressLevel = viewState.stressLevel,
-                        onStressLevelChanged = { viewModel.updateStressLevel(it) },
-                        anxietyLevel = viewState.anxietyLevel,
-                        onAnxietyLevelChanged = { viewModel.updateAnxietyLevel(it) },
+                        onPainLevelChanged = { onPainLevelUpdated(it) },
                         selectableImages = viewState.selectableImages,
-                        onImageSelected = { viewModel.updateSelectableImageCheck(it) },
+                        onImageSelected = { onPainImageSelected(it) },
                     )
                 }
             }
@@ -91,9 +164,9 @@ fun RegisterBruxismForm(
         item {
             Button(
                 onClick = {
-                    viewModel.submitForm()
+                    onSubmitFormClick()
                     // Handle form submission
-                    onActivityRegistrationFinished()
+                    //onActivityRegistrationFinished()
                 },
             ) {
                 Text(stringResource(id = R.string.register_bruxism_send_button))
@@ -106,6 +179,6 @@ fun RegisterBruxismForm(
 @Composable
 private fun RegisterBruxismPrev() {
     BruxismHelperTheme {
-        RegisterBruxismForm()
+        FormView()
     }
 }
