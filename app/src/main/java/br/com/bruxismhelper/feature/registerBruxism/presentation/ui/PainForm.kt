@@ -21,21 +21,26 @@ import br.com.bruxismhelper.ui.theme.BruxismHelperTheme
 
 @Composable
 fun PainForm(
-    selectableImages: MutableState<List<SelectableImage>> = mutableStateOf(listOf()),
-    isInPain: MutableState<Boolean> = mutableStateOf(true),
-    painLevel: MutableState<Int> = mutableIntStateOf(0),
-    stressLevel: MutableState<Int> = mutableIntStateOf(0),
-    anxietyLevel: MutableState<Int> = mutableIntStateOf(0),
+    isInPain: Boolean = true,
+    onPainChanged: (isInPain: Boolean) -> Unit = {},
+    painLevel: Int = 0,
+    onPainLevelChanged: (level: Int) -> Unit = {},
+    stressLevel: Int = 0,
+    onStressLevelChanged: (level: Int) -> Unit = {},
+    anxietyLevel: Int = 0,
+    onAnxietyLevelChanged: (level: Int) -> Unit = {},
+    selectableImages: List<SelectableImage> = listOf(),
+    onImageSelected: (index: Int) -> Unit = {}
 ) {
     FieldSwitch(
         name = R.string.register_bruxism_pain_switch,
-        checked = isInPain.value,
-        onCheckedChange = { isInPain.value = it }
+        checked = isInPain,
+        onCheckedChange = { onPainChanged(it) }
     )
 
     FieldSpacer()
 
-    AnimatedVisibility(visible = isInPain.value) {
+    AnimatedVisibility(visible = isInPain) {
         Column {
             Card(elevation = CardDefaults.cardElevation(
                 defaultElevation = 2.dp
@@ -45,11 +50,11 @@ fun PainForm(
                     titleRes = R.string.register_bruxism_label_pain_level,
                     resultLevelText = stringResource(
                         id = R.string.register_bruxism_label_pain_level_result,
-                        painLevel.value
+                        painLevel
                     ),
-                    levelValue = painLevel.value,
+                    levelValue = painLevel,
                     onLevelChange = {
-                        painLevel.value = it
+                        onPainLevelChanged(it)
                     }
                 )
             }
@@ -61,7 +66,8 @@ fun PainForm(
             )) {
                 ImageGridWithCheckboxes(
                     modifier = Modifier.cardPadding(),
-                    selectableImages = selectableImages
+                    selectableImages = selectableImages,
+                    onImageSelectionChanged = onImageSelected
                 )
             }
 
@@ -73,16 +79,16 @@ fun PainForm(
                 LevelSlider(
                     modifier = Modifier.cardPadding(),
                     titleRes = R.string.register_bruxism_label_stress_level,
-                    resultLevelText = when (stressLevel.value) {
+                    resultLevelText = when (stressLevel) {
                         in 0..3 -> stringResource(id = R.string.register_bruxism_label_stress_level_low)
                         in 4..7 -> stringResource(id = R.string.register_bruxism_label_stress_level_medium)
                         else -> stringResource(id = R.string.register_bruxism_label_stress_level_high)
                     },
                     lowLevelIconRes = R.drawable.smile_friendly,
                     highLevelIconRes = R.drawable.smile_stress,
-                    levelValue = stressLevel.value,
+                    levelValue = stressLevel,
                     onLevelChange = {
-                        stressLevel.value = it
+                        onStressLevelChanged(it)
                     }
                 )
             }
@@ -95,16 +101,16 @@ fun PainForm(
                 LevelSlider(
                     modifier = Modifier.cardPadding(),
                     titleRes = R.string.register_bruxism_label_anxiety_level,
-                    resultLevelText = when (anxietyLevel.value) {
+                    resultLevelText = when (anxietyLevel) {
                         in 0..3 -> stringResource(id = R.string.register_bruxism_label_anxiety_level_low)
                         in 4..7 -> stringResource(id = R.string.register_bruxism_label_anxiety_level_medium)
                         else -> stringResource(id = R.string.register_bruxism_label_anxiety_level_high)
                     },
                     lowLevelIconRes = R.drawable.smile_friendly,
                     highLevelIconRes = R.drawable.smile_stress,
-                    levelValue = anxietyLevel.value,
+                    levelValue = anxietyLevel,
                     onLevelChange = {
-                        anxietyLevel.value = it
+                        onAnxietyLevelChanged(it)
                     }
                 )
             }

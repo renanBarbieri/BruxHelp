@@ -36,7 +36,8 @@ import br.com.bruxismhelper.ui.theme.BruxismHelperTheme
 @Composable
 fun ImageGridWithCheckboxes(
     modifier: Modifier = Modifier,
-    selectableImages: MutableState<List<SelectableImage>> = mutableStateOf(listOf())
+    selectableImages: List<SelectableImage> = listOf(),
+    onImageSelectionChanged: (index: Int) -> Unit = {}
 ) {
     Column(modifier = modifier) {
         Text(
@@ -44,7 +45,7 @@ fun ImageGridWithCheckboxes(
             text = stringResource(id = R.string.register_bruxism_label_pain_region)
         )
 
-        selectableImages.value.chunked(2).forEachIndexed { rowIndex, rowImages ->
+        selectableImages.chunked(2).forEachIndexed { rowIndex, rowImages ->
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
@@ -56,13 +57,12 @@ fun ImageGridWithCheckboxes(
                             .size(100.dp)
                             .padding(8.dp)
                             .clickable {
-                                val updatedImages = selectableImages.value
-                                    .toMutableList()
-                                    .apply {
-                                        this[index] =
-                                            this[index].copy(isSelected = !this[index].isSelected)
-                                    }
-                                selectableImages.value = updatedImages
+                                onImageSelectionChanged(index)
+//                                val updatedImages = selectableImages
+//                                    .toMutableList().apply {
+//                                        this[index] = this[index].copy(isSelected = !this[index].isSelected)
+//                                    }
+//                                selectableImages.value = updatedImages
                             },
                         contentAlignment = Alignment.TopEnd
                     ) {
@@ -76,10 +76,11 @@ fun ImageGridWithCheckboxes(
                         Checkbox(
                             checked = selectableImage.isSelected,
                             onCheckedChange = {
-                                val updatedImages = selectableImages.value.toMutableList().apply {
-                                    this[index] = this[index].copy(isSelected = it)
-                                }
-                                selectableImages.value = updatedImages
+                                onImageSelectionChanged(index)
+//                                val updatedImages = selectableImages.toMutableList().apply {
+//                                    this[index] = this[index].copy(isSelected = it)
+//                                }
+//                                selectableImages.value = updatedImages
                             },
                         )
                     }
@@ -94,35 +95,29 @@ fun ImageGridWithCheckboxes(
 @Composable
 private fun GridPreview() {
     BruxismHelperTheme {
-        val selectableImagesState = remember {
-            mutableStateOf(
-                listOf(
-                    SelectableImage(
-                        id = TopLeftIdentifier,
-                        isSelected = false,
-                        imageRes = R.drawable.pain_test
-                    ),
-                    SelectableImage(
-                        id = TopRightIdentifier,
-                        isSelected = false,
-                        imageRes = R.drawable.pain_test
-                    ),
-                    SelectableImage(
-                        id = BottomLeftIdentifier,
-                        isSelected = false,
-                        imageRes = R.drawable.pain_test
-                    ),
-                    SelectableImage(
-                        id = BottomRightIdentifier,
-                        isSelected = false,
-                        imageRes = R.drawable.pain_test
-                    ),
-                )
-            )
-        }
-
         ImageGridWithCheckboxes(
-            selectableImages = selectableImagesState,
+            selectableImages = listOf(
+                SelectableImage(
+                    id = TopLeftIdentifier,
+                    isSelected = false,
+                    imageRes = R.drawable.pain_test
+                ),
+                SelectableImage(
+                    id = TopRightIdentifier,
+                    isSelected = false,
+                    imageRes = R.drawable.pain_test
+                ),
+                SelectableImage(
+                    id = BottomLeftIdentifier,
+                    isSelected = false,
+                    imageRes = R.drawable.pain_test
+                ),
+                SelectableImage(
+                    id = BottomRightIdentifier,
+                    isSelected = false,
+                    imageRes = R.drawable.pain_test
+                ),
+            ),
         )
     }
 }

@@ -21,7 +21,8 @@ import br.com.bruxismhelper.R
 @Composable
 fun ActivityTypeDropdown(
     activityOptions: Array<String>,
-    selectedActivity: MutableState<String>,
+    selectedActivity: String,
+    onActivitySelected: (selectedActivity: String) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -30,8 +31,8 @@ fun ActivityTypeDropdown(
         onExpandedChange = { expanded = !expanded }
     ) {
         OutlinedTextField(
-            value = selectedActivity.value,
-            onValueChange = { selectedActivity.value = it },
+            value = selectedActivity,
+            onValueChange = { },//onActivitySelected(it) },
             label = { Text(stringResource(id = R.string.register_bruxism_label_activity)) },
             modifier = Modifier
                 .fillMaxWidth()
@@ -47,7 +48,7 @@ fun ActivityTypeDropdown(
                 DropdownMenuItem(
                     text = { Text(option) },
                     onClick = {
-                        selectedActivity.value = option
+                        onActivitySelected(option)
                         expanded = false
                     }
                 )
