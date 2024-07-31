@@ -12,7 +12,11 @@ import br.com.bruxismhelper.feature.register.presentation.model.OralHabitViewObj
 import br.com.bruxismhelper.feature.register.presentation.model.RegisterFields
 import br.com.bruxismhelper.feature.register.presentation.model.RegisterFormField
 import br.com.bruxismhelper.feature.register.presentation.model.RegisterViewState
+import br.com.bruxismhelper.feature.registerBruxism.presentation.RegisterBruxismViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,86 +26,105 @@ class RegisterViewModel @Inject constructor(
     private val mapper: RegisterViewMapper
 ) : ViewModel() {
 
-    var viewState by mutableStateOf(RegisterViewState(RegisterFields(repository.getAvailableDentists())))
-        private set
+    private val _viewState =
+        MutableStateFlow(RegisterViewState(RegisterFields(repository.getAvailableDentists())))
+    val viewState: StateFlow<RegisterViewState> = _viewState
 
     fun updateField(field: RegisterFormField, value: Any) {
         when (field) {
-            RegisterFormField.FULL_NAME -> viewState = viewState.copy(
-                registerForm = viewState.registerForm.copy(
-                    fullName = value as String
+            RegisterFormField.FULL_NAME -> _viewState.update {
+                it.copy(
+                    registerForm = it.registerForm.copy(fullName = value as String)
                 )
-            )
+            }
 
-            RegisterFormField.EMAIL -> viewState = viewState.copy(
-                registerForm = viewState.registerForm.copy(
-                    email = value as String
+            RegisterFormField.EMAIL -> _viewState.update {
+                it.copy(
+                    registerForm = it.registerForm.copy(
+                        email = value as String
+                    )
                 )
-            )
+            }
 
-            RegisterFormField.DENTIST -> viewState = viewState.copy(
-                registerForm = viewState.registerForm.copy(
-                    dentist = Dentist(value as String)
+            RegisterFormField.DENTIST -> _viewState.update {
+                it.copy(
+                    registerForm = it.registerForm.copy(
+                        dentist = Dentist(value as String)
+                    )
                 )
-            )
+            }
 
-            RegisterFormField.CONTINUOUS_MEDICATIONS -> viewState = viewState.copy(
-                registerForm = viewState.registerForm.copy(
-                    continuousMedications = value as String
+            RegisterFormField.CONTINUOUS_MEDICATIONS -> _viewState.update {
+                it.copy(
+                    registerForm = it.registerForm.copy(
+                        continuousMedications = value as String
+                    )
                 )
-            )
+            }
 
-            RegisterFormField.CAFFEINE_CONSUMPTION_QUANTITY -> viewState = viewState.copy(
-                registerForm = viewState.registerForm.copy(
-                    caffeineConsumption = viewState.registerForm.caffeineConsumption.copy(quantity = value.asStringToIntOrNull())
-                )
-            )
-
-            RegisterFormField.CAFFEINE_CONSUMPTION_FREQUENCY -> viewState = viewState.copy(
-                registerForm = viewState.registerForm.copy(
-                    caffeineConsumption = viewState.registerForm.caffeineConsumption.copy(
-                        frequency = FrequencyViewObject.fromString(
-                            value as String
+            RegisterFormField.CAFFEINE_CONSUMPTION_QUANTITY -> _viewState.update {
+                it.copy(
+                    registerForm = it.registerForm.copy(
+                        caffeineConsumption = it.registerForm.caffeineConsumption.copy(
+                            quantity = value.asStringToIntOrNull()
                         )
                     )
                 )
-            )
+            }
 
-            RegisterFormField.SMOKING_QUANTITY -> viewState = viewState.copy(
-                registerForm = viewState.registerForm.copy(
-                    smoking = viewState.registerForm.smoking.copy(quantity = value.asStringToIntOrNull())
-                )
-            )
-
-            RegisterFormField.SMOKING_FREQUENCY -> viewState = viewState.copy(
-                registerForm = viewState.registerForm.copy(
-                    smoking = viewState.registerForm.smoking.copy(
-                        frequency = FrequencyViewObject.fromString(
-                            value as String
+            RegisterFormField.CAFFEINE_CONSUMPTION_FREQUENCY -> _viewState.update {
+                it.copy(
+                    registerForm = it.registerForm.copy(
+                        caffeineConsumption = it.registerForm.caffeineConsumption.copy(
+                            frequency = FrequencyViewObject.fromString(
+                                value as String
+                            )
                         )
                     )
                 )
-            )
+            }
+
+            RegisterFormField.SMOKING_QUANTITY -> _viewState.update {
+                it.copy(
+                    registerForm = it.registerForm.copy(
+                        smoking = it.registerForm.smoking.copy(quantity = value.asStringToIntOrNull())
+                    )
+                )
+            }
+
+            RegisterFormField.SMOKING_FREQUENCY -> _viewState.update {
+                it.copy(
+                    registerForm = it.registerForm.copy(
+                        smoking = it.registerForm.smoking.copy(
+                            frequency = FrequencyViewObject.fromString(
+                                value as String
+                            )
+                        )
+                    )
+                )
+            }
 
             RegisterFormField.ORAL_HABITS -> {
-                @Suppress("UNCHECKED_CAST") val fieldValue =
-                    value as Pair<OralHabitViewObject, Boolean>
-                val habit = fieldValue.first
-                val checked = fieldValue.second
+                _viewState.update {
+                    @Suppress("UNCHECKED_CAST") val fieldValue =
+                        value as Pair<OralHabitViewObject, Boolean>
+                    val habit = fieldValue.first
+                    val checked = fieldValue.second
 
-                val currentHabits = viewState.registerForm.oralHabits.toMutableList()
+                    val currentHabits = it.registerForm.oralHabits.toMutableList()
 
-                if (checked) {
-                    currentHabits.add(habit)
-                } else {
-                    currentHabits.remove(habit)
-                }
+                    if (checked) {
+                        currentHabits.add(habit)
+                    } else {
+                        currentHabits.remove(habit)
+                    }
 
-                viewState = viewState.copy(
-                    registerForm = viewState.registerForm.copy(
-                        oralHabits = currentHabits
+                    it.copy(
+                        registerForm = it.registerForm.copy(
+                            oralHabits = currentHabits
+                        )
                     )
-                )
+                }
             }
         }
     }
@@ -109,7 +132,7 @@ class RegisterViewModel @Inject constructor(
     private fun Any.asStringToIntOrNull(): Int? {
         val thisAsString = this as? String
 
-        return if(thisAsString.isNullOrBlank().not()) {
+        return if (thisAsString.isNullOrBlank().not()) {
             thisAsString!!.toInt()
         } else {
             null
@@ -118,7 +141,7 @@ class RegisterViewModel @Inject constructor(
 
     fun submitForm() {
         viewModelScope.launch {
-            repository.submitForm(mapper.fromViewToDomain(viewState.registerForm))
+            repository.submitForm(mapper.fromViewToDomain(_viewState.value.registerForm))
         }
     }
 }

@@ -16,6 +16,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableIntState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,7 +53,7 @@ fun RegisterForm(
 ) {
     appBarTitle.intValue = R.string.register_title
 
-    val formState by viewModel::viewState
+    val formState by viewModel.viewState.collectAsState()
 
     Column(
         modifier = modifier.fillMaxSize(),
