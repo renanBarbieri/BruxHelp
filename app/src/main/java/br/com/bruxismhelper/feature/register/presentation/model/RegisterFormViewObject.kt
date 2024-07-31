@@ -6,7 +6,7 @@ data class RegisterFormViewObject(
     val fullName: String = "",
     val email: String = "",
     val dentist: Dentist = Dentist(),
-    val continuousMedications: String = "",
+    val continuousMedicines: String = "",
     val caffeineConsumption: ConsumptionViewObject = ConsumptionViewObject(),
     val smoking: ConsumptionViewObject = ConsumptionViewObject(),
     val oralHabits: List<OralHabitViewObject> = listOf()

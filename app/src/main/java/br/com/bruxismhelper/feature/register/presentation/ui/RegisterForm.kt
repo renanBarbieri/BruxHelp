@@ -21,7 +21,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
@@ -37,9 +36,7 @@ import br.com.bruxismhelper.feature.register.presentation.RegisterViewModel
 import br.com.bruxismhelper.feature.register.presentation.model.FrequencyViewObject
 import br.com.bruxismhelper.feature.register.presentation.model.OralHabitViewObject
 import br.com.bruxismhelper.feature.register.presentation.model.RegisterFields
-import br.com.bruxismhelper.feature.register.presentation.model.RegisterFormField
 import br.com.bruxismhelper.feature.register.presentation.model.RegisterViewState
-import br.com.bruxismhelper.ui.common.FieldSpacer
 import br.com.bruxismhelper.ui.common.spacerField
 import br.com.bruxismhelper.ui.theme.BruxismHelperTheme
 
@@ -63,16 +60,16 @@ fun RegisterForm(
         FormView(
             modifier = modifier,
             viewState = formState,
-            onNameChanged = { viewModel.updateField(RegisterFormField.FULL_NAME, it) },
-            onEmailChanged = { viewModel.updateField(RegisterFormField.EMAIL, it) },
-            onDoctorChanged = { viewModel.updateField(RegisterFormField.DENTIST, it) },
-            onMedicinesChanged = { viewModel.updateField(RegisterFormField.DENTIST, it) },
-            onCaffeineQuantityChanged = { viewModel.updateField(RegisterFormField.CAFFEINE_CONSUMPTION_QUANTITY, it) },
-            onCaffeineFrequencyChanged = { viewModel.updateField(RegisterFormField.CAFFEINE_CONSUMPTION_FREQUENCY, it) },
-            onSmokingQuantityChanged = { viewModel.updateField(RegisterFormField.SMOKING_QUANTITY, it) },
-            onSmokingFrequencyChanged = { viewModel.updateField(RegisterFormField.SMOKING_FREQUENCY, it) },
+            onNameChanged = { viewModel.updateFullName(it) },
+            onEmailChanged = { viewModel.updateEmail(it) },
+            onDoctorChanged = { viewModel.updateDentist(it) },
+            onMedicinesChanged = { viewModel.updateContinuousMedicines(it) },
+            onCaffeineQuantityChanged = { viewModel.updateCaffeineConsumptionQuantity(it) },
+            onCaffeineFrequencyChanged = { viewModel.updateCaffeineConsumptionFrequency(it) },
+            onSmokingQuantityChanged = { viewModel.updateSmokingQuantity(it) },
+            onSmokingFrequencyChanged = { viewModel.updateSmokingFrequency(it) },
             onHabitChanged = { habit, checked ->
-                viewModel.updateField(RegisterFormField.ORAL_HABITS, Pair(habit, checked))
+                viewModel.updateOralHabits(habit, checked)
             },
             onFormSubmit = { viewModel.submitForm() },
             onFormIgnored = { onRegistrationIgnored() },
@@ -142,7 +139,7 @@ private fun FormView(
 
         item {
             OutlinedTextField(
-                value = viewState.registerForm.continuousMedications,
+                value = viewState.registerForm.continuousMedicines,
                 onValueChange = { onMedicinesChanged(it) },
                 label = { Text(stringResource(id = R.string.register_label_medicine)) },
                 modifier = Modifier.fillMaxWidth()

@@ -16,7 +16,7 @@ class RegisterRepositoryMapper @Inject constructor(){
             "fullName" to fullName,
             "email" to email,
             "dentist" to dentist.toMap(),
-            "continuousMedications" to continuousMedications,
+            "continuousMedicines" to continuousMedicines,
             "caffeineConsumption" to caffeineConsumption.toMap(),
             "smoking" to smoking.toMap(),
             "oralHabits" to oralHabits.map { it.name }

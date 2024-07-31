@@ -20,7 +20,7 @@ class RegisterViewMapper @Inject constructor() {
             fullName = formView.fullName,
             email = formView.email,
             dentist = formView.dentist,
-            continuousMedications = formView.continuousMedications,
+            continuousMedicines = formView.continuousMedicines,
             caffeineConsumption = formView.caffeineConsumption.toCaffeineConsumption(),
             smoking = formView.smoking.toSmokingConsumption(),
             oralHabits = formView.oralHabits.toDomain(),
