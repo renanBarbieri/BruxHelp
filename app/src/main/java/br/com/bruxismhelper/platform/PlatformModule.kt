@@ -1,5 +1,6 @@
 package br.com.bruxismhelper.platform
 
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -18,5 +19,11 @@ object PlatformModule {
         return GsonBuilder()
             .excludeFieldsWithoutExposeAnnotation()
             .create()
+    }
+
+    @Singleton
+    @Provides
+    fun provideFirestore(): FirebaseFirestore {
+        return FirebaseFirestore.getInstance()
     }
 }
