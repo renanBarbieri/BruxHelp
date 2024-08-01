@@ -2,12 +2,14 @@ package br.com.bruxismhelper.feature.registerBruxism.presentation
 
 import br.com.bruxismhelper.feature.registerBruxism.domain.model.BruxismRegion
 import br.com.bruxismhelper.feature.registerBruxism.domain.model.RegisterBruxismForm
-import br.com.bruxismhelper.feature.registerBruxism.presentation.model.BottomLeftIdentifier
-import br.com.bruxismhelper.feature.registerBruxism.presentation.model.BottomRightIdentifier
+import br.com.bruxismhelper.feature.registerBruxism.presentation.model.AtmLeftIdentifier
+import br.com.bruxismhelper.feature.registerBruxism.presentation.model.AtmRightIdentifier
+import br.com.bruxismhelper.feature.registerBruxism.presentation.model.MasseterLeftIdentifier
+import br.com.bruxismhelper.feature.registerBruxism.presentation.model.MasseterRightIdentifier
 import br.com.bruxismhelper.feature.registerBruxism.presentation.model.RegisterBruxismViewState
 import br.com.bruxismhelper.feature.registerBruxism.presentation.model.SelectableImage
-import br.com.bruxismhelper.feature.registerBruxism.presentation.model.TopLeftIdentifier
-import br.com.bruxismhelper.feature.registerBruxism.presentation.model.TopRightIdentifier
+import br.com.bruxismhelper.feature.registerBruxism.presentation.model.TemporalLeftIdentifier
+import br.com.bruxismhelper.feature.registerBruxism.presentation.model.TemporalRightIdentifier
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -16,23 +18,31 @@ class RegsiterBruxismViewMapper @Inject constructor() {
     fun fromViewToDomain(formView: RegisterBruxismViewState): RegisterBruxismForm {
         return RegisterBruxismForm(
             isEating = formView.isEating,
-            selectedActivity = formView.selectedActivity,
-            isInPain = formView.isInPain,
-            painLevel = formView.painLevel,
-            stressLevel = formView.stressLevel,
-            anxietyLevel = formView.anxietyLevel,
-            selectableImages = formView.selectableImages.map { it.toDomain() },
+            selectedActivity = formView.selectedActivity.getOrNullWhenFalse(formView.isEating),
+            stressLevel = formView.stressLevel.getOrNullWhenFalse(formView.isEating),
+            anxietyLevel = formView.anxietyLevel.getOrNullWhenFalse(formView.isEating),
+            isInPain = formView.isInPain.getOrNullWhenFalse(formView.isEating),
+            painLevel = formView.painLevel
+                .getOrNullWhenFalse(formView.isEating && formView.isInPain),
+            selectableImages = formView.selectableImages
+                .getOrNullWhenFalse(formView.isEating && formView.isInPain)?.map { it.toDomain() },
         )
     }
 
     private fun SelectableImage.toDomain(): BruxismRegion {
-        val name = when(this.id) {
-            BottomLeftIdentifier -> "CANTO_INFERIOR_ESQUERDO VER COM NAT"
-            BottomRightIdentifier -> "CANTO_INFERIOR_DIREITO VER COM NAT"
-            TopLeftIdentifier -> "CANTO_SUPERIOR_ESQUERDO VER COM NAT"
-            TopRightIdentifier -> "CANTO_SUPERIOR_DIREITO VER COM NAT"
+        val name = when (this.id) {
+            AtmLeftIdentifier -> "Atm Esquerda"
+            AtmRightIdentifier -> "Atm Direita"
+            MasseterLeftIdentifier -> "Masseter Esquedo"
+            MasseterRightIdentifier -> "Masseter Direito"
+            TemporalLeftIdentifier -> "Temporal Esquedo"
+            TemporalRightIdentifier -> "Temporal Direito"
         }
 
         return BruxismRegion(name, this.isSelected)
+    }
+
+    private fun <T> T.getOrNullWhenFalse(condition: Boolean): T? {
+        return if (condition) this else null
     }
 }

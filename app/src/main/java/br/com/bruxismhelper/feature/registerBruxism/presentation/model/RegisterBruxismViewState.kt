@@ -14,22 +14,32 @@ data class RegisterBruxismViewState(
 
 private val mockSelectableImage = listOf(
     SelectableImage(
-        id = TopLeftIdentifier,
+        id = AtmLeftIdentifier,
         isSelected = false,
         imageRes = R.drawable.pain_test
     ),
     SelectableImage(
-        id = TopRightIdentifier,
+        id = AtmRightIdentifier,
         isSelected = false,
         imageRes = R.drawable.pain_test
     ),
     SelectableImage(
-        id = BottomLeftIdentifier,
+        id = MasseterLeftIdentifier,
         isSelected = false,
         imageRes = R.drawable.pain_test
     ),
     SelectableImage(
-        id = BottomRightIdentifier,
+        id = MasseterRightIdentifier,
+        isSelected = false,
+        imageRes = R.drawable.pain_test
+    ),
+    SelectableImage(
+        id = TemporalLeftIdentifier,
+        isSelected = false,
+        imageRes = R.drawable.pain_test
+    ),
+    SelectableImage(
+        id = TemporalRightIdentifier,
         isSelected = false,
         imageRes = R.drawable.pain_test
     ),
