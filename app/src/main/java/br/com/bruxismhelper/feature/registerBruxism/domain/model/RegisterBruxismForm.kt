@@ -1,11 +1,11 @@
 package br.com.bruxismhelper.feature.registerBruxism.domain.model
 
 data class RegisterBruxismForm(
-    val isEating: Boolean = false,
-    val selectedActivity: String? = "",
-    val isInPain: Boolean? = false,
-    val painLevel: Int? = 0,
-    val stressLevel: Int? = 0,
-    val anxietyLevel: Int? = 0,
+    val isEating: Boolean,
+    val selectedActivity: String?,
+    val stressLevel: Int?,
+    val anxietyLevel: Int?,
+    val isInPain: Boolean?,
+    val painLevel: Int?,
     val selectableImages: List<BruxismRegion>?
 )
