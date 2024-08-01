@@ -1,12 +1,14 @@
 package br.com.bruxismhelper.feature.register.repository.source
 
+import br.com.bruxismhelper.shared.repository.source.BruxismFirestore
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.tasks.await
 import logcat.asLog
 import logcat.logcat
 import javax.inject.Inject
 
-class RegisterRemoteDataSource @Inject constructor() {
-    private val firestoreDB = FirebaseFirestore.getInstance();
+class RegisterRemoteDataSource @Inject constructor(private val bruxismFirestore: BruxismFirestore) {
 
     /**
      * TODO
@@ -15,21 +17,22 @@ class RegisterRemoteDataSource @Inject constructor() {
      *
      * @param fieldsMap
      */
-    fun submitForm(
+    suspend fun submitForm(
         fieldsMap: Map<String, Any>,
-        onFormSubmitted: suspend (userRegisterId: String) -> Unit = {},
-        onFormSubmitFailure: suspend (exception: Exception) -> Unit = {},
-    ) {
-        firestoreDB
-            .collection("user")
+    ): Result<String> {
+        val result = CompletableDeferred<Result<String>>()
+
+        bruxismFirestore.userCollection
             .add(fieldsMap)
             .addOnSuccessListener { documentReference ->
-                logcat { "User created with success: ${documentReference.id}" }
-                suspend { onFormSubmitted(documentReference.id) }
+                logcat { "User created with success: ${documentReference.path}" }
+                result.complete(Result.success(documentReference.path))
             }
             .addOnFailureListener { exception ->
                 logcat { "Error while creating user: ${exception.asLog()}" }
-                suspend { onFormSubmitFailure(exception) }
+                result.complete(Result.failure(exception))
             }
+
+        return result.await()
     }
 }

@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class RegisterRepositoryImpl @Inject constructor(
     private val remoteDataSource: RegisterRemoteDataSource,
-    private val localDataSource: UserLocalDataSource,
+    private val userLocalDataSource: UserLocalDataSource,
     private val mapper: RegisterRepositoryMapper
 ): RegisterRepository {
 
@@ -18,11 +18,10 @@ class RegisterRepositoryImpl @Inject constructor(
     }
 
     override suspend fun submitForm(registerForm: RegisterForm) {
-        remoteDataSource.submitForm(
-            fieldsMap = mapper.mapFromDomain(registerForm),
-            onFormSubmitted = { userRegisterId ->
-                localDataSource.saveUserRegisterId(userRegisterId)
-            }
-        )
+        val formRequest = remoteDataSource.submitForm(fieldsMap = mapper.mapFromDomain(registerForm))
+
+        formRequest.getOrNull()?.let {
+            userLocalDataSource.saveUserRegisterId(it)
+        }
     }
 }
