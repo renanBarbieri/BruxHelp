@@ -1,5 +1,6 @@
 package br.com.bruxismhelper.platform
 
+import br.com.bruxismhelper.shared.repository.source.BruxismFirestore
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -25,5 +26,11 @@ object PlatformModule {
     @Provides
     fun provideFirestore(): FirebaseFirestore {
         return FirebaseFirestore.getInstance()
+    }
+
+    @Singleton
+    @Provides
+    fun provideBruxismFirestore(firestore: FirebaseFirestore): BruxismFirestore {
+        return BruxismFirestore(firestore)
     }
 }

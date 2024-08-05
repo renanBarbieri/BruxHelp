@@ -26,11 +26,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.bruxismhelper.R
-import br.com.bruxismhelper.feature.registerBruxism.presentation.model.BottomLeftIdentifier
-import br.com.bruxismhelper.feature.registerBruxism.presentation.model.BottomRightIdentifier
+import br.com.bruxismhelper.feature.registerBruxism.presentation.model.AtmLeftIdentifier
+import br.com.bruxismhelper.feature.registerBruxism.presentation.model.AtmRightIdentifier
+import br.com.bruxismhelper.feature.registerBruxism.presentation.model.Identifier
+import br.com.bruxismhelper.feature.registerBruxism.presentation.model.MasseterLeftIdentifier
+import br.com.bruxismhelper.feature.registerBruxism.presentation.model.MasseterRightIdentifier
 import br.com.bruxismhelper.feature.registerBruxism.presentation.model.SelectableImage
-import br.com.bruxismhelper.feature.registerBruxism.presentation.model.TopLeftIdentifier
-import br.com.bruxismhelper.feature.registerBruxism.presentation.model.TopRightIdentifier
+import br.com.bruxismhelper.feature.registerBruxism.presentation.model.TemporalLeftIdentifier
+import br.com.bruxismhelper.feature.registerBruxism.presentation.model.TemporalRightIdentifier
 import br.com.bruxismhelper.ui.theme.BruxismHelperTheme
 
 @Composable
@@ -98,22 +101,32 @@ private fun GridPreview() {
         ImageGridWithCheckboxes(
             selectableImages = listOf(
                 SelectableImage(
-                    id = TopLeftIdentifier,
+                    id = TemporalLeftIdentifier,
                     isSelected = false,
                     imageRes = R.drawable.pain_test
                 ),
                 SelectableImage(
-                    id = TopRightIdentifier,
+                    id = TemporalRightIdentifier,
                     isSelected = false,
                     imageRes = R.drawable.pain_test
                 ),
                 SelectableImage(
-                    id = BottomLeftIdentifier,
+                    id = MasseterLeftIdentifier,
                     isSelected = false,
                     imageRes = R.drawable.pain_test
                 ),
                 SelectableImage(
-                    id = BottomRightIdentifier,
+                    id = MasseterRightIdentifier,
+                    isSelected = false,
+                    imageRes = R.drawable.pain_test
+                ),
+                SelectableImage(
+                    id = AtmLeftIdentifier,
+                    isSelected = false,
+                    imageRes = R.drawable.pain_test
+                ),
+                SelectableImage(
+                    id = AtmRightIdentifier,
                     isSelected = false,
                     imageRes = R.drawable.pain_test
                 ),
