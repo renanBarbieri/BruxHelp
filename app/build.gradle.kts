@@ -80,7 +80,7 @@ dependencies {
     implementation(libs.google.firebase.analytics)
     implementation(libs.google.firebase.firestore)
     implementation(libs.google.firebase.appcheck)
-    debugImplementation(libs.google.firebase.appcheck.debug)
+    implementation(libs.google.firebase.appcheck.debug)
     implementation(libs.google.gson)
     implementation(libs.squareup.logcat)
     kapt(libs.google.dagger.hilt.compiler)

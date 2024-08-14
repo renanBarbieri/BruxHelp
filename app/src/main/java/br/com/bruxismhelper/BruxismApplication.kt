@@ -25,14 +25,14 @@ class BruxismApplication: Application() {
     }
 
     private fun initFirebase(){
-        Firebase.initialize(context = this)
         val integrityProvider = if(BuildConfig.DEBUG) {
             DebugAppCheckProviderFactory.getInstance()
         } else {
             PlayIntegrityAppCheckProviderFactory.getInstance()
         }
 
-        Firebase.appCheck.installAppCheckProviderFactory(DebugAppCheckProviderFactory.getInstance())
+        Firebase.appCheck.installAppCheckProviderFactory(integrityProvider)
+        Firebase.initialize(context = this)
     }
 }
 
