@@ -25,6 +25,7 @@ class RegisterViewModel @Inject constructor(
         MutableStateFlow(RegisterViewState(RegisterFields(repository.getAvailableDentists())))
     val viewState: StateFlow<RegisterViewState> = _viewState
 
+    //region update fields
     fun updateFullName(name: String) {
         _viewState.update {
             it.copy(
@@ -118,10 +119,15 @@ class RegisterViewModel @Inject constructor(
             )
         }
     }
+    //endregion
 
     fun submitForm() {
         viewModelScope.launch {
             repository.submitForm(mapper.fromViewToDomain(_viewState.value.registerForm))
         }
+    }
+
+    fun ignoreRegister() {
+
     }
 }

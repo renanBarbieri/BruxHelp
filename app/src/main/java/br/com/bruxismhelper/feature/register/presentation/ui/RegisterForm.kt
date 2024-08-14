@@ -71,8 +71,14 @@ fun RegisterForm(
             onHabitChanged = { habit, checked ->
                 viewModel.updateOralHabits(habit, checked)
             },
-            onFormSubmit = { viewModel.submitForm() },
-            onFormIgnored = { onRegistrationIgnored() },
+            onFormSubmit = {
+                viewModel.submitForm()
+                onRegistrationFinished()
+            },
+            onFormIgnored = {
+                viewModel.ignoreRegister()
+                onRegistrationIgnored()
+            },
         )
     }
 }
@@ -163,7 +169,8 @@ private fun FormView(
             FieldDropdown(
                 selectedOption = stringResource(id = viewState.registerForm.caffeineConsumption.frequencyToResStringOrEmpty()),
                 label = R.string.register_label_caffeine_frequency,
-                options = FrequencyViewObject.entries.map { stringResource(id = it.fieldNameRes) }.toTypedArray(),
+                options = FrequencyViewObject.entries.map { stringResource(id = it.fieldNameRes) }
+                    .toTypedArray(),
                 onOptionSelected = {
                     onCaffeineFrequencyChanged(it)
                 }
@@ -187,7 +194,8 @@ private fun FormView(
             FieldDropdown(
                 selectedOption = stringResource(id = viewState.registerForm.smoking.frequencyToResStringOrEmpty()),
                 label = R.string.register_label_smoking_frequency,
-                options = FrequencyViewObject.entries.map { stringResource(id = it.fieldNameRes) }.toTypedArray(),
+                options = FrequencyViewObject.entries.map { stringResource(id = it.fieldNameRes) }
+                    .toTypedArray(),
                 onOptionSelected = {
                     onSmokingFrequencyChanged(it)
                 }

@@ -17,11 +17,13 @@ class RegisterRepositoryImpl @Inject constructor(
         return listOf(Dentist(name = "Dra. Nathália Celestino"), Dentist(name = "Outro") )
     }
 
-    override suspend fun submitForm(registerForm: RegisterForm) {
+    override suspend fun submitForm(registerForm: RegisterForm): Result<Unit> {
         val formRequest = remoteDataSource.submitForm(fieldsMap = mapper.mapFromDomain(registerForm))
 
         formRequest.getOrNull()?.let {
             userLocalDataSource.saveUserRegisterId(it)
         }
+
+        return formRequest.map {  }
     }
 }
