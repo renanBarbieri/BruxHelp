@@ -8,50 +8,40 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
-import br.com.bruxismhelper.main.MainScreen
 import br.com.bruxismhelper.R
 import br.com.bruxismhelper.feature.register.presentation.ui.RegisterForm
 import br.com.bruxismhelper.feature.registerBruxism.presentation.ui.RegisterBruxismForm
+import br.com.bruxismhelper.feature.waiting.ui.WaitingScreen
 import br.com.bruxismhelper.ui.theme.BruxismHelperTheme
 
 @Composable
 fun NavigationHost(appBarTitle: MutableIntState = mutableIntStateOf(R.string.app_name)) {
     val navController = rememberNavController()
     NavHost(
-        startDestination = AppRoute.Main,
+        startDestination = AppRoute.Waiting,
         navController = navController,
     ) {
-        composable(route = AppRoute.Main) {
-            MainScreen(
-                isRegistered = false, //TODO get register from db
-                onNewUser = {
-                    navController.navigate(AppRoute.Register) {
-                        popUpTo(AppRoute.Main) { inclusive = true }
-                    }
-                },
-                onUserRegistered = {
-                    navController.navigate(AppRoute.BruxismRegister) {
-                        popUpTo(AppRoute.Main) { inclusive = true }
-                    }
-                }
-            )
+        composable(route = AppRoute.Waiting) {
+            WaitingScreen()
         }
         composable(route = AppRoute.Register) {
             RegisterForm(
                 modifier = Modifier.padding(start = 26.dp, end = 26.dp),
                 appBarTitle = appBarTitle,
                 onRegistrationFinished = { navController.navigate(AppRoute.BruxismRegister) },
-                onRegistrationIgnored = { navController.navigate(AppRoute.BruxismRegister) },
+                onRegistrationIgnored = { navController.navigate(AppRoute.Waiting) },
             )
         }
         composable(route = AppRoute.BruxismRegister) {
             RegisterBruxismForm(
                 appBarTitle = appBarTitle,
-                onActivityRegistrationFinished = {}
+                onActivityRegistrationFinished = {
+                    navController.navigate(AppRoute.Waiting)
+                }
             )
         }
 
-        //TODO CREATE WAITING NEXT ALARM/SUCCESS SCREEN
+        //TODO CREATE SUCCESS SCREEN
     }
 }
 
