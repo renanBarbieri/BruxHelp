@@ -26,7 +26,7 @@ class RegisterRemoteDataSource @Inject constructor(private val bruxismFirestore:
             .add(fieldsMap)
             .addOnSuccessListener { documentReference ->
                 logcat { "User created with success: ${documentReference.path}" }
-                result.complete(Result.success(documentReference.path))
+                result.complete(Result.success(documentReference.id))
             }
             .addOnFailureListener { exception ->
                 logcat { "Error while creating user: ${exception.asLog()}" }

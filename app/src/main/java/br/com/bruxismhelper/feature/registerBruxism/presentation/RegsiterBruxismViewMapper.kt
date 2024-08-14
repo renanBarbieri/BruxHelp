@@ -23,9 +23,9 @@ class RegsiterBruxismViewMapper @Inject constructor() {
             anxietyLevel = formView.anxietyLevel.getOrNullWhenFalse(formView.isEating),
             isInPain = formView.isInPain.getOrNullWhenFalse(formView.isEating),
             painLevel = formView.painLevel
-                .getOrNullWhenFalse(formView.isEating && formView.isInPain),
+                .getOrNullWhenFalse(formView.isEating || formView.isInPain.not()),
             selectableImages = formView.selectableImages
-                .getOrNullWhenFalse(formView.isEating && formView.isInPain)?.map { it.toDomain() },
+                .getOrNullWhenFalse(formView.isEating || formView.isInPain.not())?.map { it.toDomain() },
         )
     }
 

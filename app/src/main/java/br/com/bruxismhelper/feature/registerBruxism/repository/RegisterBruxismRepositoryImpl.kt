@@ -6,9 +6,17 @@ import br.com.bruxismhelper.feature.registerBruxism.domain.repository.RegisterBr
 import br.com.bruxismhelper.shared.repository.source.BruxismFirestore
 import br.com.bruxismhelper.shared.repository.source.UserLocalDataSource
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.runBlocking
 import logcat.asLog
 import logcat.logcat
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 class RegisterBruxismRepositoryImpl @Inject constructor(
@@ -17,7 +25,9 @@ class RegisterBruxismRepositoryImpl @Inject constructor(
     private val mapper: RegisterBruxismRepositoryMapper
 ): RegisterBruxismRepository {
     override suspend fun submitForm(registerForm: RegisterBruxismForm): Result<Unit> {
-        val registeredUser = userLocalDataSource.getUserRegisterId().single()
+        val registeredUser = runBlocking(Dispatchers.IO) {
+            userLocalDataSource.getUserRegisterId().first()
+        }
 
         val result = remoteDataSource.submitForm(
             userDocumentPath = registeredUser,
@@ -31,6 +41,7 @@ class RegisterBruxismRepositoryImpl @Inject constructor(
 class RegisterBruxismRepositoryMapper @Inject constructor() {
     fun mapFromDomain(registerForm: RegisterBruxismForm): Map<String, Any> {
         val map = mutableMapOf<String, Any>(
+            "date" to Calendar.getInstance().asRFC3339(),
             "eating" to registerForm.isEating
         )
 
@@ -39,12 +50,20 @@ class RegisterBruxismRepositoryMapper @Inject constructor() {
         registerForm.anxietyLevel?.let { anxiety -> map["anxiety_level"] = anxiety }
         registerForm.isInPain?.let { pain -> map["pain"] = pain }
         registerForm.painLevel?.let { level -> map["pain_level"] = level }
-        registerForm.selectableImages?.let { images -> if(images.isNotEmpty()) map["pain_regions"] = images.mapSelectedToSting() }
+        registerForm.selectableImages?.mapSelectedToString()?.let { images ->
+            if(images.isNotEmpty()) map["pain_regions"] = images
+        }
 
         return map
     }
 
-    private fun List<BruxismRegion>.mapSelectedToSting(): List<String> = this.filter { it.selected }.map { it.name }
+    private fun List<BruxismRegion>.mapSelectedToString(): List<String> = this.filter { it.selected }.map { it.name }
+
+    private fun Calendar.asRFC3339(): String {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.getDefault())
+
+        return dateFormat.format(this.time)
+    }
 }
 
 class RegisterBruxismRemoteDataSource @Inject constructor(private val bruxismFirestore: BruxismFirestore) {
@@ -66,6 +85,7 @@ class RegisterBruxismRemoteDataSource @Inject constructor(private val bruxismFir
                 logcat { "Error while submitting form: ${exception.asLog()}" }
                 result.complete(Result.failure(exception))
             }
+
 
         return result.await()
     }
