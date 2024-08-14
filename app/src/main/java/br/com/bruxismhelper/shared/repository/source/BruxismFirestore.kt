@@ -7,4 +7,5 @@ import javax.inject.Singleton
 @Singleton
 class BruxismFirestore @Inject constructor(firestore: FirebaseFirestore) {
     val userCollection = firestore.collection("user")
+    val userBruxismFormDocument = "bruxism_forms"
 }

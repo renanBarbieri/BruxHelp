@@ -39,7 +39,7 @@ class RegisterBruxismRepositoryMapper @Inject constructor() {
         registerForm.anxietyLevel?.let { anxiety -> map["anxiety_level"] = anxiety }
         registerForm.isInPain?.let { pain -> map["pain"] = pain }
         registerForm.painLevel?.let { level -> map["pain_level"] = level }
-        registerForm.selectableImages?.let { images -> map["pain_regions"] = images.mapSelectedToSting() }
+        registerForm.selectableImages?.let { images -> if(images.isNotEmpty()) map["pain_regions"] = images.mapSelectedToSting() }
 
         return map
     }
@@ -54,11 +54,13 @@ class RegisterBruxismRemoteDataSource @Inject constructor(private val bruxismFir
         fieldsMap: Map<String, Any>,
     ): Result<String> {
         val result = CompletableDeferred<Result<String>>()
+
         bruxismFirestore.userCollection
             .document(userDocumentPath)
-            .set(fieldsMap)
+            .collection(bruxismFirestore.userBruxismFormDocument)
+            .add(fieldsMap)
             .addOnSuccessListener {
-                result.complete(Result.success(""))
+                result.complete(Result.success("Form submitted with success"))
             }
             .addOnFailureListener { exception ->
                 logcat { "Error while submitting form: ${exception.asLog()}" }

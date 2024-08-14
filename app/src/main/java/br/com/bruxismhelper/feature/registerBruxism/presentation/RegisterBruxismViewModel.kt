@@ -13,8 +13,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegisterBruxismViewModel @Inject constructor(
-    val repository: RegisterBruxismRepository,
-    val mapper: RegsiterBruxismViewMapper
+    private val repository: RegisterBruxismRepository,
+    private val mapper: RegsiterBruxismViewMapper
 ) : ViewModel() {
     private val _viewState = MutableStateFlow(RegisterBruxismViewState())
     val viewState: StateFlow<RegisterBruxismViewState> = _viewState

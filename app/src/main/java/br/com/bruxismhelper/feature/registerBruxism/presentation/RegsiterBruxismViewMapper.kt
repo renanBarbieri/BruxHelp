@@ -43,6 +43,6 @@ class RegsiterBruxismViewMapper @Inject constructor() {
     }
 
     private fun <T> T.getOrNullWhenFalse(condition: Boolean): T? {
-        return if (condition) this else null
+        return if (condition.not()) this else null
     }
 }
