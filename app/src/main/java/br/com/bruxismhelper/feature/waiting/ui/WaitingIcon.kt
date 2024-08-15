@@ -24,26 +24,24 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.bruxismhelper.R
+import br.com.bruxismhelper.feature.waiting.ui.WaitingDefaults.insideMaxSize
+import br.com.bruxismhelper.feature.waiting.ui.WaitingDefaults.insideMinSize
+import br.com.bruxismhelper.feature.waiting.ui.WaitingDefaults.outsideMaxSize
+import br.com.bruxismhelper.feature.waiting.ui.WaitingDefaults.outsideMinSize
+import br.com.bruxismhelper.feature.waiting.ui.WaitingDefaults.zeroDegree
 import br.com.bruxismhelper.ui.theme.BruxismHelperTheme
 import kotlinx.coroutines.delay
 
 @Composable
 fun WaitingIcon(
-    animationDelay: Long = 2000,
-    insideCircleDuration: Int = 1600,
-    outsideCircleDuration: Int = 2000,
-    rotationAngle: Float = 180f,
-    rotationDuration: Int = 1250
+    animationDelay: Long = WaitingDefaults.animationDelay,
+    insideCircleDuration: Int = WaitingDefaults.insideCircleDuration,
+    outsideCircleDuration: Int = WaitingDefaults.outsideCircleDuration,
+    rotationAngle: Float = WaitingDefaults.rotationAngle,
+    rotationDuration: Int = WaitingDefaults.rotationDuration,
 ) {
-    val outsideMaxSize = 200.dp
-    val insideMaxSize = 150.dp
-    val outsideMinSize = 50.dp
-    val insideMinSize = 37.dp
-    val zeroDegree = 0f
-
     var isExpanded by remember { mutableStateOf(true) }
     var rememberRotationAngle by remember { mutableFloatStateOf(zeroDegree) }
-
 
     val insideCircleSize by animateDpAsState(
         targetValue = if (isExpanded) insideMaxSize else insideMinSize,
@@ -57,7 +55,6 @@ fun WaitingIcon(
         label = "Outside circle resizing"
     )
 
-    // Animate rotation from 0 to 180 degrees
     val animatedRotation by animateFloatAsState(
         targetValue = rememberRotationAngle,
         animationSpec = tween(durationMillis = rotationDuration),
@@ -68,7 +65,8 @@ fun WaitingIcon(
     LaunchedEffect(Unit) {
         while (true) {
             isExpanded = !isExpanded
-            rememberRotationAngle = if (rememberRotationAngle == zeroDegree) rotationAngle else zeroDegree
+            rememberRotationAngle =
+                if (rememberRotationAngle == zeroDegree) rotationAngle else zeroDegree
             delay(animationDelay)
         }
     }

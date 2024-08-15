@@ -68,4 +68,8 @@
     <string name="register_bruxism_send_button">Responder</string>
     <!--endregion-->
 
+    <!-- region Waiting -->
+    <string name="waiting_message">Aguarde o próximo alarme\npara responder</string>
+    <!-- endregion -->
+
 </resources>
