@@ -7,6 +7,7 @@ import br.com.bruxismhelper.feature.navigation.presentation.model.AppRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -14,28 +15,30 @@ import javax.inject.Inject
 @HiltViewModel
 class NavigationViewModel @Inject constructor(
     private val navigationRepository: NavigationRepository,
-): ViewModel() {
+) : ViewModel() {
 
     private val _viewState = MutableStateFlow(AppRoute.Splash)
     internal val viewState: StateFlow<AppRoute> = _viewState
 
     init {
         viewModelScope.launch {
-            val isRegisterScreenShownEvent = navigationRepository.isRegisterScreenShown()
-            val isAlarmFiredEvent = navigationRepository.isAlarmFired()
+            val isRegisterShowFlow = navigationRepository.isRegisterScreenShown()
+            val isAlarmFiredFlow = navigationRepository.isAlarmFired()
 
-            calculateRoute(isRegisterScreenShownEvent, isAlarmFiredEvent)
+            isRegisterShowFlow.combine(isAlarmFiredFlow) { isRegisterScreenShown, isAlarmFired ->
+                calculateRoute(isRegisterScreenShown, isAlarmFired)
+            }.collect {
+                _viewState.update { it }
+            }
         }
     }
 
-    private fun calculateRoute(isRegisterScreenShown: Boolean, isAlarmFired: Boolean) {
-        val newRoute = when {
+    private fun calculateRoute(isRegisterScreenShown: Boolean, isAlarmFired: Boolean): AppRoute {
+        return when {
             !isRegisterScreenShown -> AppRoute.Register
             isRegisterScreenShown && isAlarmFired -> AppRoute.BruxismRegister
             else -> AppRoute.Waiting
         }
-
-        _viewState.update { newRoute }
     }
 
     fun setRegisterScreenShown() {
