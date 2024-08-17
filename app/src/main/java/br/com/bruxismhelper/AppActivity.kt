@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import br.com.bruxismhelper.feature.navigation.NavigationHost
+import br.com.bruxismhelper.feature.navigation.presentation.ui.NavigationHost
 import br.com.bruxismhelper.platform.notification.NotificationPermissionCheckerHelper
 import br.com.bruxismhelper.ui.theme.BruxismHelperTheme
 import dagger.hilt.android.AndroidEntryPoint

@@ -1,4 +1,4 @@
-package br.com.bruxismhelper.feature.navigation
+package br.com.bruxismhelper.feature.navigation.presentation.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -11,6 +11,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.PopUpToBuilder
 import androidx.navigation.compose.composable
+import br.com.bruxismhelper.feature.navigation.presentation.model.AppRoute
 
 internal fun NavController.navigate(
     route: AppRoute,

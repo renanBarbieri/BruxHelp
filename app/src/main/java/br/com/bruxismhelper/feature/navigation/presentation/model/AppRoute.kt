@@ -1,4 +1,4 @@
-package br.com.bruxismhelper.feature.navigation
+package br.com.bruxismhelper.feature.navigation.presentation.model
 
 internal enum class AppRoute {
     Splash,
