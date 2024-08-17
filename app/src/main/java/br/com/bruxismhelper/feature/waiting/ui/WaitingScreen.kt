@@ -2,6 +2,7 @@ package br.com.bruxismhelper.feature.waiting.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -19,16 +20,19 @@ import br.com.bruxismhelper.feature.waiting.ui.WaitingDefaults.waitingTextFontSi
 import br.com.bruxismhelper.ui.theme.BruxismHelperTheme
 
 @Composable
-fun WaitingScreen() {
+fun WaitingScreen(
+    centerIcon: @Composable () -> Unit = { WaitingIcon() },
+    messageStringRes: Int,
+) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        WaitingIcon()
+        centerIcon()
         Spacer(modifier = Modifier.height(24.dp))
         Text(
-            text = stringResource(id = R.string.waiting_message),
+            text = stringResource(id = messageStringRes),
             fontSize = waitingTextFontSize,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center
@@ -40,6 +44,6 @@ fun WaitingScreen() {
 @Composable
 fun WaitingScreenPreview() {
     BruxismHelperTheme {
-        WaitingScreen()
+        WaitingScreen(messageStringRes = R.string.waiting_message)
     }
 }

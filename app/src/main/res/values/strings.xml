@@ -72,4 +72,8 @@
     <string name="waiting_message">Aguarde o próximo alarme\npara responder</string>
     <!-- endregion -->
 
+    <!-- region Waiting -->
+    <string name="splash_message">Bruxism Helper</string>
+    <!-- endregion -->
+
 </resources>
