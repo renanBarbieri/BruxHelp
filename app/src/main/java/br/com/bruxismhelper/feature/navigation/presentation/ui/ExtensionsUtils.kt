@@ -24,6 +24,12 @@ internal fun NavOptionsBuilder.popUpTo(route: AppRoute, popUpToBuilder: PopUpToB
     popUpTo(route.name, popUpToBuilder)
 }
 
+internal fun NavOptionsBuilder.popUpToTop(navController: NavController) {
+    popUpTo(navController.currentBackStackEntry?.destination?.route ?: return) {
+        inclusive =  true
+    }
+}
+
 internal fun NavGraphBuilder.composable(
     route: AppRoute,
     arguments: List<NamedNavArgument> = emptyList(),

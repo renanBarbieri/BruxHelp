@@ -67,6 +67,9 @@ private fun NavStateRoute(
     val routeState by viewModel.viewState.collectAsState()
 
     LaunchedEffect(routeState) {
-        navController.navigate(routeState) { launchSingleTop = true }
+        navController.navigate(routeState) {
+            launchSingleTop = true
+            popUpToTop(navController)
+        }
     }
 }
