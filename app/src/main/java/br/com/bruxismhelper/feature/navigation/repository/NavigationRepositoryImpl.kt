@@ -3,8 +3,6 @@ package br.com.bruxismhelper.feature.navigation.repository
 import br.com.bruxismhelper.feature.navigation.domain.repository.NavigationRepository
 import br.com.bruxismhelper.feature.navigation.repository.source.AppDataSource
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.last
-import kotlinx.coroutines.flow.single
 import javax.inject.Inject
 
 class NavigationRepositoryImpl @Inject constructor(
@@ -20,5 +18,13 @@ class NavigationRepositoryImpl @Inject constructor(
 
     override suspend fun isAlarmFired(): Flow<Boolean> {
         return appLocalDataSource.isAlarmFired()
+    }
+
+    override suspend fun setAlarmFired() {
+        appLocalDataSource.setAlarmFired(true)
+    }
+
+    override suspend fun setBruxismFormAnswered() {
+        appLocalDataSource.setAlarmFired(false)
     }
 }

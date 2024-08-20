@@ -37,6 +37,7 @@ import br.com.bruxismhelper.feature.register.presentation.model.FrequencyViewObj
 import br.com.bruxismhelper.feature.register.presentation.model.OralHabitViewObject
 import br.com.bruxismhelper.feature.register.presentation.model.RegisterFields
 import br.com.bruxismhelper.feature.register.presentation.model.RegisterViewState
+import br.com.bruxismhelper.shared.presentation.ui.AlertError
 import br.com.bruxismhelper.ui.common.spacerField
 import br.com.bruxismhelper.ui.theme.BruxismHelperTheme
 
@@ -52,11 +53,24 @@ fun RegisterForm(
 
     val formState by viewModel.viewState.collectAsState()
 
+    if (formState.submitSuccess) {
+        onRegistrationFinished()
+    }
+
     Column(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        formState.error?.AlertError(
+            title = stringResource(id = R.string.register_error_title),
+            productionText = stringResource(id = R.string.register_error_message),
+            confirmButtonText = stringResource(id = R.string.register_error_confirm_text),
+            onConfirmRequest = {
+                viewModel.submitForm()
+            }
+        )
+
         FormView(
             modifier = modifier,
             viewState = formState,
@@ -71,14 +85,8 @@ fun RegisterForm(
             onHabitChanged = { habit, checked ->
                 viewModel.updateOralHabits(habit, checked)
             },
-            onFormSubmit = {
-                viewModel.submitForm()
-                onRegistrationFinished()
-            },
-            onFormIgnored = {
-                viewModel.ignoreRegister()
-                onRegistrationIgnored()
-            },
+            onFormSubmit = { viewModel.submitForm() },
+            onFormIgnored = { onRegistrationIgnored() },
         )
     }
 }

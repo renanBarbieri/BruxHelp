@@ -122,12 +122,26 @@ class RegisterViewModel @Inject constructor(
     //endregion
 
     fun submitForm() {
+        _viewState.update { it.copy(error = null) }
+
         viewModelScope.launch {
             repository.submitForm(mapper.fromViewToDomain(_viewState.value.registerForm))
+                .onSuccess {
+                    _viewState.update {
+                        it.copy(
+                            submitSuccess = true,
+                            error = null
+                        )
+                    }
+                }
+                .onFailure { error ->
+                    _viewState.update {
+                        it.copy(
+                            submitSuccess = false,
+                            error = error
+                        )
+                    }
+                }
         }
-    }
-
-    fun ignoreRegister() {
-
     }
 }

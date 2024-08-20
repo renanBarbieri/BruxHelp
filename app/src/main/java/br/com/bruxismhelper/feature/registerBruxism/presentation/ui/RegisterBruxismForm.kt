@@ -57,6 +57,7 @@ fun RegisterBruxismForm(
         onPainLevelUpdated = { viewModel.updatePainLevel(it) },
         onPainImageSelected = { viewModel.updateSelectableImageCheck(it) },
         onSubmitFormClick = { viewModel.submitForm() },
+        onActivityRegistrationFinished = onActivityRegistrationFinished
     )
 }
 

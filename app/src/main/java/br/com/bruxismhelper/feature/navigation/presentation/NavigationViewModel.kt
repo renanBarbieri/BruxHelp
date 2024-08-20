@@ -46,4 +46,10 @@ class NavigationViewModel @Inject constructor(
             navigationRepository.setRegisterScreenShown()
         }
     }
+
+    fun setBruxismFormAnswered() {
+        viewModelScope.launch {
+            navigationRepository.setBruxismFormAnswered()
+        }
+    }
 }
