@@ -144,4 +144,8 @@ class RegisterViewModel @Inject constructor(
                 }
         }
     }
+
+    fun onCloseAlertRequest() {
+        _viewState.update { it.copy(error = null) }
+    }
 }

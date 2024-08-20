@@ -66,9 +66,8 @@ fun RegisterForm(
             title = stringResource(id = R.string.register_error_title),
             productionText = stringResource(id = R.string.register_error_message),
             confirmButtonText = stringResource(id = R.string.register_error_confirm_text),
-            onConfirmRequest = {
-                viewModel.submitForm()
-            }
+            onConfirmRequest = { viewModel.submitForm() },
+            onDismissRequest = { viewModel.onCloseAlertRequest() }
         )
 
         FormView(
