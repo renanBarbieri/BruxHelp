@@ -28,6 +28,7 @@ import br.com.bruxismhelper.R
 import br.com.bruxismhelper.feature.registerBruxism.presentation.RegisterBruxismViewModel
 import br.com.bruxismhelper.feature.registerBruxism.presentation.model.RegisterBruxismViewState
 import br.com.bruxismhelper.feature.registerBruxism.presentation.ui.RegisterBruxismDefaults.cardPadding
+import br.com.bruxismhelper.shared.presentation.ui.AlertError
 import br.com.bruxismhelper.ui.common.FieldSpacer
 import br.com.bruxismhelper.ui.common.FieldSwitch
 import br.com.bruxismhelper.ui.theme.BruxismHelperTheme
@@ -40,29 +41,43 @@ fun RegisterBruxismForm(
     activityOptions: Array<String> = stringArrayResource(id = R.array.register_bruxism_activity),
     onActivityRegistrationFinished: () -> Unit = {},
 ) {
-//    // Setting the app bar title
+    // Setting the app bar title
     appBarTitle.intValue = R.string.register_bruxism_title
 
     // Observing the state from ViewModel
     val viewState by viewModel.viewState.collectAsState()
 
-    FormView(
-        viewState = viewState,
-        activityOptions = activityOptions,
-        onIsEatingChanged = { viewModel.updateIsEating(it) },
-        onBruxismActivitySelected = { viewModel.updateSelectedActivity(it) },
-        onStressLevelUpdated = { viewModel.updateStressLevel(it) },
-        onAnxietyLevelUpdated = { viewModel.updateAnxietyLevel(it) },
-        onIsInPainChanged = { viewModel.updateIsInPain(it) },
-        onPainLevelUpdated = { viewModel.updatePainLevel(it) },
-        onPainImageSelected = { viewModel.updateSelectableImageCheck(it) },
-        onSubmitFormClick = { viewModel.submitForm() },
-        onActivityRegistrationFinished = onActivityRegistrationFinished
-    )
+    Column {
+        viewState.formSubmitResult?.onSuccess {
+            onActivityRegistrationFinished()
+        }?.onFailure {
+            it.AlertError(
+                title = stringResource(id = R.string.register_bruxism_error_title),
+                productionText = stringResource(id = R.string.register_bruxism_error_message),
+                confirmButtonText = stringResource(id = R.string.register_bruxism_error_confirm_text),
+                onConfirmRequest = { viewModel.submitForm() },
+                onDismissRequest = { viewModel.onCloseAlertRequest() }
+            )
+        }
+
+        FormView(
+            viewState = viewState,
+            activityOptions = activityOptions,
+            onIsEatingChanged = { viewModel.updateIsEating(it) },
+            onBruxismActivitySelected = { viewModel.updateSelectedActivity(it) },
+            onStressLevelUpdated = { viewModel.updateStressLevel(it) },
+            onAnxietyLevelUpdated = { viewModel.updateAnxietyLevel(it) },
+            onIsInPainChanged = { viewModel.updateIsInPain(it) },
+            onPainLevelUpdated = { viewModel.updatePainLevel(it) },
+            onPainImageSelected = { viewModel.updateSelectableImageCheck(it) },
+            onSubmitFormClick = { viewModel.submitForm() },
+        )
+    }
+
 }
 
 @Composable
-fun FormView(
+private fun FormView(
     modifier: Modifier = Modifier,
     viewState: RegisterBruxismViewState = RegisterBruxismViewState(),
     activityOptions: Array<String> = stringArrayResource(id = R.array.register_bruxism_activity),
@@ -74,7 +89,6 @@ fun FormView(
     onPainLevelUpdated: (level: Int) -> Unit = {},
     onPainImageSelected: (index: Int) -> Unit = {},
     onSubmitFormClick: () -> Unit = {},
-    onActivityRegistrationFinished: () -> Unit = {},
 ) {
     LazyColumn(
         modifier = modifier
@@ -106,9 +120,11 @@ fun FormView(
                     )
                     FieldSpacer()
 
-                    Card(elevation = CardDefaults.cardElevation(
-                        defaultElevation = 2.dp
-                    )) {
+                    Card(
+                        elevation = CardDefaults.cardElevation(
+                            defaultElevation = 2.dp
+                        )
+                    ) {
                         LevelSlider(
                             modifier = Modifier.cardPadding(),
                             titleRes = R.string.register_bruxism_label_stress_level,
@@ -128,9 +144,11 @@ fun FormView(
 
                     FieldSpacer()
 
-                    Card(elevation = CardDefaults.cardElevation(
-                        defaultElevation = 2.dp
-                    )) {
+                    Card(
+                        elevation = CardDefaults.cardElevation(
+                            defaultElevation = 2.dp
+                        )
+                    ) {
                         LevelSlider(
                             modifier = Modifier.cardPadding(),
                             titleRes = R.string.register_bruxism_label_anxiety_level,
@@ -163,13 +181,7 @@ fun FormView(
         }
 
         item {
-            Button(
-                onClick = {
-                    onSubmitFormClick()
-                    // Handle form submission
-                    //onActivityRegistrationFinished()
-                },
-            ) {
+            Button(onClick = onSubmitFormClick) {
                 Text(stringResource(id = R.string.register_bruxism_send_button))
             }
         }

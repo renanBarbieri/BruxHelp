@@ -72,6 +72,10 @@
     <string name="register_bruxism_label_anxiety_level_high">Muito ansiosa(o)</string>
 
     <string name="register_bruxism_send_button">Responder</string>
+
+    <string name="register_bruxism_error_title">Não conseguimos salvar sua resposta</string>
+    <string name="register_bruxism_error_message">Se o problema persistir, entre em contato</string>
+    <string name="register_bruxism_error_confirm_text">Tentar Novamente</string>
     <!--endregion-->
 
     <!-- region Waiting -->

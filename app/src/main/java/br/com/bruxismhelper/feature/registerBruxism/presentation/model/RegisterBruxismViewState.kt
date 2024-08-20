@@ -9,7 +9,8 @@ data class RegisterBruxismViewState(
     val painLevel: Int = 0,
     val stressLevel: Int = 0,
     val anxietyLevel: Int = 0,
-    val selectableImages: List<SelectableImage> = mockSelectableImage
+    val selectableImages: List<SelectableImage> = mockSelectableImage,
+    val formSubmitResult: Result<Unit>? = null
 )
 
 private val mockSelectableImage = listOf(

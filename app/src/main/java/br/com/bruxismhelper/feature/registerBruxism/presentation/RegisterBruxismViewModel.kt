@@ -53,9 +53,18 @@ class RegisterBruxismViewModel @Inject constructor(
     }
 
     fun submitForm() {
+        _viewState.update { it.copy(formSubmitResult = null) }
         viewModelScope.launch {
-            repository.submitForm(mapper.fromViewToDomain(_viewState.value))
+            _viewState.update {
+                it.copy(
+                    formSubmitResult = repository.submitForm(mapper.fromViewToDomain(_viewState.value))
+                )
+            }
         }
+    }
+
+    fun onCloseAlertRequest() {
+        _viewState.update { it.copy(formSubmitResult = null) }
     }
 }
 
