@@ -2,15 +2,13 @@ package br.com.bruxismhelper.feature.registerBruxism.repository
 
 import br.com.bruxismhelper.feature.registerBruxism.domain.model.BruxismRegion
 import br.com.bruxismhelper.feature.registerBruxism.domain.model.RegisterBruxismForm
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
+import com.google.firebase.Timestamp
 import javax.inject.Inject
 
 class RegisterBruxismRepositoryMapper @Inject constructor() {
     fun mapFromDomain(registerForm: RegisterBruxismForm): Map<String, Any> {
         val map = mutableMapOf<String, Any>(
-            "date" to Calendar.getInstance().asRFC3339(),
+            "createdAt" to Timestamp.now(),
             "eating" to registerForm.isEating
         )
 
@@ -27,10 +25,4 @@ class RegisterBruxismRepositoryMapper @Inject constructor() {
     }
 
     private fun List<BruxismRegion>.mapSelectedToString(): List<String> = this.filter { it.selected }.map { it.name }
-
-    private fun Calendar.asRFC3339(): String {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.getDefault())
-
-        return dateFormat.format(this.time)
-    }
 }
