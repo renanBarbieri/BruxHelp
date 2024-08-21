@@ -2,6 +2,7 @@ package br.com.bruxismhelper.feature.register.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import br.com.bruxismhelper.feature.alarm.AlarmSchedulerFacade
 import br.com.bruxismhelper.feature.register.domain.model.Dentist
 import br.com.bruxismhelper.feature.register.domain.repository.RegisterRepository
 import br.com.bruxismhelper.feature.register.presentation.model.FrequencyViewObject
@@ -18,7 +19,8 @@ import javax.inject.Inject
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
     private val repository: RegisterRepository,
-    private val mapper: RegisterViewMapper
+    private val mapper: RegisterViewMapper,
+    private val alertFacade: AlarmSchedulerFacade
 ) : ViewModel() {
 
     private val _viewState =
@@ -127,6 +129,8 @@ class RegisterViewModel @Inject constructor(
         viewModelScope.launch {
             repository.submitForm(mapper.fromViewToDomain(_viewState.value.registerForm))
                 .onSuccess {
+                    alertFacade.executeOnce()
+
                     _viewState.update {
                         it.copy(
                             submitSuccess = true,

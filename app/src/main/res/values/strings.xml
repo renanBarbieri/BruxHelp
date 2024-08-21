@@ -21,6 +21,11 @@
     <string name="notification_alert_message_feature_request">Seus alertas de %s precisam de permissão para serem enviados.</string>
     <!-- endregion -->
 
+    <!-- region Alerts -->
+    <string name="alert_title">Como está seu bruxismo?</string>
+    <string name="alert_message">Responda ao formulário sobre sua percepção</string>
+    <!-- endregion -->
+
     <!--region User Register-->
     <string name="register_title">Cadastre-se!</string>
     <string name="register_button">Cadastrar</string>

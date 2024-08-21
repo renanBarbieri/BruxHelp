@@ -9,7 +9,7 @@ import android.os.Build
 import br.com.bruxismhelper.feature.alarm.data.AlarmItem
 import br.com.bruxismhelper.feature.alarm.data.AlarmType
 
-object AlarmSchedulerHelper {
+internal object AlarmSchedulerHelper {
     private const val INTENT_KEY_ALARM_ITEM = "AlarmScheduler.ALARM_ITEM"
 
     /**
@@ -41,7 +41,7 @@ object AlarmSchedulerHelper {
                     alarmManager.setRepeating(
                         AlarmManager.RTC_WAKEUP,
                         item.timeInMillis,
-                        AlarmManager.INTERVAL_DAY,
+                        type.interval.intervalMillis,
                         pendingIntent
                     )
                 }
@@ -49,7 +49,7 @@ object AlarmSchedulerHelper {
                     val alarmClockInfo = AlarmClockInfo(item.timeInMillis, pendingIntent)
                     alarmManager.setAlarmClock(alarmClockInfo, pendingIntent)
                 }
-                is AlarmType.Other -> {
+                is AlarmType.Default -> {
                     alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, item.timeInMillis, pendingIntent)
                 }
             }

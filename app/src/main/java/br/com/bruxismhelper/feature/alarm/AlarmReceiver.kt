@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
-class AlarmReceiver(
+internal class AlarmReceiver(
     private val notificationHelper: NotificationHelper,
     private val appDataSource: AppDataSource,
 ) : BroadcastReceiver() {

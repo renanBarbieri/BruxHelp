@@ -5,7 +5,7 @@ import com.google.gson.annotations.Expose
 import java.io.Serializable
 import kotlin.random.Random
 
-data class AlarmItem(
+internal data class AlarmItem(
     @Expose val id: Int = Random.nextInt(),
     @Expose val channelProp: NotificationChannelProp,
     @Expose val timeInMillis: Long,

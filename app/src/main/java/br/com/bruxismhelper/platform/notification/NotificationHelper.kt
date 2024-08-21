@@ -14,7 +14,6 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import br.com.bruxismhelper.R
 import br.com.bruxismhelper.platform.notification.data.NotificationChannelProp
-import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlin.random.Random
 
