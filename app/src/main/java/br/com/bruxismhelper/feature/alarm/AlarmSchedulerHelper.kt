@@ -28,7 +28,7 @@ internal object AlarmSchedulerHelper {
             putExtra(INTENT_KEY_ALARM_ITEM, item)
         }
 
-        if (canScheduleAlarms(alarmManager)) {
+
             val pendingIntent = PendingIntent.getBroadcast(
                 context,
                 item.id,
@@ -46,17 +46,17 @@ internal object AlarmSchedulerHelper {
                     )
                 }
                 is AlarmType.Exact -> {
-                    val alarmClockInfo = AlarmClockInfo(item.timeInMillis, pendingIntent)
-                    alarmManager.setAlarmClock(alarmClockInfo, pendingIntent)
+                    if (canScheduleAlarms(alarmManager)) {
+                        val alarmClockInfo = AlarmClockInfo(item.timeInMillis, pendingIntent)
+                        alarmManager.setAlarmClock(alarmClockInfo, pendingIntent)
+                    } else {
+                        throw ScheduleExactAlarmNotAllowedException()
+                    }
                 }
                 is AlarmType.Default -> {
                     alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, item.timeInMillis, pendingIntent)
                 }
             }
-        } else {
-            throw ScheduleExactAlarmNotAllowedException()
-        }
-
     }
 
     private fun canScheduleAlarms(alarmManager: AlarmManager): Boolean {
