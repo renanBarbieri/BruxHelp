@@ -12,5 +12,5 @@ import dagger.hilt.android.components.ViewModelComponent
 internal abstract class ViewModelModule {
 
     @Binds
-    internal abstract fun bindAlarmFacade(impl: AlarmSchedulerFacadeImpl): AlarmSchedulerFacade
+    abstract fun bindAlarmFacade(impl: AlarmSchedulerFacadeImpl): AlarmSchedulerFacade
 }

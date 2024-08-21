@@ -14,6 +14,8 @@ class RegisterBruxismRemoteDataSource @Inject constructor(private val bruxismFir
     ): Result<String> {
         val result = CompletableDeferred<Result<String>>()
 
+        logcat { "userDocPath: $userDocumentPath" }
+
         bruxismFirestore.userCollection
             .document(userDocumentPath)
             .collection(bruxismFirestore.userBruxismFormDocument)
