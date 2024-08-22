@@ -29,34 +29,40 @@ internal object AlarmSchedulerHelper {
         }
 
 
-            val pendingIntent = PendingIntent.getBroadcast(
-                context,
-                item.id,
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-            )
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            item.id,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
 
-            when(type) {
-                is AlarmType.Repeat -> {
-                    alarmManager.setRepeating(
-                        AlarmManager.RTC_WAKEUP,
-                        item.timeInMillis,
-                        type.interval.intervalMillis,
-                        pendingIntent
-                    )
-                }
-                is AlarmType.Exact -> {
-                    if (canScheduleAlarms(alarmManager)) {
-                        val alarmClockInfo = AlarmClockInfo(item.timeInMillis, pendingIntent)
-                        alarmManager.setAlarmClock(alarmClockInfo, pendingIntent)
-                    } else {
-                        throw ScheduleExactAlarmNotAllowedException()
-                    }
-                }
-                is AlarmType.Default -> {
-                    alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, item.timeInMillis, pendingIntent)
+        when (type) {
+            is AlarmType.Repeat -> {
+                alarmManager.setRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    item.timeInMillis,
+                    type.interval.intervalMillis,
+                    pendingIntent
+                )
+            }
+
+            is AlarmType.Exact -> {
+                if (canScheduleAlarms(alarmManager)) {
+                    val alarmClockInfo = AlarmClockInfo(item.timeInMillis, pendingIntent)
+                    alarmManager.setAlarmClock(alarmClockInfo, pendingIntent)
+                } else {
+                    throw ScheduleExactAlarmNotAllowedException()
                 }
             }
+
+            is AlarmType.Default -> {
+                alarmManager.setAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
+                    item.timeInMillis,
+                    pendingIntent
+                )
+            }
+        }
     }
 
     private fun canScheduleAlarms(alarmManager: AlarmManager): Boolean {

@@ -129,7 +129,7 @@ class RegisterViewModel @Inject constructor(
         viewModelScope.launch {
             repository.submitForm(mapper.fromViewToDomain(_viewState.value.registerForm))
                 .onSuccess {
-                    alertFacade.executeOnce()
+                    alertFacade.scheduleNextAlarm(null)
 
                     _viewState.update {
                         it.copy(

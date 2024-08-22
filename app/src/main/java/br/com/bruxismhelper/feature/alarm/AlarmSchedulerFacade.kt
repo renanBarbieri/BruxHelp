@@ -1,5 +1,7 @@
 package br.com.bruxismhelper.feature.alarm
 
+import br.com.bruxismhelper.feature.alarm.data.DayAlarmTime
+
 interface AlarmSchedulerFacade {
-    fun executeOnce()
+    fun scheduleNextAlarm(currentAlarmTime: DayAlarmTime?)
 }

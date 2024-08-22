@@ -3,6 +3,7 @@ package br.com.bruxismhelper.feature.alarm
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import br.com.bruxismhelper.feature.alarm.data.DayAlarmTime
 import br.com.bruxismhelper.feature.navigation.repository.source.AppDataSource
 import br.com.bruxismhelper.platform.notification.NotificationHelper
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,6 +20,7 @@ internal class AlarmReceiver : BroadcastReceiver() {
 
     @Inject lateinit var notificationHelper: NotificationHelper
     @Inject lateinit var appDataSource: AppDataSource
+    @Inject lateinit var alarmScheduler: AlarmSchedulerFacade
 
     override fun onReceive(context: Context?, intent: Intent?) {
         logcat { "receiving" }
@@ -27,7 +29,7 @@ internal class AlarmReceiver : BroadcastReceiver() {
         AlarmSchedulerHelper.extractAlarmItemFromExtra(intent)?.let {
             logcat { "alarm extracted: $it" }
 
-            setAlarmFired()
+            setAlarmFired(it.id)
 
             notificationHelper.sendNotification(
                 context = context,
@@ -39,8 +41,14 @@ internal class AlarmReceiver : BroadcastReceiver() {
     }
 
     @OptIn(DelicateCoroutinesApi::class)
-    private fun setAlarmFired(context: CoroutineContext = EmptyCoroutineContext){
+    private fun setAlarmFired(
+        alarmId: Int,
+        context: CoroutineContext = EmptyCoroutineContext
+    ){
         val pendingResult = goAsync()
+
+        val currentDayAlarm = DayAlarmTime.getByOrdinal(alarmId)
+        alarmScheduler.scheduleNextAlarm(currentDayAlarm)
 
         GlobalScope.launch(context) {
             appDataSource.setAlarmFired(true)

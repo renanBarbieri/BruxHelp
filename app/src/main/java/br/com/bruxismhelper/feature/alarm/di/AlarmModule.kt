@@ -5,11 +5,11 @@ import br.com.bruxismhelper.feature.alarm.AlarmSchedulerFacadeImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.components.SingletonComponent
 
 @Module
-@InstallIn(ViewModelComponent::class)
-internal abstract class ViewModelModule {
+@InstallIn(SingletonComponent::class)
+internal abstract class AlarmModule {
 
     @Binds
     abstract fun bindAlarmFacade(impl: AlarmSchedulerFacadeImpl): AlarmSchedulerFacade
