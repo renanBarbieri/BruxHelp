@@ -242,6 +242,7 @@ private fun FormView(
                 Spacer(modifier = Modifier.weight(1f))
 
                 Button(
+                    enabled = viewState.allMandatoryFieldsFilled,
                     onClick = {
                         onFormSubmit()
                     },

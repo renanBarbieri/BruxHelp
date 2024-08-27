@@ -29,7 +29,7 @@ class RegisterViewModel @Inject constructor(
 
     //region update fields
     fun updateFullName(name: String) {
-        _viewState.update {
+        _viewState.updateAndVerifyMandatory {
             it.copy(
                 registerForm = it.registerForm.copy(fullName = name)
             )
@@ -37,7 +37,7 @@ class RegisterViewModel @Inject constructor(
     }
 
     fun updateEmail(email: String) {
-        _viewState.update {
+        _viewState.updateAndVerifyMandatory {
             it.copy(
                 registerForm = it.registerForm.copy(email = email)
             )
@@ -45,7 +45,7 @@ class RegisterViewModel @Inject constructor(
     }
 
     fun updateDentist(dentist: String) {
-        _viewState.update {
+        _viewState.updateAndVerifyMandatory {
             it.copy(
                 registerForm = it.registerForm.copy(dentist = Dentist(dentist))
             )
@@ -53,7 +53,7 @@ class RegisterViewModel @Inject constructor(
     }
 
     fun updateContinuousMedicines(medicines: String) {
-        _viewState.update {
+        _viewState.updateAndVerifyMandatory {
             it.copy(
                 registerForm = it.registerForm.copy(continuousMedicines = medicines)
             )
@@ -61,7 +61,7 @@ class RegisterViewModel @Inject constructor(
     }
 
     fun updateCaffeineConsumptionQuantity(quantity: String) {
-        _viewState.update {
+        _viewState.updateAndVerifyMandatory {
             it.copy(
                 registerForm = it.registerForm.copy(
                     caffeineConsumption = it.registerForm.caffeineConsumption.copy(
@@ -73,7 +73,7 @@ class RegisterViewModel @Inject constructor(
     }
 
     fun updateCaffeineConsumptionFrequency(frequency: String) {
-        _viewState.update {
+        _viewState.updateAndVerifyMandatory {
             it.copy(
                 registerForm = it.registerForm.copy(
                     caffeineConsumption = it.registerForm.caffeineConsumption.copy(
@@ -85,7 +85,7 @@ class RegisterViewModel @Inject constructor(
     }
 
     fun updateSmokingQuantity(quantity: String) {
-        _viewState.update {
+        _viewState.updateAndVerifyMandatory {
             it.copy(
                 registerForm = it.registerForm.copy(
                     smoking = it.registerForm.smoking.copy(quantity = quantity.toIntOrNull())
@@ -95,17 +95,21 @@ class RegisterViewModel @Inject constructor(
     }
 
     fun updateSmokingFrequency(frequency: String) {
-        _viewState.update {
+        _viewState.updateAndVerifyMandatory {
             it.copy(
                 registerForm = it.registerForm.copy(
-                    smoking = it.registerForm.smoking.copy(frequency = FrequencyViewObject.fromString(frequency))
+                    smoking = it.registerForm.smoking.copy(
+                        frequency = FrequencyViewObject.fromString(
+                            frequency
+                        )
+                    )
                 )
             )
         }
     }
 
     fun updateOralHabits(habit: OralHabitViewObject, checked: Boolean) {
-        _viewState.update {
+        _viewState.updateAndVerifyMandatory {
             val currentHabits = it.registerForm.oralHabits.toMutableList()
 
             if (checked) {
@@ -125,6 +129,10 @@ class RegisterViewModel @Inject constructor(
 
     fun submitForm() {
         _viewState.update { it.copy(error = null) }
+
+        if(_viewState.value.allMandatoryFieldsFilled.not()) {
+            _viewState.update { it.copy(error = Throwable()) }
+        }
 
         viewModelScope.launch {
             repository.submitForm(mapper.fromViewToDomain(_viewState.value.registerForm))
@@ -151,5 +159,21 @@ class RegisterViewModel @Inject constructor(
 
     fun onCloseAlertRequest() {
         _viewState.update { it.copy(error = null) }
+    }
+
+    private fun MutableStateFlow<RegisterViewState>.updateAndVerifyMandatory(function: (RegisterViewState) -> RegisterViewState) {
+        update {
+            function(it)
+        }
+
+        with(value.registerForm) {
+            val allMandatoryFilled =
+                fullName.isNotBlank() && email.isNotBlank() && dentist.name.isNotBlank()
+            update {
+                it.copy(
+                    allMandatoryFieldsFilled = allMandatoryFilled
+                )
+            }
+        }
     }
 }
