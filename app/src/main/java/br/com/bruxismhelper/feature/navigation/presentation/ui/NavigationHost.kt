@@ -32,7 +32,7 @@ fun NavigationHost(
         navController = navController,
     ) {
         composable(route = AppRoute.Splash) {
-            IdleScreen(messageStringRes = R.string.splash_message)
+            IdleScreen(messageStringRes = R.string.loading)
         }
 
         composable(route = AppRoute.Waiting) {

@@ -2,6 +2,7 @@ package br.com.bruxismhelper.feature.registerBruxism.presentation.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableIntState
@@ -25,9 +27,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import br.com.bruxismhelper.R
+import br.com.bruxismhelper.feature.idle.ui.IdleScreen
+import br.com.bruxismhelper.feature.idle.ui.loading.LoadingIcon
 import br.com.bruxismhelper.feature.registerBruxism.presentation.RegisterBruxismViewModel
 import br.com.bruxismhelper.feature.registerBruxism.presentation.model.RegisterBruxismViewState
 import br.com.bruxismhelper.feature.registerBruxism.presentation.ui.RegisterBruxismDefaults.cardPadding
+import br.com.bruxismhelper.platform.kotlin.whenTrue
 import br.com.bruxismhelper.shared.presentation.ui.AlertError
 import br.com.bruxismhelper.ui.common.FieldSpacer
 import br.com.bruxismhelper.ui.common.FieldSwitch
@@ -47,19 +52,7 @@ fun RegisterBruxismForm(
     // Observing the state from ViewModel
     val viewState by viewModel.viewState.collectAsState()
 
-    Column {
-        viewState.formSubmitResult?.onSuccess {
-            onActivityRegistrationFinished()
-        }?.onFailure {
-            it.AlertError(
-                title = stringResource(id = R.string.register_bruxism_error_title),
-                productionText = stringResource(id = R.string.register_bruxism_error_message),
-                confirmButtonText = stringResource(id = R.string.register_bruxism_error_confirm_text),
-                onConfirmRequest = { viewModel.submitForm() },
-                onDismissRequest = { viewModel.onCloseAlertRequest() }
-            )
-        }
-
+    Box {
         FormView(
             viewState = viewState,
             activityOptions = activityOptions,
@@ -72,6 +65,26 @@ fun RegisterBruxismForm(
             onPainImageSelected = { viewModel.updateSelectableImageCheck(it) },
             onSubmitFormClick = { viewModel.submitForm() },
         )
+
+        viewState.formSubmitResult?.onSuccess {
+            onActivityRegistrationFinished()
+        }?.onFailure {
+            it.AlertError(
+                title = stringResource(id = R.string.register_bruxism_error_title),
+                productionText = stringResource(id = R.string.register_bruxism_error_message),
+                confirmButtonText = stringResource(id = R.string.register_bruxism_error_confirm_text),
+                onConfirmRequest = { viewModel.submitForm() },
+                onDismissRequest = { viewModel.onCloseAlertRequest() }
+            )
+        }
+
+        viewState.showLoading.whenTrue {
+            IdleScreen(
+                centerIcon = { LoadingIcon() },
+                messageStringRes = R.string.loading,
+                backgroundColor = MaterialTheme.colorScheme.surfaceBright
+            )
+        }
     }
 
 }
