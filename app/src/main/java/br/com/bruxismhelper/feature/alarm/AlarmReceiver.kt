@@ -32,6 +32,7 @@ internal class AlarmReceiver : BroadcastReceiver() {
             setAlarmFired(it.id)
 
             notificationHelper.sendNotification(
+                id = 1234, //Same id for all notifications to update it, instead of create a new one
                 context = context,
                 title = it.title,
                 body = it.message,

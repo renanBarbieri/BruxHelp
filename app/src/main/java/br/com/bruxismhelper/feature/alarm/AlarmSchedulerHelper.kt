@@ -1,13 +1,13 @@
 package br.com.bruxismhelper.feature.alarm
 
 import android.app.AlarmManager
-import android.app.AlarmManager.AlarmClockInfo
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import br.com.bruxismhelper.feature.alarm.data.AlarmItem
 import br.com.bruxismhelper.feature.alarm.data.AlarmType
+import logcat.logcat
 
 internal object AlarmSchedulerHelper {
     private const val INTENT_KEY_ALARM_ITEM = "AlarmScheduler.ALARM_ITEM"
@@ -28,7 +28,6 @@ internal object AlarmSchedulerHelper {
             putExtra(INTENT_KEY_ALARM_ITEM, item)
         }
 
-
         val pendingIntent = PendingIntent.getBroadcast(
             context,
             item.id,
@@ -36,11 +35,13 @@ internal object AlarmSchedulerHelper {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
+        val triggerTime = item.timeInMillis
+
         when (type) {
             is AlarmType.Repeat -> {
                 alarmManager.setRepeating(
                     AlarmManager.RTC_WAKEUP,
-                    item.timeInMillis,
+                    triggerTime,
                     type.interval.intervalMillis,
                     pendingIntent
                 )
@@ -48,8 +49,11 @@ internal object AlarmSchedulerHelper {
 
             is AlarmType.Exact -> {
                 if (canScheduleAlarms(alarmManager)) {
-                    val alarmClockInfo = AlarmClockInfo(item.timeInMillis, pendingIntent)
-                    alarmManager.setAlarmClock(alarmClockInfo, pendingIntent)
+                    alarmManager.setExactAndAllowWhileIdle(
+                        AlarmManager.RTC_WAKEUP,
+                        triggerTime,
+                        pendingIntent
+                    )
                 } else {
                     throw ScheduleExactAlarmNotAllowedException()
                 }
@@ -58,11 +62,13 @@ internal object AlarmSchedulerHelper {
             is AlarmType.Default -> {
                 alarmManager.setAndAllowWhileIdle(
                     AlarmManager.RTC_WAKEUP,
-                    item.timeInMillis,
+                    triggerTime,
                     pendingIntent
                 )
             }
         }
+
+        logcat { "alarm scheduled at $triggerTime" }
     }
 
     private fun canScheduleAlarms(alarmManager: AlarmManager): Boolean {
@@ -106,7 +112,11 @@ internal object AlarmSchedulerHelper {
      * @return [AlarmItem] extracted from intent extras or null if has no AlarmItem on extras
      */
     fun extractAlarmItemFromExtra(intent: Intent): AlarmItem? {
-        return intent.getSerializableExtra(INTENT_KEY_ALARM_ITEM, AlarmItem::class.java)
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getSerializableExtra(INTENT_KEY_ALARM_ITEM, AlarmItem::class.java)
+        } else {
+            intent.getSerializableExtra(INTENT_KEY_ALARM_ITEM) as AlarmItem
+        }
     }
 
     class ScheduleExactAlarmNotAllowedException : Exception() {

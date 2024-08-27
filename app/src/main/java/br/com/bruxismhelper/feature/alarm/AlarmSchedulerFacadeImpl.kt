@@ -32,28 +32,11 @@ internal class AlarmSchedulerFacadeImpl @Inject constructor(
             message = appContext.getString(R.string.alert_message),
         )
 
-        getRealTimeInMillis(alarmToSchedule.timeMillis)
-
         AlarmSchedulerHelper.schedule(
             appContext,
             alarmItem,
             AlarmType.Default
         )
-    }
-
-    private fun getRealTimeInMillis(alarmTime: Long): Long {
-        val calendar = Calendar.getInstance().apply {
-            timeInMillis = System.currentTimeMillis()
-            set(Calendar.HOUR_OF_DAY, 0)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
-            add(Calendar.MILLISECOND, alarmTime.toInt())
-        }
-
-        logcat { "calendar time: ${calendar.time}" }
-
-        return calendar.timeInMillis
     }
 
     private fun DayAlarmTime.Companion.getNextTime(
