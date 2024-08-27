@@ -1,5 +1,5 @@
 
-package br.com.bruxismhelper.feature.waiting.ui
+package br.com.bruxismhelper.feature.idle.ui.waiting
 
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp

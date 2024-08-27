@@ -1,6 +1,7 @@
 package br.com.bruxismhelper.feature.register.presentation.ui
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,16 +28,18 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import br.com.bruxismhelper.R
 import br.com.bruxismhelper.emptyString
+import br.com.bruxismhelper.feature.idle.ui.IdleScreen
+import br.com.bruxismhelper.feature.idle.ui.loading.LoadingIcon
 import br.com.bruxismhelper.feature.register.domain.model.Dentist
 import br.com.bruxismhelper.feature.register.presentation.RegisterViewModel
 import br.com.bruxismhelper.feature.register.presentation.model.FrequencyViewObject
 import br.com.bruxismhelper.feature.register.presentation.model.OralHabitViewObject
 import br.com.bruxismhelper.feature.register.presentation.model.RegisterFields
 import br.com.bruxismhelper.feature.register.presentation.model.RegisterViewState
+import br.com.bruxismhelper.platform.kotlin.whenTrue
 import br.com.bruxismhelper.shared.presentation.ui.AlertError
 import br.com.bruxismhelper.ui.common.spacerField
 import br.com.bruxismhelper.ui.theme.BruxismHelperTheme
@@ -57,19 +60,10 @@ fun RegisterForm(
         onRegistrationFinished()
     }
 
-    Column(
+    Box(
         modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        contentAlignment = Alignment.Center,
     ) {
-        formState.error?.AlertError(
-            title = stringResource(id = R.string.register_error_title),
-            productionText = stringResource(id = R.string.register_error_message),
-            confirmButtonText = stringResource(id = R.string.register_error_confirm_text),
-            onConfirmRequest = { viewModel.submitForm() },
-            onDismissRequest = { viewModel.onCloseAlertRequest() }
-        )
-
         FormView(
             modifier = modifier,
             viewState = formState,
@@ -87,6 +81,22 @@ fun RegisterForm(
             onFormSubmit = { viewModel.submitForm() },
             onFormIgnored = { onRegistrationIgnored() },
         )
+
+        formState.error?.AlertError(
+            title = stringResource(id = R.string.register_error_title),
+            productionText = stringResource(id = R.string.register_error_message),
+            confirmButtonText = stringResource(id = R.string.register_error_confirm_text),
+            onConfirmRequest = { viewModel.submitForm() },
+            onDismissRequest = { viewModel.onCloseAlertRequest() }
+        )
+
+        formState.showLoading.whenTrue {
+            IdleScreen(
+                centerIcon = { LoadingIcon() },
+                messageStringRes = R.string.loading,
+                backgroundColor = MaterialTheme.colorScheme.surfaceBright
+            )
+        }
     }
 }
 

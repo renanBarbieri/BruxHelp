@@ -1,4 +1,4 @@
-package br.com.bruxismhelper.feature.waiting.ui
+package br.com.bruxismhelper.feature.idle.ui.waiting
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -22,13 +22,12 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import br.com.bruxismhelper.R
-import br.com.bruxismhelper.feature.waiting.ui.WaitingDefaults.insideMaxSize
-import br.com.bruxismhelper.feature.waiting.ui.WaitingDefaults.insideMinSize
-import br.com.bruxismhelper.feature.waiting.ui.WaitingDefaults.outsideMaxSize
-import br.com.bruxismhelper.feature.waiting.ui.WaitingDefaults.outsideMinSize
-import br.com.bruxismhelper.feature.waiting.ui.WaitingDefaults.zeroDegree
+import br.com.bruxismhelper.feature.idle.ui.waiting.WaitingDefaults.insideMaxSize
+import br.com.bruxismhelper.feature.idle.ui.waiting.WaitingDefaults.insideMinSize
+import br.com.bruxismhelper.feature.idle.ui.waiting.WaitingDefaults.outsideMaxSize
+import br.com.bruxismhelper.feature.idle.ui.waiting.WaitingDefaults.outsideMinSize
+import br.com.bruxismhelper.feature.idle.ui.waiting.WaitingDefaults.zeroDegree
 import br.com.bruxismhelper.ui.theme.BruxismHelperTheme
 import kotlinx.coroutines.delay
 

@@ -2,6 +2,7 @@
     <string name="app_name">Bruxism Helper</string>
 
     <string name="empty"/>
+    <string name="loading">Carregando</string>
 
     <!-- region Notification -->
     <string name="activate">Ativar</string>
@@ -32,7 +33,7 @@
     <string name="register_ignore_button">Ignorar</string>
     <string name="register_label_name">Nome Completo (obrigatório)</string>
     <string name="register_label_email">Email (obrigatório)</string>
-    <string name="register_label_doctor">Doutor(a) (obrigatório)</string>
+    <string name="register_label_doctor">Dentista (obrigatório)</string>
 
     <string name="register_label_medicine">Medicamentos de uso contínuo</string>
     <string name="register_label_caffeine_quantity">Consumo de cafeína (quantidade)</string>
@@ -46,6 +47,7 @@
     <string name="register_option_frequency_daily">Diária</string>
     <string name="register_option_frequency_weekly">Semanal</string>
     <string name="register_option_frequency_by_week">Quinzenal</string>
+    <string name="register_option_frequency_none">Sem consumo</string>
 
     <string name="register_error_title">Não conseguimos realizar seu cadastro</string>
     <string name="register_error_message">Se o problema persistir, entre em contato</string>

@@ -6,4 +6,5 @@ data class RegisterViewState(
     val error: Throwable? = null,
     val submitSuccess: Boolean = false,
     val allMandatoryFieldsFilled: Boolean = false,
+    val showLoading: Boolean = false,
 )

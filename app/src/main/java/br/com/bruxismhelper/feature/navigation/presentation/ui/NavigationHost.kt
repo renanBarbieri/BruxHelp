@@ -13,11 +13,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import br.com.bruxismhelper.R
+import br.com.bruxismhelper.feature.idle.ui.IdleScreen
 import br.com.bruxismhelper.feature.navigation.presentation.NavigationViewModel
 import br.com.bruxismhelper.feature.navigation.presentation.model.AppRoute
 import br.com.bruxismhelper.feature.register.presentation.ui.RegisterForm
 import br.com.bruxismhelper.feature.registerBruxism.presentation.ui.RegisterBruxismForm
-import br.com.bruxismhelper.feature.waiting.ui.WaitingScreen
 
 @Composable
 fun NavigationHost(
@@ -32,11 +32,11 @@ fun NavigationHost(
         navController = navController,
     ) {
         composable(route = AppRoute.Splash) {
-            WaitingScreen(messageStringRes = R.string.splash_message)
+            IdleScreen(messageStringRes = R.string.splash_message)
         }
 
         composable(route = AppRoute.Waiting) {
-            WaitingScreen(messageStringRes = R.string.waiting_message)
+            IdleScreen(messageStringRes = R.string.waiting_message)
         }
 
         composable(route = AppRoute.Register) {

@@ -3,16 +3,16 @@ package br.com.bruxismhelper.feature.alarm.data
 import java.util.Calendar
 
 enum class DayAlarmTime(val timeMillis: Long) {
-    FIRST(epochMillisOf(8,0)),// 08:00
-    SECOND(epochMillisOf(9,20)),// 09:20
-    THIRD(epochMillisOf(10,40)),// 10:40
-    FOURTH(epochMillisOf(11, 30)),// 11:30
-    FIFTH(epochMillisOf(13,30)),// 13:30
-    SIXTH(epochMillisOf(14,40)),// 14:40
-    SEVENTH(epochMillisOf(16,0)),// 16:00
-    EIGHTH(epochMillisOf(17,20)),// 17:20
-    NINTH(epochMillisOf(18,40)),// 18:40
-    TENTH(epochMillisOf(20,0));// 20:00
+    FIRST(epochMillisOf(8,0)),
+    SECOND(epochMillisOf(9,20)),
+    THIRD(epochMillisOf(10,40)),
+    FOURTH(epochMillisOf(11, 30)),
+    FIFTH(epochMillisOf(13,30)),
+    SIXTH(epochMillisOf(14,40)),
+    SEVENTH(epochMillisOf(16,0)),
+    EIGHTH(epochMillisOf(17,20)),
+    NINTH(epochMillisOf(18,40)),
+    TENTH(epochMillisOf(20,0));
 
     companion object {
         fun getByOrdinal(ordinal: Int) = entries.first { it.ordinal == ordinal }
