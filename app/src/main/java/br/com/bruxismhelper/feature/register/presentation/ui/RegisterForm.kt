@@ -79,7 +79,10 @@ fun RegisterForm(
                 viewModel.updateOralHabits(habit, checked)
             },
             onFormSubmit = { viewModel.submitForm() },
-            onFormIgnored = { onRegistrationIgnored() },
+            onFormIgnored = {
+                viewModel.ignoreForm()
+                onRegistrationIgnored()
+            },
         )
 
         formState.error?.AlertError(

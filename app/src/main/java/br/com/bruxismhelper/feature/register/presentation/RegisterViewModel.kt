@@ -127,6 +127,14 @@ class RegisterViewModel @Inject constructor(
     }
     //endregion
 
+    private fun scheduleAlarm(){
+        alertFacade.scheduleNextAlarm(null)
+    }
+
+    fun ignoreForm() {
+        scheduleAlarm()
+    }
+
     fun submitForm() {
         _viewState.update { it.copy(error = null) }
 
@@ -138,7 +146,7 @@ class RegisterViewModel @Inject constructor(
             _viewState.update { it.copy(showLoading = true) }
             repository.submitForm(mapper.fromViewToDomain(_viewState.value.registerForm))
                 .onSuccess {
-                    alertFacade.scheduleNextAlarm(null)
+                    scheduleAlarm()
 
                     _viewState.update {
                         it.copy(
