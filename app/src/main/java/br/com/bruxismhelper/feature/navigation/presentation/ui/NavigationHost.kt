@@ -8,12 +8,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import br.com.bruxismhelper.R
+import br.com.bruxismhelper.feature.agreement.ui.AgreementScreen
 import br.com.bruxismhelper.feature.idle.ui.IdleScreen
+import br.com.bruxismhelper.feature.idle.ui.waiting.WaitingIcon
 import br.com.bruxismhelper.feature.navigation.presentation.NavigationViewModel
 import br.com.bruxismhelper.feature.navigation.presentation.model.AppRoute
 import br.com.bruxismhelper.feature.register.presentation.ui.RegisterForm
@@ -32,11 +35,21 @@ fun NavigationHost(
         navController = navController,
     ) {
         composable(route = AppRoute.Splash) {
-            IdleScreen(messageStringRes = R.string.loading)
+            IdleScreen(
+                centerIcon = { WaitingIcon() },
+                messageStringRes = R.string.loading
+            )
+        }
+
+        composable(route = AppRoute.Agreement) {
+            AgreementScreen(agreementText = stringResource(id = R.string.agreement_term))
         }
 
         composable(route = AppRoute.Waiting) {
-            IdleScreen(messageStringRes = R.string.waiting_message)
+            IdleScreen(
+                centerIcon = { WaitingIcon() },
+                messageStringRes = R.string.waiting_message
+            )
         }
 
         composable(route = AppRoute.Register) {
@@ -54,8 +67,6 @@ fun NavigationHost(
                 onActivityRegistrationFinished = { viewModel.setBruxismFormAnswered() }
             )
         }
-
-        //TODO CREATE SUCCESS SCREEN
     }
 }
 
