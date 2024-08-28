@@ -13,13 +13,14 @@ class RegisterBruxismRepositoryImpl @Inject constructor(
     private val remoteDataSource: RegisterBruxismRemoteDataSource,
     private val userLocalDataSource: UserLocalDataSource,
     private val mapper: RegisterBruxismRepositoryMapper
-): RegisterBruxismRepository {
+) : RegisterBruxismRepository {
     override suspend fun submitForm(registerForm: RegisterBruxismForm): Result<Unit> {
         val registeredUser = runBlocking(Dispatchers.IO) {
             userLocalDataSource.getUserRegisterId().first()
         }
 
-        val result = remoteDataSource.submitForm(
+        val result = if (registeredUser.isBlank()) Result.failure(UserNotFound())
+        else remoteDataSource.submitForm(
             userDocumentPath = registeredUser,
             fieldsMap = mapper.mapFromDomain(registerForm)
         )
@@ -27,3 +28,5 @@ class RegisterBruxismRepositoryImpl @Inject constructor(
         return result.map {}
     }
 }
+
+class UserNotFound : Throwable("User not found")

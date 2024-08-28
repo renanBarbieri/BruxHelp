@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.bruxismhelper.feature.registerBruxism.domain.repository.RegisterBruxismRepository
 import br.com.bruxismhelper.feature.registerBruxism.presentation.model.RegisterBruxismViewState
+import br.com.bruxismhelper.feature.registerBruxism.repository.UserNotFound
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -60,10 +61,17 @@ class RegisterBruxismViewModel @Inject constructor(
             )
         }
         viewModelScope.launch {
-            _viewState.update {
-                it.copy(
+            val formSubmitResult = repository.submitForm(mapper.fromViewToDomain(_viewState.value)).fold(
+                onSuccess = { Result.success(it) },
+                onFailure = {
+                    if (it is UserNotFound) Result.success(Unit)
+                    else Result.failure(it)
+                }
+            )
+            _viewState.update { state ->
+                state.copy(
                     showLoading = false,
-                    formSubmitResult = repository.submitForm(mapper.fromViewToDomain(_viewState.value))
+                    formSubmitResult = formSubmitResult
                 )
             }
         }
