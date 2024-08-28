@@ -24,7 +24,7 @@ import br.com.bruxismhelper.ui.theme.BruxismHelperTheme
 
 @Composable
 fun IdleScreen(
-    centerIcon: @Composable () -> Unit = { WaitingIcon() },
+    centerIcon: @Composable () -> Unit,
     messageStringRes: Int,
     backgroundColor: Color? = null,
 ) {
@@ -57,6 +57,9 @@ private fun Color?.alphaOrSurface(): Color {
 @Composable
 fun WaitingScreenPreview() {
     BruxismHelperTheme {
-        IdleScreen(messageStringRes = R.string.waiting_message)
+        IdleScreen(
+            centerIcon = { WaitingIcon() },
+            messageStringRes = R.string.waiting_message
+        )
     }
 }
