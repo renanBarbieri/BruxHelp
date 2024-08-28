@@ -116,7 +116,7 @@ private fun FormView(
         item {
             FieldSwitch(
                 name = R.string.register_bruxism_eating_switch,
-                checked = viewState.isEating,
+                checked = viewState.registerBruxismForm.isEating,
                 onCheckedChange = { onIsEatingChanged(it) }
             )
 
@@ -124,11 +124,11 @@ private fun FormView(
         }
 
         item {
-            AnimatedVisibility(visible = !viewState.isEating) {
+            AnimatedVisibility(visible = !viewState.registerBruxismForm.isEating) {
                 Column {
                     ActivityTypeDropdown(
                         activityOptions = activityOptions,
-                        selectedActivity = viewState.selectedActivity,
+                        selectedActivity = viewState.registerBruxismForm.selectedActivity,
                         onActivitySelected = { onBruxismActivitySelected(it) }
                     )
                     FieldSpacer()
@@ -141,14 +141,14 @@ private fun FormView(
                         LevelSlider(
                             modifier = Modifier.cardPadding(),
                             titleRes = R.string.register_bruxism_label_stress_level,
-                            resultLevelText = when (viewState.stressLevel) {
+                            resultLevelText = when (viewState.registerBruxismForm.stressLevel) {
                                 in 0..3 -> stringResource(id = R.string.register_bruxism_label_stress_level_low)
                                 in 4..7 -> stringResource(id = R.string.register_bruxism_label_stress_level_medium)
                                 else -> stringResource(id = R.string.register_bruxism_label_stress_level_high)
                             },
                             lowLevelIconRes = R.drawable.smile_friendly,
                             highLevelIconRes = R.drawable.smile_stress,
-                            levelValue = viewState.stressLevel,
+                            levelValue = viewState.registerBruxismForm.stressLevel,
                             onLevelChange = {
                                 onStressLevelUpdated(it)
                             }
@@ -165,14 +165,14 @@ private fun FormView(
                         LevelSlider(
                             modifier = Modifier.cardPadding(),
                             titleRes = R.string.register_bruxism_label_anxiety_level,
-                            resultLevelText = when (viewState.anxietyLevel) {
+                            resultLevelText = when (viewState.registerBruxismForm.anxietyLevel) {
                                 in 0..3 -> stringResource(id = R.string.register_bruxism_label_anxiety_level_low)
                                 in 4..7 -> stringResource(id = R.string.register_bruxism_label_anxiety_level_medium)
                                 else -> stringResource(id = R.string.register_bruxism_label_anxiety_level_high)
                             },
                             lowLevelIconRes = R.drawable.smile_friendly,
                             highLevelIconRes = R.drawable.smile_stress,
-                            levelValue = viewState.anxietyLevel,
+                            levelValue = viewState.registerBruxismForm.anxietyLevel,
                             onLevelChange = {
                                 onAnxietyLevelUpdated(it)
                             }
@@ -180,11 +180,11 @@ private fun FormView(
                     }
                     FieldSpacer()
                     PainForm(
-                        isInPain = viewState.isInPain,
+                        isInPain = viewState.registerBruxismForm.isInPain,
                         onPainChanged = { onIsInPainChanged(it) },
-                        painLevel = viewState.painLevel,
+                        painLevel = viewState.registerBruxismForm.painLevel,
                         onPainLevelChanged = { onPainLevelUpdated(it) },
-                        selectableImages = viewState.selectableImages,
+                        selectableImages = viewState.registerBruxismForm.selectableImages,
                         onImageSelected = { onPainImageSelected(it) },
                     )
                 }

@@ -15,41 +15,57 @@ import javax.inject.Inject
 @HiltViewModel
 class RegisterBruxismViewModel @Inject constructor(
     private val repository: RegisterBruxismRepository,
-    private val mapper: RegsiterBruxismViewMapper
+    private val mapper: RegisterBruxismViewMapper
 ) : ViewModel() {
     private val _viewState = MutableStateFlow(RegisterBruxismViewState())
     val viewState: StateFlow<RegisterBruxismViewState> = _viewState
 
     fun updateIsEating(isEating: Boolean) {
-        _viewState.update { it.copy(isEating = isEating) }
+        _viewState.update {
+            it.copy(registerBruxismForm = it.registerBruxismForm.copy(isEating = isEating))
+        }
     }
 
     fun updateSelectedActivity(selectedActivity: String) {
-        _viewState.update { it.copy(selectedActivity = selectedActivity) }
+        _viewState.update {
+            it.copy(
+                registerBruxismForm = it.registerBruxismForm.copy(
+                    selectedActivity = selectedActivity
+                )
+            )
+        }
     }
 
     fun updateIsInPain(isInPain: Boolean) {
-        _viewState.update { it.copy(isInPain = isInPain) }
+        _viewState.update {
+            it.copy(registerBruxismForm = it.registerBruxismForm.copy(isInPain = isInPain))
+        }
     }
 
     fun updatePainLevel(painLevel: Int) {
-        _viewState.update { it.copy(painLevel = painLevel) }
+        _viewState.update {
+            it.copy(registerBruxismForm = it.registerBruxismForm.copy(painLevel = painLevel))
+        }
     }
 
     fun updateStressLevel(stressLevel: Int) {
-        _viewState.update { it.copy(stressLevel = stressLevel) }
+        _viewState.update {
+            it.copy(registerBruxismForm = it.registerBruxismForm.copy(stressLevel = stressLevel))
+        }
     }
 
     fun updateAnxietyLevel(anxietyLevel: Int) {
-        _viewState.update { it.copy(anxietyLevel = anxietyLevel) }
+        _viewState.update {
+            it.copy(registerBruxismForm = it.registerBruxismForm.copy(anxietyLevel = anxietyLevel))
+        }
     }
 
     fun updateSelectableImageCheck(index: Int) {
         _viewState.update { state ->
-            val updatedImages = state.selectableImages.toMutableList().apply {
+            val updatedImages = state.registerBruxismForm.selectableImages.toMutableList().apply {
                 this[index] = this[index].copy(isSelected = !this[index].isSelected)
             }
-            state.copy(selectableImages = updatedImages)
+            state.copy(registerBruxismForm = state.registerBruxismForm.copy(selectableImages = updatedImages))
         }
     }
 
@@ -61,13 +77,14 @@ class RegisterBruxismViewModel @Inject constructor(
             )
         }
         viewModelScope.launch {
-            val formSubmitResult = repository.submitForm(mapper.fromViewToDomain(_viewState.value)).fold(
-                onSuccess = { Result.success(it) },
-                onFailure = {
-                    if (it is UserNotFound) Result.success(Unit)
-                    else Result.failure(it)
-                }
-            )
+            val formSubmitResult =
+                repository.submitForm(mapper.fromViewToDomain(_viewState.value)).fold(
+                    onSuccess = { Result.success(it) },
+                    onFailure = {
+                        if (it is UserNotFound) Result.success(Unit)
+                        else Result.failure(it)
+                    }
+                )
             _viewState.update { state ->
                 state.copy(
                     showLoading = false,
@@ -79,6 +96,24 @@ class RegisterBruxismViewModel @Inject constructor(
 
     fun onCloseAlertRequest() {
         _viewState.update { it.copy(formSubmitResult = null) }
+    }
+
+    private fun MutableStateFlow<RegisterBruxismViewState>.updateAndVerifyMandatory(function: (RegisterBruxismViewState) -> RegisterBruxismViewState) {
+        update {
+            function(it)
+        }
+
+        with(value.registerBruxismForm) {
+            val allMandatoryFilled = if(isEating) true
+            else {
+                false
+            }
+            update {
+                it.copy(
+                    allMandatoryFieldsFilled = allMandatoryFilled
+                )
+            }
+        }
     }
 }
 
