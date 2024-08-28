@@ -21,13 +21,13 @@ class RegisterBruxismViewModel @Inject constructor(
     val viewState: StateFlow<RegisterBruxismViewState> = _viewState
 
     fun updateIsEating(isEating: Boolean) {
-        _viewState.update {
+        _viewState.updateAndVerifyMandatory {
             it.copy(registerBruxismForm = it.registerBruxismForm.copy(isEating = isEating))
         }
     }
 
     fun updateSelectedActivity(selectedActivity: String) {
-        _viewState.update {
+        _viewState.updateAndVerifyMandatory {
             it.copy(
                 registerBruxismForm = it.registerBruxismForm.copy(
                     selectedActivity = selectedActivity
@@ -37,31 +37,31 @@ class RegisterBruxismViewModel @Inject constructor(
     }
 
     fun updateIsInPain(isInPain: Boolean) {
-        _viewState.update {
+        _viewState.updateAndVerifyMandatory {
             it.copy(registerBruxismForm = it.registerBruxismForm.copy(isInPain = isInPain))
         }
     }
 
     fun updatePainLevel(painLevel: Int) {
-        _viewState.update {
+        _viewState.updateAndVerifyMandatory {
             it.copy(registerBruxismForm = it.registerBruxismForm.copy(painLevel = painLevel))
         }
     }
 
     fun updateStressLevel(stressLevel: Int) {
-        _viewState.update {
+        _viewState.updateAndVerifyMandatory {
             it.copy(registerBruxismForm = it.registerBruxismForm.copy(stressLevel = stressLevel))
         }
     }
 
     fun updateAnxietyLevel(anxietyLevel: Int) {
-        _viewState.update {
+        _viewState.updateAndVerifyMandatory {
             it.copy(registerBruxismForm = it.registerBruxismForm.copy(anxietyLevel = anxietyLevel))
         }
     }
 
     fun updateSelectableImageCheck(index: Int) {
-        _viewState.update { state ->
+        _viewState.updateAndVerifyMandatory { state ->
             val updatedImages = state.registerBruxismForm.selectableImages.toMutableList().apply {
                 this[index] = this[index].copy(isSelected = !this[index].isSelected)
             }
@@ -104,10 +104,13 @@ class RegisterBruxismViewModel @Inject constructor(
         }
 
         with(value.registerBruxismForm) {
-            val allMandatoryFilled = if(isEating) true
-            else {
-                false
+            val allMandatoryFilled = when {
+                isEating -> true
+                selectedActivity.isEmpty() -> false
+                isInPain -> selectableImages.any { it.isSelected }
+                else -> true
             }
+
             update {
                 it.copy(
                     allMandatoryFieldsFilled = allMandatoryFilled

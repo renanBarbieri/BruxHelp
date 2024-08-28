@@ -194,7 +194,10 @@ private fun FormView(
         }
 
         item {
-            Button(onClick = onSubmitFormClick) {
+            Button(
+                enabled = viewState.allMandatoryFieldsFilled,
+                onClick = onSubmitFormClick
+            ) {
                 Text(stringResource(id = R.string.register_bruxism_send_button))
             }
         }
