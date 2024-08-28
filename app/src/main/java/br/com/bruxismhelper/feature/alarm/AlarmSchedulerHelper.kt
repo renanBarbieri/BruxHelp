@@ -35,8 +35,8 @@ internal object AlarmSchedulerHelper {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        //TODO: No último alarme do dia, quando vamos adicionar o próximo alarme, temos que add +1 dia
         val triggerTime = item.timeInMillis
+//        val triggerTime = Date().time + 10000
 
         when (type) {
             is AlarmType.Repeat -> {

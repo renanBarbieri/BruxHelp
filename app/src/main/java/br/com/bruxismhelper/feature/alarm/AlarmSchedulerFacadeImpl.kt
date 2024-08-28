@@ -27,7 +27,7 @@ internal class AlarmSchedulerFacadeImpl @Inject constructor(
                 AppChannel.BRUXISM,
                 NotificationManager.IMPORTANCE_DEFAULT
             ),
-            timeInMillis = alarmToSchedule.timeMillis,
+            timeInMillis = alarmToSchedule.timeMillisAfterNow(),
             title = appContext.getString(R.string.alert_title),
             message = appContext.getString(R.string.alert_message),
         )
@@ -46,6 +46,21 @@ internal class AlarmSchedulerFacadeImpl @Inject constructor(
         return currentAlarmTime?.let {
             DayAlarmTime.getNextTime(it)
         } ?: DayAlarmTime.getNextTime(currentTimeInMillis)
+    }
+
+    private fun DayAlarmTime.timeMillisAfterNow(): Long {
+        if(this == DayAlarmTime.FIRST){
+            val now = Calendar.getInstance()
+
+            if(timeMillis < now.timeInMillis){
+                return now.apply {
+                    timeInMillis = timeMillis
+                    add(Calendar.DAY_OF_MONTH, 1)
+                }.timeInMillis
+            }
+        }
+
+        return timeMillis
     }
 }
 
