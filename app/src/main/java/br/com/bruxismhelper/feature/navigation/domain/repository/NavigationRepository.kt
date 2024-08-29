@@ -10,4 +10,7 @@ interface NavigationRepository {
     suspend fun isAlarmFired(): Flow<Boolean>
 
     suspend fun setBruxismFormAnswered()
+
+    suspend fun setAgreementScreenShown()
+    suspend fun isAgreementScreenShown(): Flow<Boolean>
 }

@@ -8,13 +8,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import br.com.bruxismhelper.R
-import br.com.bruxismhelper.feature.agreement.ui.AgreementScreen
+import br.com.bruxismhelper.feature.agreement.presentation.ui.AgreementScreen
 import br.com.bruxismhelper.feature.idle.ui.IdleScreen
 import br.com.bruxismhelper.feature.idle.ui.waiting.WaitingIcon
 import br.com.bruxismhelper.feature.navigation.presentation.NavigationViewModel
@@ -43,8 +42,10 @@ fun NavigationHost(
         }
 
         composable(route = AppRoute.Agreement) {
-            appBarTitle.intValue = R.string.app_name
-            AgreementScreen(agreementText = stringResource(id = R.string.agreement_term))
+            appBarTitle.intValue = R.string.agreement_title
+            AgreementScreen(onAgreed = {
+                viewModel.setTermShown()
+            })
         }
 
         composable(route = AppRoute.Waiting) {

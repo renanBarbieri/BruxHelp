@@ -24,17 +24,27 @@ class NavigationViewModel @Inject constructor(
         viewModelScope.launch {
             val isRegisterShowFlow = navigationRepository.isRegisterScreenShown()
             val isAlarmFiredFlow = navigationRepository.isAlarmFired()
+            val isTermAgreedFlow = navigationRepository.isAgreementScreenShown()
 
-            isRegisterShowFlow.combine(isAlarmFiredFlow) { isRegisterScreenShown, isAlarmFired ->
-                calculateRoute(isRegisterScreenShown, isAlarmFired)
+            combine(
+                isRegisterShowFlow,
+                isAlarmFiredFlow,
+                isTermAgreedFlow
+            ) { isRegisterScreenShown, isAlarmFired, isTermAgreed ->
+                calculateRoute(isRegisterScreenShown, isAlarmFired, isTermAgreed)
             }.collect { newRoute ->
                 _viewState.update { newRoute }
             }
         }
     }
 
-    private fun calculateRoute(isRegisterScreenShown: Boolean, isAlarmFired: Boolean): AppRoute {
+    private fun calculateRoute(
+        isRegisterScreenShown: Boolean,
+        isAlarmFired: Boolean,
+        isTermAgreed: Boolean
+    ): AppRoute {
         return when {
+            !isTermAgreed -> AppRoute.Agreement
             !isRegisterScreenShown -> AppRoute.Register
             isRegisterScreenShown && isAlarmFired -> AppRoute.BruxismRegister
             else -> AppRoute.Waiting
@@ -50,6 +60,12 @@ class NavigationViewModel @Inject constructor(
     fun setBruxismFormAnswered() {
         viewModelScope.launch {
             navigationRepository.setBruxismFormAnswered()
+        }
+    }
+
+    fun setTermShown() {
+        viewModelScope.launch {
+            navigationRepository.setAgreementScreenShown()
         }
     }
 }

@@ -27,4 +27,12 @@ class NavigationRepositoryImpl @Inject constructor(
     override suspend fun setBruxismFormAnswered() {
         appLocalDataSource.setAlarmFired(false)
     }
+
+    override suspend fun setAgreementScreenShown() {
+        appLocalDataSource.setAgreementScreenShown()
+    }
+
+    override suspend fun isAgreementScreenShown(): Flow<Boolean> {
+        return appLocalDataSource.isAgreementScreenShown()
+    }
 }

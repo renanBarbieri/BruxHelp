@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 private const val KEY_REGISTER_SCREEN_SHOWN = "register_screen"
+private const val KEY_AGREEMENT_SCREEN_SHOWN = "agreement_screen"
 private const val KEY_ALARM_FIRED = "alarm_fired"
 
 class AppDataSource @Inject constructor(private val dataStoreManager: DataStoreManager) {
@@ -23,5 +24,13 @@ class AppDataSource @Inject constructor(private val dataStoreManager: DataStoreM
 
     fun isAlarmFired(): Flow<Boolean> {
         return dataStoreManager.readBoolean(KEY_ALARM_FIRED)
+    }
+
+    suspend fun setAgreementScreenShown() {
+        dataStoreManager.writeBoolean(KEY_AGREEMENT_SCREEN_SHOWN, true)
+    }
+
+    fun isAgreementScreenShown(): Flow<Boolean> {
+        return dataStoreManager.readBoolean(KEY_AGREEMENT_SCREEN_SHOWN)
     }
 }
