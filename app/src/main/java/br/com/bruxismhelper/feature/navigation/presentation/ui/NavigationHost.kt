@@ -35,6 +35,7 @@ fun NavigationHost(
         navController = navController,
     ) {
         composable(route = AppRoute.Splash) {
+            appBarTitle.intValue = R.string.empty
             IdleScreen(
                 centerIcon = { WaitingIcon() },
                 messageStringRes = R.string.loading
@@ -42,10 +43,12 @@ fun NavigationHost(
         }
 
         composable(route = AppRoute.Agreement) {
+            appBarTitle.intValue = R.string.app_name
             AgreementScreen(agreementText = stringResource(id = R.string.agreement_term))
         }
 
         composable(route = AppRoute.Waiting) {
+            appBarTitle.intValue = R.string.empty
             IdleScreen(
                 centerIcon = { WaitingIcon() },
                 messageStringRes = R.string.waiting_message
@@ -53,17 +56,17 @@ fun NavigationHost(
         }
 
         composable(route = AppRoute.Register) {
+            appBarTitle.intValue = R.string.register_title
             RegisterForm(
                 modifier = Modifier.padding(start = 26.dp, end = 26.dp),
-                appBarTitle = appBarTitle,
                 onRegistrationFinished = { viewModel.setRegisterScreenShown() },
                 onRegistrationIgnored = { viewModel.setRegisterScreenShown() },
             )
         }
 
         composable(route = AppRoute.BruxismRegister) {
+            appBarTitle.intValue = R.string.register_bruxism_title
             RegisterBruxismForm(
-                appBarTitle = appBarTitle,
                 onActivityRegistrationFinished = { viewModel.setBruxismFormAnswered() }
             )
         }

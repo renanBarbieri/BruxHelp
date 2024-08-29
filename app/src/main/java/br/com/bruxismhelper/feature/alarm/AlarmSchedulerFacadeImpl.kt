@@ -53,10 +53,12 @@ internal class AlarmSchedulerFacadeImpl @Inject constructor(
             val now = Calendar.getInstance()
 
             if(timeMillis < now.timeInMillis){
-                return now.apply {
+                val tomorrowTime = now.apply {
                     timeInMillis = timeMillis
                     add(Calendar.DAY_OF_MONTH, 1)
                 }.timeInMillis
+
+                return tomorrowTime
             }
         }
 

@@ -15,10 +15,8 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringArrayResource
@@ -40,16 +38,10 @@ import br.com.bruxismhelper.ui.theme.BruxismHelperTheme
 
 @Composable
 fun RegisterBruxismForm(
-    modifier: Modifier = Modifier,
-    appBarTitle: MutableIntState = mutableIntStateOf(R.string.register_bruxism_title),
     viewModel: RegisterBruxismViewModel = hiltViewModel(),
     activityOptions: Array<String> = stringArrayResource(id = R.array.register_bruxism_activity),
     onActivityRegistrationFinished: () -> Unit = {},
 ) {
-    // Setting the app bar title
-    appBarTitle.intValue = R.string.register_bruxism_title
-
-    // Observing the state from ViewModel
     val viewState by viewModel.viewState.collectAsState()
 
     Box {

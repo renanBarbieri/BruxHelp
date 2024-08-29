@@ -55,19 +55,21 @@ fun App(notificationAlert: (@Composable () -> Unit)? = null) {
     BruxismHelperTheme {
         Scaffold(
             topBar = {
-                TopAppBar(
-                    title = {
-                        Text(
-                            text = stringResource(id = appBarTitle.intValue),
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxWidth()
+                if(stringResource(id = appBarTitle.intValue).isNotBlank()) {
+                    TopAppBar(
+                        title = {
+                            Text(
+                                text = stringResource(id = appBarTitle.intValue),
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        },
+                        colors = topAppBarColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            titleContentColor = MaterialTheme.colorScheme.primary
                         )
-                    },
-                    colors = topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                        titleContentColor = MaterialTheme.colorScheme.primary
                     )
-                )
+                }
             }
         ) {
             Column(

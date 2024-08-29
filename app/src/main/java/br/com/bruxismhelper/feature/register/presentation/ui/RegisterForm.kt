@@ -16,10 +16,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -48,12 +46,9 @@ import br.com.bruxismhelper.ui.theme.BruxismHelperTheme
 fun RegisterForm(
     modifier: Modifier = Modifier,
     viewModel: RegisterViewModel = hiltViewModel(),
-    appBarTitle: MutableIntState = mutableIntStateOf(R.string.register_title),
     onRegistrationFinished: () -> Unit = {},
     onRegistrationIgnored: () -> Unit = {},
 ) {
-    appBarTitle.intValue = R.string.register_title
-
     val formState by viewModel.viewState.collectAsState()
 
     if (formState.submitSuccess) {
