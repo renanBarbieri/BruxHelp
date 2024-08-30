@@ -2,9 +2,7 @@ package br.com.bruxismhelper.feature.agreement.presentation.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
@@ -22,6 +20,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import br.com.bruxismhelper.R
 import br.com.bruxismhelper.feature.agreement.presentation.AgreementViewModel
 import br.com.bruxismhelper.feature.idle.ui.waiting.WaitingDefaults.waitingTextFontSize
+import br.com.bruxismhelper.ui.common.spacerField
 import br.com.bruxismhelper.ui.theme.BruxismHelperTheme
 
 @Composable
@@ -41,9 +40,7 @@ fun AgreementScreen(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            item {
-                Spacer(modifier = Modifier.height(24.dp))
-            }
+            spacerField()
 
             item {
                 Text(
