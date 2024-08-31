@@ -18,16 +18,17 @@ internal class AlarmSchedulerFacadeImpl @Inject constructor(
 ) : AlarmSchedulerFacade {
     override fun scheduleNextAlarm(currentAlarmTime: DayAlarmTime?) {
 
-        val alarmToSchedule = DayAlarmTime.getNextTime(currentAlarmTime, Calendar.getInstance().timeInMillis)
+        val alarmTime =
+            DayAlarmTime.getNextTime(currentAlarmTime, Calendar.getInstance())
 
-        logcat { "scheduling ${alarmToSchedule.name}" }
+        logcat { "scheduling ${alarmTime.name}" }
         val alarmItem = AlarmItem(
-            id = alarmToSchedule.ordinal,
+            id = alarmTime.ordinal,
             channelProp = NotificationChannelProp(
                 AppChannel.BRUXISM,
                 NotificationManager.IMPORTANCE_DEFAULT
             ),
-            timeInMillis = alarmToSchedule.timeMillisAfterNow(),
+            timeInMillis = alarmTime.timeInMillisAfterNow(),
             title = appContext.getString(R.string.alert_title),
             message = appContext.getString(R.string.alert_message),
         )
@@ -41,29 +42,35 @@ internal class AlarmSchedulerFacadeImpl @Inject constructor(
 
     private fun DayAlarmTime.Companion.getNextTime(
         currentAlarmTime: DayAlarmTime?,
-        currentTimeInMillis: Long
+        nowCalendar: Calendar,
     ): DayAlarmTime {
         return currentAlarmTime?.let {
             DayAlarmTime.getNextTime(it)
-        } ?: DayAlarmTime.getNextTime(currentTimeInMillis)
+        } ?: DayAlarmTime.getNextTime(
+            nowCalendar.get(Calendar.HOUR_OF_DAY),
+            nowCalendar.get(Calendar.MINUTE)
+        )
     }
 
-    private fun DayAlarmTime.timeMillisAfterNow(): Long {
-        if(this == DayAlarmTime.FIRST){
-            val now = Calendar.getInstance()
+    private fun DayAlarmTime.timeInMillisAfterNow(): Long {
+        val calendar = Calendar.getInstance()
 
-            if(timeMillis < now.timeInMillis){
-                val tomorrowTime = now.apply {
-                    timeInMillis = timeMillis
-                    add(Calendar.DAY_OF_MONTH, 1)
-                }.timeInMillis
+        logcat { "calendar.timeInMillis = ${calendar.timeInMillis}" }
 
-                return tomorrowTime
-            }
+        if (calendar.hourMinutesInMinutes() > alarmTimeInMinutes) {
+            logcat { "Adding 1 day to calendar;" }
+            calendar.add(Calendar.DAY_OF_MONTH, 1)
         }
 
-        return timeMillis
+        calendar.set(Calendar.HOUR_OF_DAY, hour)
+        calendar.set(Calendar.MINUTE, minute)
+
+        logcat { "calendar.timeInMillis = ${calendar.timeInMillis}" }
+        return calendar.timeInMillis
     }
+
+    private fun Calendar.hourMinutesInMinutes() =
+        get(Calendar.HOUR_OF_DAY) * 60 + get(Calendar.MINUTE)
 }
 
 

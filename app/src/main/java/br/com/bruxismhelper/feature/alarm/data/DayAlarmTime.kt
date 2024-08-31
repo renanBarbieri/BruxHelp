@@ -2,17 +2,19 @@ package br.com.bruxismhelper.feature.alarm.data
 
 import java.util.Calendar
 
-enum class DayAlarmTime(val timeMillis: Long) {
-    FIRST(epochMillisOf(8,0)),
-    SECOND(epochMillisOf(9,20)),
-    THIRD(epochMillisOf(10,40)),
-    FOURTH(epochMillisOf(11, 30)),
-    FIFTH(epochMillisOf(13,30)),
-    SIXTH(epochMillisOf(14,40)),
-    SEVENTH(epochMillisOf(16,0)),
-    EIGHTH(epochMillisOf(17,20)),
-    NINTH(epochMillisOf(18,40)),
-    TENTH(epochMillisOf(20,0));
+enum class DayAlarmTime(val hour: Int, val minute: Int) {
+    FIRST(8,0),
+    SECOND(9,20),
+    THIRD(10,40),
+    FOURTH(11, 30),
+    FIFTH(13,30),
+    SIXTH(14,40),
+    SEVENTH(16,0),
+    EIGHTH(17,20),
+    NINTH(18,40),
+    TENTH(20,0);
+
+    val alarmTimeInMinutes = hour * 60 + minute
 
     companion object {
         fun getByOrdinal(ordinal: Int) = entries.first { it.ordinal == ordinal }
@@ -28,9 +30,10 @@ enum class DayAlarmTime(val timeMillis: Long) {
             return FIRST
         }
 
-        fun getNextTime(currentTimeInMillis: Long): DayAlarmTime {
+        fun getNextTime(currentHour: Int, currentMinute: Int): DayAlarmTime {
+            val currentTimeInMinutes = currentHour * 60 + currentMinute
             entries.forEach {
-                if(currentTimeInMillis < it.timeMillis) return it
+                if(currentTimeInMinutes < it.alarmTimeInMinutes) return it
             }
 
             return FIRST
