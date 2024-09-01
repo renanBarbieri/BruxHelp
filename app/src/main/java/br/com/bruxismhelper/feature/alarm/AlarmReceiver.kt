@@ -20,12 +20,13 @@ internal class AlarmReceiver : BroadcastReceiver() {
     @Inject lateinit var notificationHelper: NotificationHelper
     @Inject lateinit var appDataSource: AppDataSource
     @Inject lateinit var alarmScheduler: AlarmSchedulerFacade
+    @Inject lateinit var alarmSchedulerHelper: AlarmSchedulerHelper
 
     override fun onReceive(context: Context?, intent: Intent?) {
         logcat { "receiving" }
         if (intent == null || context == null) return
 
-        AlarmSchedulerHelper.extractAlarmItemFromExtra(intent)?.let {
+        alarmSchedulerHelper.extractAlarmItemFromExtra(intent)?.let {
             logcat { "alarm extracted: $it" }
 
             setAlarmFired(it.id)

@@ -3,10 +3,8 @@ package br.com.bruxismhelper.feature.alarm.data
 import logcat.logcat
 import java.util.Calendar
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class DayAlarmTimeHelper @Inject constructor() {
+internal class DayAlarmTimeHelper @Inject constructor() {
 
     /**
      * Determines the next [DayAlarmTime] after the given [currentAlarmTime] or the current time represented by [nowCalendar].
@@ -67,18 +65,19 @@ class DayAlarmTimeHelper @Inject constructor() {
      * @param nowCalendar A Calendar instance representing the current time.* @return The time in milliseconds from [nowCalendar] to the [dayAlarmTime].
      */
     fun timeInMillisAfterNow(dayAlarmTime: DayAlarmTime, nowCalendar: Calendar): Long {
-        logcat { "calendar.timeInMillis = ${nowCalendar.timeInMillis}" }
+        val calendar = nowCalendar.clone() as Calendar
+        logcat { "calendar.timeInMillis = ${calendar.timeInMillis}" }
 
-        if (hourMinutesInMinutes(nowCalendar) > dayAlarmTime.alarmTimeInMinutes) {
+        if (hourMinutesInMinutes(calendar) > dayAlarmTime.alarmTimeInMinutes) {
             logcat { "Adding 1 day to calendar;" }
-            nowCalendar.add(Calendar.DAY_OF_MONTH, 1)
+            calendar.add(Calendar.DAY_OF_MONTH, 1)
         }
 
-        nowCalendar.set(Calendar.HOUR_OF_DAY, dayAlarmTime.hour)
-        nowCalendar.set(Calendar.MINUTE, dayAlarmTime.minute)
+        calendar.set(Calendar.HOUR_OF_DAY, dayAlarmTime.hour)
+        calendar.set(Calendar.MINUTE, dayAlarmTime.minute)
 
-        logcat { "calendar.timeInMillis = ${nowCalendar.timeInMillis}" }
-        return nowCalendar.timeInMillis
+        logcat { "calendar.timeInMillis = ${calendar.timeInMillis}" }
+        return calendar.timeInMillis
     }
 
     private fun hourMinutesInMinutes(calendar: Calendar) =

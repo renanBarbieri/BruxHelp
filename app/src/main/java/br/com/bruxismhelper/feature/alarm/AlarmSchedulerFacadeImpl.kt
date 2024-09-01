@@ -12,16 +12,19 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import logcat.logcat
 import java.util.Calendar
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 internal class AlarmSchedulerFacadeImpl @Inject constructor(
     @ApplicationContext private val appContext: Context,
+    private val alarmSchedulerHelper: AlarmSchedulerHelper,
     private val dayAlarmTimeHelper: DayAlarmTimeHelper,
 ) : AlarmSchedulerFacade {
-    override fun scheduleNextAlarm(currentAlarmId: Int?) {
+    override fun scheduleNextAlarm(currentAlarmId: Int?, nowCalendar: Calendar) {
         val currentDayAlarm = currentAlarmId?.let { dayAlarmTimeHelper.getDayAlarmTimeByOrdinal(it) }
 
         val alarmTime =
-            dayAlarmTimeHelper.getDayAlarmNextTime(currentDayAlarm, Calendar.getInstance())
+            dayAlarmTimeHelper.getDayAlarmNextTime(currentDayAlarm, nowCalendar)
 
         logcat { "scheduling ${alarmTime.name}" }
         val alarmItem = AlarmItem(
@@ -30,12 +33,12 @@ internal class AlarmSchedulerFacadeImpl @Inject constructor(
                 AppChannel.BRUXISM,
                 NotificationManager.IMPORTANCE_DEFAULT
             ),
-            timeInMillis = dayAlarmTimeHelper.timeInMillisAfterNow(alarmTime, Calendar.getInstance()),
+            timeInMillis = dayAlarmTimeHelper.timeInMillisAfterNow(alarmTime, nowCalendar),
             title = appContext.getString(R.string.alert_title),
             message = appContext.getString(R.string.alert_message),
         )
 
-        AlarmSchedulerHelper.schedule(
+        alarmSchedulerHelper.schedule(
             appContext,
             alarmItem,
             AlarmType.Exact

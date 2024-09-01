@@ -1,3 +1,5 @@
+@file:Suppress("PrivatePropertyName")
+
 package br.com.bruxismhelper.feature.alarm
 
 import android.app.AlarmManager
@@ -8,9 +10,10 @@ import android.os.Build
 import br.com.bruxismhelper.feature.alarm.data.AlarmItem
 import br.com.bruxismhelper.feature.alarm.data.AlarmType
 import logcat.logcat
+import javax.inject.Inject
 
-internal object AlarmSchedulerHelper {
-    private const val INTENT_KEY_ALARM_ITEM = "AlarmScheduler.ALARM_ITEM"
+internal class AlarmSchedulerHelper @Inject constructor() {
+    private val INTENT_KEY_ALARM_ITEM = "AlarmScheduler.ALARM_ITEM"
 
     /**
      * Schedules a push notification using [AlarmManager]
@@ -112,6 +115,7 @@ internal object AlarmSchedulerHelper {
      *
      * @return [AlarmItem] extracted from intent extras or null if has no AlarmItem on extras
      */
+    @Suppress("DEPRECATION")
     fun extractAlarmItemFromExtra(intent: Intent): AlarmItem? {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getSerializableExtra(INTENT_KEY_ALARM_ITEM, AlarmItem::class.java)
