@@ -3,7 +3,6 @@ package br.com.bruxismhelper.feature.alarm
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import br.com.bruxismhelper.feature.alarm.data.DayAlarmTime
 import br.com.bruxismhelper.feature.navigation.repository.source.AppDataSource
 import br.com.bruxismhelper.platform.notification.NotificationHelper
 import dagger.hilt.android.AndroidEntryPoint
@@ -48,8 +47,7 @@ internal class AlarmReceiver : BroadcastReceiver() {
     ){
         val pendingResult = goAsync()
 
-        val currentDayAlarm = DayAlarmTime.getByOrdinal(alarmId)
-        alarmScheduler.scheduleNextAlarm(currentDayAlarm)
+        alarmScheduler.scheduleNextAlarm(alarmId)
 
         GlobalScope.launch(context) {
             appDataSource.setAlarmFired(true)
