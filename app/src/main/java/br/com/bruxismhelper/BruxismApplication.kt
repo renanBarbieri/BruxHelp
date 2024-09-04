@@ -24,7 +24,12 @@ class BruxismApplication: Application() {
         AndroidLogcatLogger.installOnDebuggableApp(this, minPriority = LogPriority.VERBOSE)
     }
 
+    /**
+     * [Official documentation](https://firebase.google.com/docs/app-check/android/play-integrity-provider?authuser=0#initialize)
+     *
+     */
     private fun initFirebase(){
+        Firebase.initialize(context = this)
         val integrityProvider = if(BuildConfig.DEBUG) {
             DebugAppCheckProviderFactory.getInstance()
         } else {
@@ -32,7 +37,6 @@ class BruxismApplication: Application() {
         }
 
         Firebase.appCheck.installAppCheckProviderFactory(integrityProvider)
-        Firebase.initialize(context = this)
     }
 }
 
