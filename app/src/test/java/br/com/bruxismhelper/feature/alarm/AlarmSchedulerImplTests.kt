@@ -19,7 +19,6 @@ import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
-import java.util.Calendar
 
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE)
@@ -31,8 +30,6 @@ class AlarmSchedulerFacadeImplTest {
     private lateinit var dayAlarmTimeHelper: DayAlarmTimeHelper
     @Mock
     private lateinit var alarmSchedulerHelper: AlarmSchedulerHelper
-    @Mock
-    private lateinit var calendarMock: Calendar
 
     private lateinit var alarmSchedulerFacade: AlarmSchedulerFacadeImpl
 
@@ -49,7 +46,7 @@ class AlarmSchedulerFacadeImplTest {
 
     @Test
     fun scheduleNextAlarm_noCurrentAlarm_schedulesNextAvailableAlarm() {
-        setMockCalendar(1, 9, 2024, 10, 0)
+        val calendarMock = getCalendarWithProperties(1, 9, 2024, 10, 0)
 
         val expectedNextAlarmTime = DayAlarmTime.THIRD
         val expectedTimeInMillis = getTimeInMillisOf(1, 9, 2024, 10, 40)
@@ -77,7 +74,7 @@ class AlarmSchedulerFacadeImplTest {
 
     @Test
     fun scheduleNextAlarm_withCurrentAlarm_schedulesAlarmAfterCurrent() {
-        setMockCalendar(1, 9, 2024, 10, 41)
+        val calendarMock = getCalendarWithProperties(1, 9, 2024, 10, 41)
 
         val currentAlarmId = 2
         val currentDayAlarm = DayAlarmTime.THIRD
@@ -107,24 +104,8 @@ class AlarmSchedulerFacadeImplTest {
         )
     }
 
-    private fun setMockCalendar(day: Int, month: Int, year: Int, hour: Int, minute: Int) {
-        with(calendarMock) {
-            `when`(get(Calendar.DAY_OF_MONTH)).thenReturn(day)
-            `when`(get(Calendar.MONTH)).thenReturn(month)
-            `when`(get(Calendar.YEAR)).thenReturn(year)
-            `when`(get(Calendar.HOUR_OF_DAY)).thenReturn(hour)
-            `when`(get(Calendar.MINUTE)).thenReturn(minute)
-        }
-    }
-
     private fun getTimeInMillisOf(day: Int, month: Int, year: Int, hour: Int, minute: Int): Long {
-        return Calendar.getInstance().apply {
-            set(Calendar.DAY_OF_MONTH, day)
-            set(Calendar.MONTH, month)
-            set(Calendar.YEAR, year)
-            set(Calendar.HOUR_OF_DAY, hour)
-            set(Calendar.MINUTE, minute)
-        }.timeInMillis
+        return getCalendarWithProperties(day, month, year, hour, minute).timeInMillis
     }
 
     private fun expectedAlarmItem(expectedNextAlarmTime: DayAlarmTime, expectedTimeInMillis: Long) = AlarmItem(

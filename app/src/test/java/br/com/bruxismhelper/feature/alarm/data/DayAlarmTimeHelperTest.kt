@@ -1,8 +1,8 @@
 package br.com.bruxismhelper.feature.alarm.data
 
+import br.com.bruxismhelper.feature.alarm.getCalendarWithProperties
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
-import org.junit.Ignore
 import org.junit.Test
 import java.util.Calendar
 
@@ -12,32 +12,27 @@ class DayAlarmTimeHelperTest {
 
     @Test
     fun getDayAlarmNextTime_noCurrentAlarm_returnsFirstAlarm() {
-        val mockCalendar = Calendar.getInstance().apply {set(Calendar.HOUR_OF_DAY, 0)
-            set(Calendar.MINUTE, 0)
-        }
+        val mockCalendar = getCalendarWithProperties(hour = 0, minute = 0)
 
         val nextAlarm = dayAlarmTimeHelper.getDayAlarmNextTime(null, mockCalendar)
 
         assertEquals(DayAlarmTime.FIRST, nextAlarm)
     }
 
-    @Ignore("Not implemented yet")
     @Test
     fun getDayAlarmNextTime_withCurrentAlarm_returnsNextAlarm() {
-        val currentAlarm = DayAlarmTime.FIRST // Replace with an actual value
-        val mockCalendar = Calendar.getInstance() // Time doesn't matter in this case
+        val currentAlarm = DayAlarmTime.FIRST
+        val mockCalendar = getCalendarWithProperties() // Time doesn't matter in this case
 
-        val nextAlarm= dayAlarmTimeHelper.getDayAlarmNextTime(currentAlarm, mockCalendar)
+        val nextAlarm = dayAlarmTimeHelper.getDayAlarmNextTime(currentAlarm, mockCalendar)
 
-        // Assert that nextAlarm is the expected value after currentAlarm in the DayAlarmTime enum
-
-        TODO("Not implemented")
+        assertEquals(DayAlarmTime.SECOND, nextAlarm)
     }
 
     @Test
     fun getDayAlarmNextTime_lastAlarm_returnsFirstAlarm() {
         val lastAlarm = DayAlarmTime.TENTH
-        val mockCalendar = Calendar.getInstance() // Time doesn't matter in this case
+        val mockCalendar = getCalendarWithProperties() // Time doesn't matter in this case
 
         val nextAlarm = dayAlarmTimeHelper.getDayAlarmNextTime(lastAlarm, mockCalendar)
 
@@ -69,43 +64,32 @@ class DayAlarmTimeHelperTest {
         assertEquals(DayAlarmTime.FIRST, nextAlarm)
     }
 
-    @Ignore("Not implemented yet")
-    @Test
-    fun timeInMillisAfterNow_calculatesCorrectTime() {
-        val alarmTime = DayAlarmTime.FIRST // Replace with an actual value
-        val mockCalendar = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, 10)
-            set(Calendar.MINUTE, 0)
-        }
-
-        val timeInMillis = dayAlarmTimeHelper.timeInMillisAfterNow(alarmTime, mockCalendar)
-
-        // Calculate the expected time in milliseconds based on alarmTime and mockCalendar
-        // and assert that timeInMillis matches the expected value
-        TODO("Not implemented")
-    }
-
-    @Ignore("Not implemented yet")
     @Test
     fun timeInMillisAfterNow_alarmInNextDay_calculatesCorrectTime() {
-        val alarmTime = DayAlarmTime.FIRST // Replace with an actual value
-        val mockCalendar = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, 23)
-            set(Calendar.MINUTE, 59)
-        }
-        // Assuming alarmTime is earlier than 23:59
+        val alarmTime = DayAlarmTime.FIRST //Next alarm should be the first
+        val mockCalendar = getCalendarWithProperties(day = 4, month = 9, year = 2024, hour = 23, minute = 0) //this date if after time of First alarm
 
         val timeInMillis = dayAlarmTimeHelper.timeInMillisAfterNow(alarmTime, mockCalendar)
 
-        // Calculate the expected time in milliseconds (including the time until the next day)
-        // and assert that timeInMillis matches the expected value
-        TODO("Not implemented")
+        val expectedTimeInMillis = getCalendarWithProperties(day = 5, month = 9, year = 2024, hour = 8, minute = 0).timeInMillis
+
+        assertEquals(expectedTimeInMillis, timeInMillis)
+    }
+
+    @Test
+    fun timeInMillisAfterNow_calculatesCorrectTime() {
+        val alarmTime = DayAlarmTime.FIRST
+        val mockCalendar = getCalendarWithProperties(hour = 7, minute = 0)
+
+        val timeInMillis = dayAlarmTimeHelper.timeInMillisAfterNow(alarmTime, mockCalendar)
+        val expectedTimeInMillis = getCalendarWithProperties(hour = 8, minute = 0).timeInMillis
+
+        assertEquals(expectedTimeInMillis, timeInMillis)
     }
 
     @Test
     fun getDayAlarmTimeByOrdinal_returnsCorrectAlarm() {
-        val ordinal = 1 // Replace with a valid ordinal within your DayAlarmTime enum
-
+        val ordinal = 1
         val alarmTime = dayAlarmTimeHelper.getDayAlarmTimeByOrdinal(ordinal)
 
         assertNotNull(alarmTime)
