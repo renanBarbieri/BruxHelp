@@ -9,12 +9,10 @@ import br.com.bruxismhelper.feature.alarm.data.DayAlarmTimeHelper
 import br.com.bruxismhelper.platform.notification.data.AppChannel
 import br.com.bruxismhelper.platform.notification.data.NotificationChannelProp
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito.anyInt
-import org.mockito.Mockito.mock
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when`
@@ -52,12 +50,15 @@ class AlarmSchedulerFacadeImplTest {
     @Test
     fun scheduleNextAlarm_noCurrentAlarm_schedulesNextAvailableAlarm() {
         setMockCalendar(1, 9, 2024, 10, 0)
-        val expectedNextAlarmTime = DayAlarmTime.THIRD // Replace with your expected DayAlarmTime
+
+        val expectedNextAlarmTime = DayAlarmTime.THIRD
+        val expectedTimeInMillis = getTimeInMillisOf(1, 9, 2024, 10, 40)
+        val expectedAlarmItem = expectedAlarmItem(expectedNextAlarmTime, expectedTimeInMillis)
+
         `when`(dayAlarmTimeHelper.getDayAlarmNextTime(null, calendarMock)).thenReturn(
             expectedNextAlarmTime
         )
 
-        val expectedTimeInMillis = getTimeInMillisOf(1, 9, 2024, 10, 40)
         `when`(
             dayAlarmTimeHelper.timeInMillisAfterNow(
                 expectedNextAlarmTime,
@@ -65,19 +66,8 @@ class AlarmSchedulerFacadeImplTest {
             )
         ).thenReturn(expectedTimeInMillis)
 
+
         alarmSchedulerFacade.scheduleNextAlarm(null, calendarMock)
-
-        val expectedAlarmItem = AlarmItem(
-            id = expectedNextAlarmTime.ordinal,
-            channelProp = NotificationChannelProp(
-                AppChannel.BRUXISM,
-                NotificationManager.IMPORTANCE_DEFAULT
-            ),
-            timeInMillis = expectedTimeInMillis,
-            title = "Unit test string",
-            message = "Unit test string",
-        )
-
         verify(alarmSchedulerHelper, times(1)).schedule(
             appContext,
             expectedAlarmItem,
@@ -85,38 +75,37 @@ class AlarmSchedulerFacadeImplTest {
         )
     }
 
-    @Ignore("Not implemented yet")
     @Test
     fun scheduleNextAlarm_withCurrentAlarm_schedulesAlarmAfterCurrent() {
-        val currentAlarmId = 2 // Example ID, replace with a valid ordinal
-        val currentDayAlarm = DayAlarmTime.THIRD // Or the corresponding DayAlarmTime
+        setMockCalendar(1, 9, 2024, 10, 41)
+
+        val currentAlarmId = 2
+        val currentDayAlarm = DayAlarmTime.THIRD
+        val expectedNextAlarmTime = DayAlarmTime.FOURTH
+        val expectedTimeInMillis = getTimeInMillisOf(1, 9, 2024, 11, 30)
+        val expectedAlarmItem = expectedAlarmItem(expectedNextAlarmTime, expectedTimeInMillis)
+
         `when`(dayAlarmTimeHelper.getDayAlarmTimeByOrdinal(currentAlarmId)).thenReturn(
             currentDayAlarm
         )
 
-        val mockCalendar = mock(Calendar::class.java)
-        `when`(Calendar.getInstance()).thenReturn(mockCalendar)
-
-        val expectedNextAlarmTime =
-            DayAlarmTime.FOURTH // Replace with your expected next DayAlarmTime
-        `when`(dayAlarmTimeHelper.getDayAlarmNextTime(currentDayAlarm, mockCalendar)).thenReturn(
+        `when`(dayAlarmTimeHelper.getDayAlarmNextTime(currentDayAlarm, calendarMock)).thenReturn(
             expectedNextAlarmTime
         )
 
-        val expectedTimeInMillis = 54321L // Replace with expected value
-        `when`(
-            dayAlarmTimeHelper.timeInMillisAfterNow(
-                expectedNextAlarmTime,
-                mockCalendar
-            )
-        ).thenReturn(expectedTimeInMillis)
+        `when`(dayAlarmTimeHelper.timeInMillisAfterNow(expectedNextAlarmTime,calendarMock)).thenReturn(
+            expectedTimeInMillis
+        )
 
-        alarmSchedulerFacade.scheduleNextAlarm(currentAlarmId)
 
-        // ... similar verification as in the previous test, using expectedNextAlarmTime and expectedTimeInMillis
+        alarmSchedulerFacade.scheduleNextAlarm(currentAlarmId, calendarMock)
+
+        verify(alarmSchedulerHelper, times(1)).schedule(
+            appContext,
+            expectedAlarmItem,
+            AlarmType.Exact
+        )
     }
-
-    // Edge Cases: (Add tests for scenarios like all alarms passed, current time equals alarm time, etc.)
 
     private fun setMockCalendar(day: Int, month: Int, year: Int, hour: Int, minute: Int) {
         with(calendarMock) {
@@ -137,4 +126,15 @@ class AlarmSchedulerFacadeImplTest {
             set(Calendar.MINUTE, minute)
         }.timeInMillis
     }
+
+    private fun expectedAlarmItem(expectedNextAlarmTime: DayAlarmTime, expectedTimeInMillis: Long) = AlarmItem(
+        id = expectedNextAlarmTime.ordinal,
+        channelProp = NotificationChannelProp(
+            AppChannel.BRUXISM,
+            NotificationManager.IMPORTANCE_DEFAULT
+        ),
+        timeInMillis = expectedTimeInMillis,
+        title = "Unit test string",
+        message = "Unit test string",
+    )
 }
