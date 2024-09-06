@@ -79,6 +79,7 @@ dependencies {
     implementation(libs.google.dagger.hilt)
     implementation(platform(libs.google.firebase.bom))
     implementation(libs.google.firebase.analytics)
+    implementation(libs.google.firebase.auth)
     implementation(libs.google.firebase.firestore)
     implementation(libs.google.firebase.appcheck)
     implementation(libs.google.firebase.appcheck.debug)
