@@ -20,7 +20,7 @@ gson = "2.11.0"
 workRuntimeKtx = "2.9.1"
 hiltCommon = "1.2.0"
 robolectric = "4.13"
-mokito = "5.7.0"
+mockito = "5.2.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -54,8 +54,8 @@ squareup-logcat = { group = "com.squareup.logcat", name = "logcat" , version.ref
 google-gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 androidx-hilt-common = { group = "androidx.hilt", name = "hilt-common", version.ref = "hiltCommon" }
 robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
-mokito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mokito" }
-mokito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mokito" }
+mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
+mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockito" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
