@@ -38,6 +38,7 @@ class NavigationViewModel @Inject constructor(
         }
     }
 
+    @Suppress("SameParameterValue")
     private fun calculateRoute(
         isRegisterScreenShown: Boolean,
         isAlarmFired: Boolean,

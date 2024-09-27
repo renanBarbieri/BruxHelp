@@ -104,6 +104,7 @@ class AlarmSchedulerFacadeImplTest {
         )
     }
 
+    @Suppress("SameParameterValue")
     private fun getTimeInMillisOf(day: Int, month: Int, year: Int, hour: Int, minute: Int): Long {
         return getCalendarWithProperties(day, month, year, hour, minute).timeInMillis
     }

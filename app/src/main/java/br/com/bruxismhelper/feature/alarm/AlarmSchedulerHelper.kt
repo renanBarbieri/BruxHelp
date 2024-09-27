@@ -89,6 +89,7 @@ internal class AlarmSchedulerHelper @Inject constructor() {
      * @param context
      * @param alarmItem
      */
+    @Suppress("unused")
     fun cancel(context: Context, alarmItem: AlarmItem) {
         val alarmManager = context.getAlarmManager()
         val intent = Intent(context, AlarmReceiver::class.java).apply {

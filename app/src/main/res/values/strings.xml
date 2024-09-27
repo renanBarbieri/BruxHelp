@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Bruxism Helper</string>
 
     <string name="empty"/>
@@ -24,7 +24,7 @@
 
     <!-- region Alerts -->
     <string name="alert_title">Registre suas atividades!</string>
-    <string name="alert_message">Pare por um momento e responda ao formulário</string>
+    <string name="alert_message" tools:ignore="Typos">Pare por um momento e responda ao formulário</string>
     <!-- endregion -->
 
     <!--region User Register-->
