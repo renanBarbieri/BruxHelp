@@ -44,6 +44,7 @@
     <string name="register_option_habit_nail_biting">Roer unha</string>
     <string name="register_option_habit_object_biting">Morder objetos</string>
     <string name="register_option_habit_lip_biting">Morder lábios</string>
+    <string name="register_option_no_usage">Não consumo</string>
     <string name="register_option_frequency_daily">Diária</string>
     <string name="register_option_frequency_weekly">Semanal</string>
     <string name="register_option_frequency_by_week">Quinzenal</string>

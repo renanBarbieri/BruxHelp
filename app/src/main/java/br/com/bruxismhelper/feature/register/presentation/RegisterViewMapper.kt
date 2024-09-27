@@ -41,11 +41,12 @@ class RegisterViewMapper @Inject constructor() {
         )
     }
 
-    private fun FrequencyViewObject.toDomain(): Frequency {
+    private fun FrequencyViewObject.toDomain(): Frequency? {
         return when(this) {
             FrequencyViewObject.DAILY -> Frequency.DAILY
             FrequencyViewObject.WEEKLY -> Frequency.WEEKLY
-            else -> Frequency.BY_WEEKLY
+            FrequencyViewObject.BY_WEEKLY -> Frequency.BY_WEEKLY
+            else -> null
         }
     }
 
