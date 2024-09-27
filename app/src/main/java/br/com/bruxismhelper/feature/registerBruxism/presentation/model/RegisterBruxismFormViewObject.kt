@@ -13,35 +13,35 @@ data class RegisterBruxismFormViewObject(
 )
 
 
-private val mockSelectableImage = listOf(
+val mockSelectableImage = listOf(
     SelectableImage(
         id = AtmLeftIdentifier,
         isSelected = false,
-        imageRes = R.drawable.pain_test
+        imageRes = R.drawable.left_top
     ),
     SelectableImage(
         id = AtmRightIdentifier,
         isSelected = false,
-        imageRes = R.drawable.pain_test
+        imageRes = R.drawable.right_top
     ),
     SelectableImage(
         id = MasseterLeftIdentifier,
         isSelected = false,
-        imageRes = R.drawable.pain_test
+        imageRes = R.drawable.left_middle
     ),
     SelectableImage(
         id = MasseterRightIdentifier,
         isSelected = false,
-        imageRes = R.drawable.pain_test
+        imageRes = R.drawable.right_middle
     ),
     SelectableImage(
         id = TemporalLeftIdentifier,
         isSelected = false,
-        imageRes = R.drawable.pain_test
+        imageRes = R.drawable.left_bottom
     ),
     SelectableImage(
         id = TemporalRightIdentifier,
         isSelected = false,
-        imageRes = R.drawable.pain_test
+        imageRes = R.drawable.right_bottom
     ),
 )
