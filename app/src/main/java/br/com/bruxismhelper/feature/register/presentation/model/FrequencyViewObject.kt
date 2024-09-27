@@ -13,7 +13,8 @@ enum class FrequencyViewObject(val fieldNameRes: Int) {
             return when(value) {
                 "Diária" -> DAILY
                 "Semanal" -> WEEKLY
-                else -> BY_WEEKLY
+                "Quinzenal" -> BY_WEEKLY
+                else -> NO_USAGE
             }
         }
     }
