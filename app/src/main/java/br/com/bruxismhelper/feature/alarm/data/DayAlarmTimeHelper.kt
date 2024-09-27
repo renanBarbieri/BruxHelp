@@ -56,15 +56,16 @@ internal class DayAlarmTimeHelper @Inject constructor() {
     }
 
     /**
-     * Calculates the time in milliseconds from the given [nowCalendar] to the specified [dayAlarmTime].
+     * Calculates the calendar time from the given [nowCalendar] to the specified [dayAlarmTime].
      *
-     *If the current time (represented by [nowCalendar]) is already past the [dayAlarmTime],
+     * If the current time (represented by [nowCalendar]) is already past the [dayAlarmTime],
      * the function will calculate the time until the alarm on the next day.
      *
      * @param dayAlarmTime The target alarm time.
-     * @param nowCalendar A Calendar instance representing the current time.* @return The time in milliseconds from [nowCalendar] to the [dayAlarmTime].
+     * @param nowCalendar A Calendar instance representing the current time.
+     * @return The calendar time from [nowCalendar] to the [dayAlarmTime].
      */
-    fun timeInMillisAfterNow(dayAlarmTime: DayAlarmTime, nowCalendar: Calendar): Long {
+    fun calendarAfterNow(dayAlarmTime: DayAlarmTime, nowCalendar: Calendar): Calendar {
         val calendar = nowCalendar.clone() as Calendar
         logcat { "calendar.timeInMillis = ${calendar.timeInMillis}" }
 
@@ -76,8 +77,7 @@ internal class DayAlarmTimeHelper @Inject constructor() {
         calendar.set(Calendar.HOUR_OF_DAY, dayAlarmTime.hour)
         calendar.set(Calendar.MINUTE, dayAlarmTime.minute)
 
-        logcat { "calendar.timeInMillis = ${calendar.timeInMillis}" }
-        return calendar.timeInMillis
+        return calendar
     }
 
     private fun hourMinutesInMinutes(calendar: Calendar) =

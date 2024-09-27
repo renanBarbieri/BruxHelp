@@ -57,10 +57,10 @@ class AlarmSchedulerFacadeImplTest {
         )
 
         `when`(
-            dayAlarmTimeHelper.timeInMillisAfterNow(
+            dayAlarmTimeHelper.calendarAfterNow(
                 expectedNextAlarmTime,
                 calendarMock
-            )
+            ).timeInMillis
         ).thenReturn(expectedTimeInMillis)
 
 
@@ -90,7 +90,7 @@ class AlarmSchedulerFacadeImplTest {
             expectedNextAlarmTime
         )
 
-        `when`(dayAlarmTimeHelper.timeInMillisAfterNow(expectedNextAlarmTime,calendarMock)).thenReturn(
+        `when`(dayAlarmTimeHelper.calendarAfterNow(expectedNextAlarmTime,calendarMock).timeInMillis).thenReturn(
             expectedTimeInMillis
         )
 

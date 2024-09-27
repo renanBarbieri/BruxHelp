@@ -39,7 +39,6 @@ internal class AlarmSchedulerHelper @Inject constructor() {
         )
 
         val triggerTime = item.timeInMillis
-//        val triggerTime = Date().time + 10000
 
         when (type) {
             is AlarmType.Repeat -> {

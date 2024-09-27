@@ -30,6 +30,9 @@ internal class AlarmSchedulerFacadeImpl @Inject constructor(
         val alarmTime =
             dayAlarmTimeHelper.getDayAlarmNextTime(currentDayAlarm, nowCalendar)
 
+        val calendarAfterNow = dayAlarmTimeHelper.calendarAfterNow(alarmTime, nowCalendar)
+        Firebase.crashlytics.recordException(Throwable("Next alarm scheduled: ${calendarAfterNow.time}"))
+
         logcat { "scheduling ${alarmTime.name}" }
         val alarmItem = AlarmItem(
             id = alarmTime.ordinal,
@@ -37,7 +40,7 @@ internal class AlarmSchedulerFacadeImpl @Inject constructor(
                 AppChannel.BRUXISM,
                 NotificationManager.IMPORTANCE_DEFAULT
             ),
-            timeInMillis = dayAlarmTimeHelper.timeInMillisAfterNow(alarmTime, nowCalendar),
+            timeInMillis = calendarAfterNow.timeInMillis,
             title = appContext.getString(R.string.alert_title),
             message = appContext.getString(R.string.alert_message),
         )

@@ -69,7 +69,7 @@ class DayAlarmTimeHelperTest {
         val alarmTime = DayAlarmTime.FIRST //Next alarm should be the first
         val mockCalendar = getCalendarWithProperties(day = 4, month = 9, year = 2024, hour = 23, minute = 0) //this date if after time of First alarm
 
-        val timeInMillis = dayAlarmTimeHelper.timeInMillisAfterNow(alarmTime, mockCalendar)
+        val timeInMillis = dayAlarmTimeHelper.calendarAfterNow(alarmTime, mockCalendar).timeInMillis
 
         val expectedTimeInMillis = getCalendarWithProperties(day = 5, month = 9, year = 2024, hour = 8, minute = 0).timeInMillis
 
@@ -81,7 +81,7 @@ class DayAlarmTimeHelperTest {
         val alarmTime = DayAlarmTime.FIRST
         val mockCalendar = getCalendarWithProperties(hour = 7, minute = 0)
 
-        val timeInMillis = dayAlarmTimeHelper.timeInMillisAfterNow(alarmTime, mockCalendar)
+        val timeInMillis = dayAlarmTimeHelper.calendarAfterNow(alarmTime, mockCalendar).timeInMillis
         val expectedTimeInMillis = getCalendarWithProperties(hour = 8, minute = 0).timeInMillis
 
         assertEquals(expectedTimeInMillis, timeInMillis)
