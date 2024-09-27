@@ -30,8 +30,8 @@ class NavigationViewModel @Inject constructor(
                 isRegisterShowFlow,
                 isAlarmFiredFlow,
                 isTermAgreedFlow
-            ) { isRegisterScreenShown, isAlarmFired, isTermAgreed ->
-                calculateRoute(isRegisterScreenShown, isAlarmFired, isTermAgreed)
+            ) { isRegisterScreenShown, isAlarmFired, _ ->
+                calculateRoute(isRegisterScreenShown, isAlarmFired, true)
             }.collect { newRoute ->
                 _viewState.update { newRoute }
             }
