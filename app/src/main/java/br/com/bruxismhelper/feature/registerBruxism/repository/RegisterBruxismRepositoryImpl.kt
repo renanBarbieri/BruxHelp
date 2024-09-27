@@ -4,6 +4,8 @@ import br.com.bruxismhelper.feature.registerBruxism.domain.model.RegisterBruxism
 import br.com.bruxismhelper.feature.registerBruxism.domain.repository.RegisterBruxismRepository
 import br.com.bruxismhelper.feature.registerBruxism.repository.source.RegisterBruxismRemoteDataSource
 import br.com.bruxismhelper.shared.repository.source.UserLocalDataSource
+import com.google.firebase.crashlytics.ktx.crashlytics
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -18,6 +20,8 @@ class RegisterBruxismRepositoryImpl @Inject constructor(
         val registeredUser = runBlocking(Dispatchers.IO) {
             userLocalDataSource.getUserRegisterId().first()
         }
+
+        Firebase.crashlytics.setUserId(registeredUser)
 
         val result = if (registeredUser.isBlank()) Result.failure(UserNotFound())
         else remoteDataSource.submitForm(

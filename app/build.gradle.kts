@@ -4,6 +4,7 @@ plugins {
     id("kotlin-kapt") //Hilt does not support ksp at 2.44
     alias(libs.plugins.hilt)
     alias(libs.plugins.googleServices)
+    alias(libs.plugins.firebaseCrashlytics)
 }
 
 android {
@@ -15,7 +16,7 @@ android {
         minSdk = 24
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -78,11 +79,7 @@ dependencies {
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.google.dagger.hilt)
     implementation(platform(libs.google.firebase.bom))
-    implementation(libs.google.firebase.analytics)
-    implementation(libs.google.firebase.auth)
-    implementation(libs.google.firebase.firestore)
-    implementation(libs.google.firebase.appcheck)
-    implementation(libs.google.firebase.appcheck.debug)
+    implementation(libs.bundles.google.firebase)
     implementation(libs.google.gson)
     implementation(libs.squareup.logcat)
     implementation(libs.androidx.hilt.common)

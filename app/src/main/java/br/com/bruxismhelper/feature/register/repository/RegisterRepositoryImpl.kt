@@ -3,8 +3,10 @@ package br.com.bruxismhelper.feature.register.repository
 import br.com.bruxismhelper.feature.register.domain.model.Dentist
 import br.com.bruxismhelper.feature.register.domain.model.RegisterForm
 import br.com.bruxismhelper.feature.register.domain.repository.RegisterRepository
-import br.com.bruxismhelper.shared.repository.source.UserLocalDataSource
 import br.com.bruxismhelper.feature.register.repository.source.RegisterRemoteDataSource
+import br.com.bruxismhelper.shared.repository.source.UserLocalDataSource
+import com.google.firebase.crashlytics.ktx.crashlytics
+import com.google.firebase.ktx.Firebase
 import javax.inject.Inject
 
 class RegisterRepositoryImpl @Inject constructor(
@@ -22,6 +24,7 @@ class RegisterRepositoryImpl @Inject constructor(
 
         formRequest.getOrNull()?.let {
             userLocalDataSource.saveUserRegisterId(it)
+            Firebase.crashlytics.setUserId(it)
         }
 
         return formRequest.map {  }

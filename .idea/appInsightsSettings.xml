@@ -27,10 +27,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="br.com.bruxismhelper" />
+                  <option name="mobileSdkAppId" value="1:1033969406486:android:8f948e120906d377949b37" />
+                  <option name="projectId" value="bruxism-research" />
+                  <option name="projectNumber" value="1033969406486" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
