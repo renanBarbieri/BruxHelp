@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import br.com.bruxismhelper.BuildConfig
 import br.com.bruxismhelper.R
 import br.com.bruxismhelper.feature.idle.ui.waiting.WaitingDefaults.waitingTextFontSize
 import br.com.bruxismhelper.feature.idle.ui.waiting.WaitingIcon
@@ -44,6 +45,8 @@ fun IdleScreen(
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center
             )
+
+            Text("Versão do aplicativo: ${BuildConfig.VERSION_NAME}")
         }
     }
 }
