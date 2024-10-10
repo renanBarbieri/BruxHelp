@@ -179,7 +179,7 @@ class RegisterViewModel @Inject constructor(
 
         with(value.registerForm) {
             val allMandatoryFilled =
-                fullName.isNotBlank() && email.isNotBlank() && dentist.name.isNotBlank()
+                fullName.isNotBlank() && email.isNotBlank()// && dentist.name.isNotBlank()
             update {
                 it.copy(
                     allMandatoryFieldsFilled = allMandatoryFilled

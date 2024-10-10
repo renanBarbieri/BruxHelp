@@ -145,16 +145,16 @@ private fun FormView(
 
         spacerField()
 
-        item {
-            FieldDropdown(
-                selectedOption = viewState.registerForm.dentist.name,
-                label = R.string.register_label_doctor,
-                options = viewState.formFields.dentists.map { it.name }.toTypedArray(),
-                onOptionSelected = {
-                    onDoctorChanged(it)
-                }
-            )
-        }
+//        item {
+//            FieldDropdown(
+//                selectedOption = viewState.registerForm.dentist.name,
+//                label = R.string.register_label_doctor,
+//                options = viewState.formFields.dentists.map { it.name }.toTypedArray(),
+//                onOptionSelected = {
+//                    onDoctorChanged(it)
+//                }
+//            )
+//        }
 
         spacerField()
 
