@@ -78,6 +78,11 @@ fun LevelSlider(
                 )
             }
         }
+
+        Text(
+            text = levelValue.toString()
+        )
+
         Text(
             text = resultLevelText,
             modifier = Modifier.padding(16.dp)

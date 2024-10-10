@@ -1,8 +1,6 @@
 package br.com.bruxismhelper.feature.register.presentation.ui
 
 import android.annotation.SuppressLint
-import android.content.Intent
-import android.provider.Settings
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,7 +20,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.buildAnnotatedString
@@ -99,13 +96,6 @@ fun RegisterForm(
                 messageStringRes = R.string.loading,
                 backgroundColor = MaterialTheme.colorScheme.surfaceBright
             )
-        }
-
-        formState.requestAlarmPermission.whenTrue {
-            Intent().also { intent ->
-                intent.action = Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
-                LocalContext.current.startActivity(intent)
-            }
         }
     }
 }
