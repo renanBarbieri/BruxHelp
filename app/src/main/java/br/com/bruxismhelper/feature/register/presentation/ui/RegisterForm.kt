@@ -1,14 +1,16 @@
 package br.com.bruxismhelper.feature.register.presentation.ui
 
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.provider.Settings
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
@@ -20,7 +22,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -42,6 +46,7 @@ import br.com.bruxismhelper.shared.presentation.ui.AlertError
 import br.com.bruxismhelper.ui.common.spacerField
 import br.com.bruxismhelper.ui.theme.BruxismHelperTheme
 
+@SuppressLint("InlinedApi")
 @Composable
 fun RegisterForm(
     modifier: Modifier = Modifier,
@@ -94,6 +99,13 @@ fun RegisterForm(
                 messageStringRes = R.string.loading,
                 backgroundColor = MaterialTheme.colorScheme.surfaceBright
             )
+        }
+
+        formState.requestAlarmPermission.whenTrue {
+            Intent().also { intent ->
+                intent.action = Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
+                LocalContext.current.startActivity(intent)
+            }
         }
     }
 }
@@ -242,12 +254,12 @@ private fun FormView(
 
         item {
             Row {
-                IgnoreButton(
-                    modifier = Modifier.align(Alignment.CenterVertically),
-                    onRegistrationIgnored = { onFormIgnored() }
-                )
-
-                Spacer(modifier = Modifier.weight(1f))
+//                IgnoreButton(
+//                    modifier = Modifier.align(Alignment.CenterVertically),
+//                    onRegistrationIgnored = { onFormIgnored() }
+//                )
+//
+//                Spacer(modifier = Modifier.weight(1f))
 
                 Button(
                     enabled = viewState.allMandatoryFieldsFilled,
@@ -271,7 +283,7 @@ private fun IgnoreButton(
     modifier: Modifier = Modifier,
     onRegistrationIgnored: () -> Unit
 ) {
-    val annotatedString = buildAnnotatedString {
+    val annotatedString: AnnotatedString = buildAnnotatedString {
         val string = stringResource(id = R.string.register_ignore_button)
         append(string)
         addStyle(
@@ -284,12 +296,9 @@ private fun IgnoreButton(
         )
     }
 
-    ClickableText(
-        modifier = modifier,
+    Text(
         text = annotatedString,
-        onClick = {
-            onRegistrationIgnored()
-        },
+        modifier = modifier.clickable { onRegistrationIgnored() },
         style = MaterialTheme.typography.bodyLarge,
     )
 
