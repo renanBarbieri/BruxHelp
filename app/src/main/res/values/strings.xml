@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Bruxism Helper</string>
+    <string name="app_name">BruxHelp</string>
 
     <string name="empty"/>
     <string name="loading">Carregando</string>
@@ -8,7 +8,7 @@
     <string name="activate">Ativar</string>
     <string name="ignore">Ignorar</string>
 
-    <string name="notification_channel_name_default">Bruxism Helper</string>
+    <string name="notification_channel_name_default">BruxHelp</string>
     <string name="notification_channel_description_default">Comunicações em geral sobre o aplicativo.</string>
     <string name="notification_channel_name_bruxism">Seus Alertas</string>
     <string name="notification_channel_description_bruxism">Seus alertas de bruxismo configurados.</string>
@@ -91,7 +91,7 @@
     <!-- endregion -->
 
     <!-- region Splash -->
-    <string name="splash_message">Bruxism Helper</string>
+    <string name="splash_message">BruxHelp</string>
     <!-- endregion -->
 
     <!-- region Agreement -->
