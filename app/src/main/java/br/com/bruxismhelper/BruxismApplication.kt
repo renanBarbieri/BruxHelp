@@ -1,6 +1,11 @@
 package br.com.bruxismhelper
 
 import android.app.Application
+import androidx.hilt.work.HiltWorkerFactory
+import androidx.work.Configuration
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.WorkManager
+import br.com.bruxismhelper.feature.alarm.AlarmRecoverWorker
 import com.google.firebase.Firebase
 import com.google.firebase.appcheck.appCheck
 import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory
@@ -11,15 +16,25 @@ import dagger.hilt.android.HiltAndroidApp
 import logcat.AndroidLogcatLogger
 import logcat.LogPriority
 import logcat.logcat
+import javax.inject.Inject
 
 @HiltAndroidApp
-class BruxismApplication : Application() {
+class BruxismApplication : Application(), Configuration.Provider {
+
+    @Inject lateinit var workerFactory: HiltWorkerFactory
+
+    override val workManagerConfiguration: Configuration
+        get() = Configuration.Builder()
+            .setWorkerFactory(workerFactory)
+            .build()
+
 
     override fun onCreate() {
         super.onCreate()
 
         initLogger()
         initFirebase()
+        initWorkers()
     }
 
     private fun initLogger() {
@@ -58,6 +73,16 @@ class BruxismApplication : Application() {
                 }
         }
 
+    }
+
+    private fun initWorkers() {
+        WorkManager.initialize(this, workManagerConfiguration)
+
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+            AlarmRecoverWorker.RECOVER_WORK_NAME,
+            ExistingPeriodicWorkPolicy.UPDATE,
+            AlarmRecoverWorker.recoverWorkRequest
+        )
     }
 }
 

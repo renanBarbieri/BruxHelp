@@ -87,6 +87,7 @@ dependencies {
     implementation(libs.google.gson)
     implementation(libs.squareup.logcat)
     implementation(libs.androidx.hilt.common)
+    implementation(libs.androidx.hilt.work)
     kapt(libs.google.dagger.hilt.compiler)
     testImplementation(libs.junit)
     testImplementation(libs.robolectric)
