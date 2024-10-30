@@ -29,6 +29,7 @@ internal class AlarmSchedulerHelper @Inject constructor() {
 
         val intent = Intent(context, AlarmReceiver::class.java).apply {
             putExtra(INTENT_KEY_ALARM_ITEM, item)
+            addFlags(Intent.FLAG_RECEIVER_FOREGROUND)
         }
 
         val pendingIntent = PendingIntent.getBroadcast(
