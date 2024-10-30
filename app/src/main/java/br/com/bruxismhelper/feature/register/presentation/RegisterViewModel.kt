@@ -127,12 +127,14 @@ class RegisterViewModel @Inject constructor(
     }
     //endregion
 
-    private fun scheduleAlarm(){
+    private suspend fun scheduleAlarm(){
         alertFacade.scheduleNextAlarm(null)
     }
 
     fun ignoreForm() {
-        scheduleAlarm()
+        viewModelScope.launch {
+            scheduleAlarm()
+        }
     }
 
     fun submitForm() {

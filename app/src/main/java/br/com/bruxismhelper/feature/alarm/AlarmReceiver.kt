@@ -48,9 +48,8 @@ internal class AlarmReceiver : BroadcastReceiver() {
     ){
         val pendingResult = goAsync()
 
-        alarmScheduler.scheduleNextAlarm(alarmId)
-
         GlobalScope.launch(context) {
+            alarmScheduler.scheduleNextAlarm(alarmId)
             appDataSource.setAlarmFired(true)
             pendingResult.finish()
         }
