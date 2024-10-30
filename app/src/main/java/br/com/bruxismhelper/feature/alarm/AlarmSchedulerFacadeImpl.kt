@@ -59,4 +59,12 @@ internal class AlarmSchedulerFacadeImpl @Inject constructor(
 
             alarmRepository.saveNextAlarmItem(alarmItem)
         }
+
+    override suspend fun getNextCalendarAlarmScheduled(): Calendar? = withContext(Dispatchers.IO) {
+        alarmRepository.getNextAlarmItem()?.let { nextAlarmItem ->
+            Calendar.getInstance().apply {
+                timeInMillis = nextAlarmItem.timeInMillis
+            }
+        }
+    }
 }
