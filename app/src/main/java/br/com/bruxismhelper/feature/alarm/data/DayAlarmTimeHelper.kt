@@ -4,7 +4,7 @@ import logcat.logcat
 import java.util.Calendar
 import javax.inject.Inject
 
-internal class DayAlarmTimeHelper @Inject constructor() {
+class DayAlarmTimeHelper @Inject constructor() {
 
     /**
      * Determines the next [DayAlarmTime] after the given [currentAlarmTime] or the current time represented by [nowCalendar].
@@ -49,10 +49,23 @@ internal class DayAlarmTimeHelper @Inject constructor() {
     private fun getDayAlarmNextTime(currentHour: Int, currentMinute: Int): DayAlarmTime {
         val currentTimeInMinutes = currentHour * 60 + currentMinute
         DayAlarmTime.entries.forEach {
-            if(currentTimeInMinutes < it.alarmTimeInMinutes) return it
+            if(currentTimeInMinutes <= it.alarmTimeInMinutes) return it
         }
 
         return DayAlarmTime.FIRST
+    }
+
+    fun getDateAlarmPreviousTime(nowCalendar: Calendar): DayAlarmTime {
+        val currentTimeInMinutes = nowCalendar.get(Calendar.HOUR_OF_DAY) * 60 + nowCalendar.get(Calendar.MINUTE)
+        var returnTime = DayAlarmTime.FIRST
+        DayAlarmTime.entries.forEach {
+            if(currentTimeInMinutes > it.alarmTimeInMinutes)
+                returnTime = it
+            else
+                return@forEach
+        }
+
+        return returnTime
     }
 
     /**
