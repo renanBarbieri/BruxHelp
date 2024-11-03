@@ -11,7 +11,7 @@ plugins {
 
 android {
     namespace = "br.com.bruxismhelper"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "br.com.bruxismhelper"
