@@ -28,7 +28,6 @@ class BruxismApplication : Application(), Configuration.Provider {
             .setWorkerFactory(workerFactory)
             .build()
 
-
     override fun onCreate() {
         super.onCreate()
 

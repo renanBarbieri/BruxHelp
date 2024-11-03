@@ -31,4 +31,23 @@ class RegisterBruxismRemoteDataSource @Inject constructor(private val bruxismFir
 
         return result.await()
     }
+
+    suspend fun getResponsesFromUser(userDocumentPath: String): Result<HashMap<String, Any>> {
+        val deferredResult = CompletableDeferred<Result<HashMap<String, Any>>>()
+
+        bruxismFirestore.userCollection
+            .document(userDocumentPath)
+            .collection(bruxismFirestore.userBruxismFormDocument)
+            .get()
+            .addOnSuccessListener { result ->
+                val hashMap = result.associateTo(HashMap<String, Any>()) { it.id to it.data }
+                deferredResult.complete(Result.success(hashMap))
+            }
+            .addOnFailureListener { exception ->
+                logcat { "Error while getting responses: ${exception.asLog()}" }
+                deferredResult.complete(Result.failure(exception))
+            }
+
+        return deferredResult.await()
+    }
 }

@@ -6,31 +6,39 @@ import androidx.work.CoroutineWorker
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkerParameters
 import br.com.bruxismhelper.feature.alarm.data.DayAlarmTimeHelper
+import br.com.bruxismhelper.feature.registerBruxism.domain.repository.RegisterBruxismRepository
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import dagger.hilt.android.qualifiers.ApplicationContext
+import logcat.logcat
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
 @HiltWorker
 class AlarmRecoverWorker @AssistedInject constructor(
-    @Assisted private val alarmSchedulerFacade: AlarmSchedulerFacade,
-    @Assisted private val dayAlarmTimeHelper: DayAlarmTimeHelper,
-    @ApplicationContext appContext: Context,
+    @Assisted appContext: Context,
     @Assisted workerParams: WorkerParameters,
-): CoroutineWorker(appContext, workerParams)  {
+    private val alarmSchedulerFacade: AlarmSchedulerFacade,
+    private val dayAlarmTimeHelper: DayAlarmTimeHelper,
+    private val registerBruxismRepository: RegisterBruxismRepository,
+) : CoroutineWorker(appContext, workerParams) {
 
     override suspend fun doWork(): Result {
-        val lastTimeScheduled = alarmSchedulerFacade.getNextCalendarAlarmScheduled() ?: run {
-            //TODO Get firestore last response
-            return Result.failure()
+        logcat { "Doing my work" }
+        val lastTimeScheduled =
+            alarmSchedulerFacade.getNextCalendarAlarmScheduled() ?: getLastBruxismResponseCalendar()
+
+        if(lastTimeScheduled == null) {
+            logcat { "No alarm scheduled. This is probably first run" }
+            return Result.success()
         }
+
         val previousAlarmCalendar = getPreviousAlarmCalendar()
 
         if (lastTimeScheduled.before(previousAlarmCalendar)) {
+            logcat { "Recovering alarm" }
             Firebase.crashlytics.log("Recovering alarm")
             //FORCE TO SEND NOTIFICATION?
             alarmSchedulerFacade.scheduleNextAlarm(null)
@@ -38,6 +46,10 @@ class AlarmRecoverWorker @AssistedInject constructor(
 
         return Result.success()
     }
+
+    private suspend fun getLastBruxismResponseCalendar(): Calendar? =
+        registerBruxismRepository.getResponses().getOrNull()
+            ?.maxByOrNull { it.createdAt }?.createdAt
 
     private fun getPreviousAlarmCalendar(): Calendar {
         val nowCalendar = Calendar.getInstance()
@@ -51,13 +63,14 @@ class AlarmRecoverWorker @AssistedInject constructor(
     companion object {
         const val RECOVER_WORK_NAME = "AlarmRecoverWorker"
 
-        val recoverWorkRequest = PeriodicWorkRequestBuilder<AlarmRecoverWorker>(1, TimeUnit.DAYS).build()
+        val recoverWorkRequest =
+            PeriodicWorkRequestBuilder<AlarmRecoverWorker>(1, TimeUnit.DAYS).build()
     }
 
     @AssistedFactory
-    interface AlarmWorkerFactory {
+    interface AlarmRecoverWorkerFactory {
         fun create(
-            alarmSchedulerFacade: AlarmSchedulerFacade,
+            context: Context,
             workerParams: WorkerParameters,
         ): AlarmRecoverWorker
     }

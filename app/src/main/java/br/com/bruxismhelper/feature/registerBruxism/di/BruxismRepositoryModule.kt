@@ -5,10 +5,10 @@ import br.com.bruxismhelper.feature.registerBruxism.repository.RegisterBruxismRe
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.components.SingletonComponent
 
 @Module
-@InstallIn(ViewModelComponent::class)
+@InstallIn(SingletonComponent::class)
 internal abstract class BruxismRepositoryModule {
 
     @Binds
