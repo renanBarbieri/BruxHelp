@@ -7,13 +7,14 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkerParameters
 import br.com.bruxismhelper.feature.alarm.data.DayAlarmTimeHelper
 import br.com.bruxismhelper.feature.registerBruxism.domain.repository.RegisterBruxismRepository
-import com.google.firebase.crashlytics.ktx.crashlytics
-import com.google.firebase.ktx.Firebase
+import br.com.bruxismhelper.platform.firebase.logMessage
+import br.com.bruxismhelper.platform.firebase.logNonFatalException
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import logcat.logcat
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 @HiltWorker
@@ -26,20 +27,21 @@ class AlarmRecoverWorker @AssistedInject constructor(
 ) : CoroutineWorker(appContext, workerParams) {
 
     override suspend fun doWork(): Result {
-        logcat { "Doing my work" }
+        logMessage { "AlarmRecoverWorker running" }
+
         val lastTimeScheduled =
             alarmSchedulerFacade.getNextCalendarAlarmScheduled() ?: getLastBruxismResponseCalendar()
 
         if(lastTimeScheduled == null) {
-            logcat { "No alarm scheduled. This is probably first run" }
+            logMessage { "No alarm scheduled. This is probably first run" }
             return Result.success()
         }
 
         val previousAlarmCalendar = getPreviousAlarmCalendar()
 
         if (lastTimeScheduled.before(previousAlarmCalendar)) {
-            logcat { "Recovering alarm" }
-            Firebase.crashlytics.log("Recovering alarm")
+            logNonFatalException { "Recovering alarm. Last time scheduled: ${lastTimeScheduled.toHumanString()}" }
+
             //FORCE TO SEND NOTIFICATION?
             alarmSchedulerFacade.scheduleNextAlarm(null)
         }
@@ -58,6 +60,12 @@ class AlarmRecoverWorker @AssistedInject constructor(
             set(Calendar.HOUR_OF_DAY, previousAlarmTime.hour)
             set(Calendar.MINUTE, previousAlarmTime.minute)
         }
+    }
+
+    private fun Calendar.toHumanString(): String {
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+        // Format the Calendar instance to a string
+        return dateFormat.format(time)
     }
 
     companion object {

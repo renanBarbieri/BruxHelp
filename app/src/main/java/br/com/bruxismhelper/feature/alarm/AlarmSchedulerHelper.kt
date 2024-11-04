@@ -1,5 +1,3 @@
-@file:Suppress("PrivatePropertyName")
-
 package br.com.bruxismhelper.feature.alarm
 
 import android.app.AlarmManager
@@ -12,8 +10,9 @@ import br.com.bruxismhelper.feature.alarm.data.AlarmType
 import logcat.logcat
 import javax.inject.Inject
 
+private const val INTENT_KEY_ALARM_ITEM = "AlarmScheduler.ALARM_ITEM"
+
 internal class AlarmSchedulerHelper @Inject constructor() {
-    private val INTENT_KEY_ALARM_ITEM = "AlarmScheduler.ALARM_ITEM"
 
     /**
      * Schedules a push notification using [AlarmManager]

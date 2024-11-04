@@ -1,6 +1,7 @@
 package br.com.bruxismhelper.feature.alarm.repository
 
 import br.com.bruxismhelper.feature.alarm.data.AlarmItem
+import br.com.bruxismhelper.platform.firebase.logMessage
 import br.com.bruxismhelper.platform.store.DataStoreManager
 import kotlinx.coroutines.flow.firstOrNull
 import javax.inject.Inject
@@ -12,6 +13,7 @@ internal class AlarmRepositoryImpl @Inject constructor(
 ): AlarmRepository {
 
     override suspend fun saveNextAlarmItem(alarmItem: AlarmItem) {
+        logMessage { "Saving alarm: $alarmItem" }
         dataStoreManager.writeObject(KEY_ALARM_TIME, alarmItem)
     }
 

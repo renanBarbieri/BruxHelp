@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.provider.Settings
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
@@ -25,6 +24,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.compose.hiltViewModel
 import br.com.bruxismhelper.R
+import br.com.bruxismhelper.platform.firebase.logMessage
 import br.com.bruxismhelper.platform.notification.data.AppChannel
 import javax.inject.Inject
 
@@ -221,8 +221,7 @@ class NotificationPermissionCheckerHelper @Inject constructor(){
                 )
             }
             else -> {
-                /* DIALOG NOT SHOWN */
-                Log.d(this::class.java.name, "Nothing to show")
+                logMessage { "Nothing to show" }
             }
         }
     }

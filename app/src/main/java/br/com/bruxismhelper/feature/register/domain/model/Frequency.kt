@@ -4,10 +4,4 @@ enum class Frequency {
     DAILY,
     WEEKLY,
     BY_WEEKLY;
-
-    companion object {
-        fun fromString(value: String): Frequency {
-            return DAILY
-        }
-    }
 }
