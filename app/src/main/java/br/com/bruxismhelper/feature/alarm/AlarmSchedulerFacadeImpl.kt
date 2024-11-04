@@ -54,7 +54,7 @@ internal class AlarmSchedulerFacadeImpl @Inject constructor(
             alarmSchedulerHelper.schedule(
                 appContext,
                 alarmItem,
-                AlarmType.Exact
+                AlarmType.AlarmClock
             )
 
             alarmRepository.saveNextAlarmItem(alarmItem)

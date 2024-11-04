@@ -13,4 +13,6 @@ internal sealed class AlarmType {
             INTERVAL_DAY(AlarmManager.INTERVAL_DAY)
         }
     }
+
+    internal data object AlarmClock : AlarmType()
 }

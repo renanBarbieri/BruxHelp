@@ -62,6 +62,10 @@ internal class AlarmSchedulerHelper @Inject constructor() {
                 }
             }
 
+            is AlarmType.AlarmClock -> {
+                alarmManager.setAlarmClock(AlarmManager.AlarmClockInfo(triggerTime, pendingIntent), pendingIntent)
+            }
+
             is AlarmType.Default -> {
                 alarmManager.setAndAllowWhileIdle(
                     AlarmManager.RTC_WAKEUP,
