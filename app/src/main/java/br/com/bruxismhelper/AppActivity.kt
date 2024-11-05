@@ -12,7 +12,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Create
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -20,7 +24,9 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableIntState
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -71,6 +77,8 @@ class AppActivity : ComponentActivity() {
 @Composable
 fun App(notificationAlert: (@Composable () -> Unit)? = null) {
     val appBarTitle: MutableIntState = remember { mutableIntStateOf(R.string.app_name) }
+    val forceResponse: MutableState<Boolean> = remember { mutableStateOf(false) }
+    val showForceIcon: MutableState<Boolean> = remember { mutableStateOf(false) }
 
     BruxismHelperTheme {
         Scaffold(
@@ -87,7 +95,17 @@ fun App(notificationAlert: (@Composable () -> Unit)? = null) {
                         colors = topAppBarColors(
                             containerColor = MaterialTheme.colorScheme.primaryContainer,
                             titleContentColor = MaterialTheme.colorScheme.primary
-                        )
+                        ),
+                        actions = {
+                            if(showForceIcon.value) {
+                                IconButton(onClick = { forceResponse.value = true }) {
+                                    Icon(
+                                        imageVector = Icons.Filled.Create,
+                                        contentDescription = "Responder mesmo assim"
+                                    )
+                                }
+                            }
+                        }
                     )
                 }
             }
@@ -98,7 +116,7 @@ fun App(notificationAlert: (@Composable () -> Unit)? = null) {
                     .background(MaterialTheme.colorScheme.background)
             ) {
                 notificationAlert?.invoke()
-                NavigationHost(appBarTitle)
+                NavigationHost(appBarTitle, forceResponse, showForceIcon)
             }
         }
     }

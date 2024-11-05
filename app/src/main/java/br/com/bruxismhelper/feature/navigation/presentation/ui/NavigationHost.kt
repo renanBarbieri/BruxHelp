@@ -4,9 +4,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableIntState
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -24,10 +26,12 @@ import br.com.bruxismhelper.feature.registerBruxism.presentation.ui.RegisterBrux
 @Composable
 fun NavigationHost(
     appBarTitle: MutableIntState = mutableIntStateOf(R.string.app_name),
+    forceResponse: MutableState<Boolean> = mutableStateOf(false),
+    showForceIcon: MutableState<Boolean> = mutableStateOf(false),
     viewModel: NavigationViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController(),
 ) {
-    NavStateRoute(viewModel = viewModel, navController = navController)
+    NavStateRoute(viewModel = viewModel, navController = navController, forceResponse = forceResponse)
 
     NavHost(
         startDestination = AppRoute.Splash,
@@ -49,7 +53,8 @@ fun NavigationHost(
         }
 
         composable(route = AppRoute.Waiting) {
-            appBarTitle.intValue = R.string.empty
+            appBarTitle.intValue = R.string.app_name
+            showForceIcon.value = true
             IdleScreen(
                 centerIcon = { WaitingIcon() },
                 messageStringRes = R.string.waiting_message
@@ -67,8 +72,12 @@ fun NavigationHost(
 
         composable(route = AppRoute.BruxismRegister) {
             appBarTitle.intValue = R.string.register_bruxism_title
+            showForceIcon.value = false
             RegisterBruxismForm(
-                onActivityRegistrationFinished = { viewModel.setBruxismFormAnswered() }
+                onActivityRegistrationFinished = {
+                    forceResponse.value = false
+                    viewModel.setBruxismFormAnswered()
+                }
             )
         }
     }
@@ -77,14 +86,23 @@ fun NavigationHost(
 @Composable
 private fun NavStateRoute(
     viewModel: NavigationViewModel,
-    navController: NavHostController
+    navController: NavHostController,
+    forceResponse: MutableState<Boolean> = mutableStateOf(false),
 ) {
-    val routeState by viewModel.viewState.collectAsState()
-
-    LaunchedEffect(routeState) {
-        navController.navigate(routeState) {
+    if(forceResponse.value) {
+        navController.navigate(AppRoute.BruxismRegister) {
             launchSingleTop = true
             popUpToTop(navController)
         }
+    } else {
+        val routeState by viewModel.viewState.collectAsState()
+
+        LaunchedEffect(routeState) {
+            navController.navigate(routeState) {
+                launchSingleTop = true
+                popUpToTop(navController)
+            }
+        }
     }
+
 }
