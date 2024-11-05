@@ -1,6 +1,11 @@
 package br.com.bruxismhelper
 
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.os.PowerManager
+import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -34,6 +39,8 @@ class AppActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestIgnoreBatteryOptimization()
+
         notificationPermissionCheckerHelper.registerForResult(
             activity = this
         )
@@ -43,6 +50,19 @@ class AppActivity : ComponentActivity() {
             App(
                 notificationAlert = { notificationPermissionCheckerHelper.NotificationAlert() }
             )
+        }
+    }
+
+    @SuppressLint("BatteryLife")
+    private fun requestIgnoreBatteryOptimization() {
+        val packageName = packageName
+        val powerManager = getSystemService(POWER_SERVICE) as PowerManager
+        if (!powerManager.isIgnoringBatteryOptimizations(packageName)) {
+            val intent = Intent().apply {
+                setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
+                setData(Uri.parse("package:$packageName"))
+            }
+            startActivity(intent)
         }
     }
 }
