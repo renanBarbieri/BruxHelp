@@ -24,6 +24,8 @@ internal class AlarmSchedulerHelper @Inject constructor() {
      */
     @Throws(ScheduleExactAlarmNotAllowedException::class)
     fun schedule(context: Context, item: AlarmItem, type: AlarmType) {
+        logcat { "Scheduling alarm: id=${item.id}, time=${item.timeInMillis}, type=$type" }
+        
         val alarmManager = context.getAlarmManager()
 
         val intent = Intent(context, AlarmReceiver::class.java).apply {
@@ -42,6 +44,7 @@ internal class AlarmSchedulerHelper @Inject constructor() {
 
         when (type) {
             is AlarmType.Repeat -> {
+                logcat { "Scheduling repeating alarm with interval: ${type.interval.intervalMillis}" }
                 alarmManager.setRepeating(
                     AlarmManager.RTC_WAKEUP,
                     triggerTime,
@@ -75,7 +78,7 @@ internal class AlarmSchedulerHelper @Inject constructor() {
             }
         }
 
-        logcat { "alarm scheduled at $triggerTime" }
+        logcat { "Alarm scheduled successfully: id=${item.id}" }
     }
 
     private fun canScheduleAlarms(alarmManager: AlarmManager): Boolean {

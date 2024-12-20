@@ -24,23 +24,31 @@ internal class AlarmReceiver : BroadcastReceiver() {
     @Inject lateinit var alarmSchedulerHelper: AlarmSchedulerHelper
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        logMessage { "receiving" }
-        if (intent == null || context == null) return
+        logMessage { "AlarmReceiver.onReceive" }
+        if (intent == null || context == null) {
+            logMessage { "Intent or context is null" }
+            return
+        }
 
-        alarmSchedulerHelper.extractAlarmItemFromExtra(intent)?.let {
-            logMessage { "alarm extracted: $it" }
+        try {
+            val alarmItem = alarmSchedulerHelper.extractAlarmItemFromExtra(intent)
+            if (alarmItem == null) {
+                logMessage { "No alarm item found in intent" }
+                return
+            }
 
-            setAlarmFired(it.id)
-
-            logNonFatalException { "Sending notification" }
+            logMessage { "Processing alarm: $alarmItem" }
+            setAlarmFired(alarmItem.id)
 
             notificationHelper.sendNotification(
-                id = 1234, //Same id for all notifications to update it, instead of create a new one
+                id = 1234,
                 context = context,
-                title = it.title,
-                body = it.message,
-                notificationChannelProp = it.channelProp
+                title = alarmItem.title,
+                body = alarmItem.message,
+                notificationChannelProp = alarmItem.channelProp
             )
+        } catch (e: Exception) {
+            logNonFatalException { "Error processing alarm: ${e.message}" }
         }
     }
 
@@ -52,9 +60,15 @@ internal class AlarmReceiver : BroadcastReceiver() {
         val pendingResult = goAsync()
 
         GlobalScope.launch(context) {
-            alarmScheduler.scheduleNextAlarm(alarmId)
-            appDataSource.setAlarmFired(true)
-            pendingResult.finish()
+            try {
+                logMessage { "Scheduling next alarm after alarm id=$alarmId" }
+                alarmScheduler.scheduleNextAlarm(alarmId)
+                appDataSource.setAlarmFired(true)
+            } catch (e: Exception) {
+                logNonFatalException { "Error scheduling next alarm: ${e.message}" }
+            } finally {
+                pendingResult.finish()
+            }
         }
     }
 }

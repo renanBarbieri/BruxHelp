@@ -1,14 +1,19 @@
 package br.com.bruxismhelper.feature.alarm
 
+import android.app.NotificationManager
 import android.content.Context
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkerParameters
+import br.com.bruxismhelper.R
 import br.com.bruxismhelper.feature.alarm.data.DayAlarmTimeHelper
 import br.com.bruxismhelper.feature.registerBruxism.domain.repository.RegisterBruxismRepository
 import br.com.bruxismhelper.platform.firebase.logMessage
 import br.com.bruxismhelper.platform.firebase.logNonFatalException
+import br.com.bruxismhelper.platform.notification.NotificationHelper
+import br.com.bruxismhelper.platform.notification.data.AppChannel
+import br.com.bruxismhelper.platform.notification.data.NotificationChannelProp
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -19,34 +24,56 @@ import java.util.concurrent.TimeUnit
 
 @HiltWorker
 class AlarmRecoverWorker @AssistedInject constructor(
-    @Assisted appContext: Context,
+    @Assisted val appContext: Context,
     @Assisted workerParams: WorkerParameters,
     private val alarmSchedulerFacade: AlarmSchedulerFacade,
     private val dayAlarmTimeHelper: DayAlarmTimeHelper,
     private val registerBruxismRepository: RegisterBruxismRepository,
+    private val notificationHelper: NotificationHelper,
 ) : CoroutineWorker(appContext, workerParams) {
 
     override suspend fun doWork(): Result {
-        logMessage { "AlarmRecoverWorker running" }
+        try {
+            logMessage { "AlarmRecoverWorker running" }
 
-        val lastTimeScheduled =
-            alarmSchedulerFacade.getNextCalendarAlarmScheduled() ?: getLastBruxismResponseCalendar()
+            val lastTimeScheduled = alarmSchedulerFacade.getNextCalendarAlarmScheduled() 
+                ?: getLastBruxismResponseCalendar()
 
-        if(lastTimeScheduled == null) {
-            logMessage { "No alarm scheduled. This is probably first run" }
+            if(lastTimeScheduled == null) {
+                logMessage { "No alarm scheduled. This is probably first run" }
+                // Agendar primeiro alarme aqui
+                alarmSchedulerFacade.scheduleNextAlarm(null)
+                return Result.success()
+            }
+
+            val previousAlarmCalendar = getPreviousAlarmCalendar()
+            val now = Calendar.getInstance()
+
+            logMessage { "Last scheduled: ${lastTimeScheduled.toHumanString()}" }
+            logMessage { "Previous alarm: ${previousAlarmCalendar.toHumanString()}" }
+            logMessage { "Now: ${now.toHumanString()}" }
+
+            if (lastTimeScheduled.before(previousAlarmCalendar) || lastTimeScheduled.before(now)) {
+                logNonFatalException { "Recovering alarm. Last time scheduled: ${lastTimeScheduled.toHumanString()}" }
+
+                alarmSchedulerFacade.scheduleNextAlarm(null)
+                notificationHelper.sendNotification(
+                    id = 1234,
+                    context = appContext,
+                    title = appContext.getString(R.string.alert_title),
+                    body = appContext.getString(R.string.alert_message),
+                    notificationChannelProp = NotificationChannelProp(
+                        AppChannel.BRUXISM,
+                        NotificationManager.IMPORTANCE_DEFAULT
+                    )
+                )
+            }
+
             return Result.success()
+        } catch (e: Exception) {
+            logNonFatalException { "Error in AlarmRecoverWorker: ${e.message}" }
+            return Result.retry()
         }
-
-        val previousAlarmCalendar = getPreviousAlarmCalendar()
-
-        if (lastTimeScheduled.before(previousAlarmCalendar)) {
-            logNonFatalException { "Recovering alarm. Last time scheduled: ${lastTimeScheduled.toHumanString()}" }
-
-            //FORCE TO SEND NOTIFICATION?
-            alarmSchedulerFacade.scheduleNextAlarm(null)
-        }
-
-        return Result.success()
     }
 
     private suspend fun getLastBruxismResponseCalendar(): Calendar? =
