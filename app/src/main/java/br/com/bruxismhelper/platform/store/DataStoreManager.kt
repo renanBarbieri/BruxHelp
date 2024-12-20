@@ -8,7 +8,6 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import br.com.bruxismhelper.emptyString
-import com.google.common.reflect.TypeToken
 import com.google.gson.Gson
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
@@ -40,10 +39,13 @@ class DataStoreManager @Inject constructor(
         return read(booleanPreferencesKey(key), defaultValue)
     }
 
-    fun <T> readObject(key: String, defaultValue: T? = null): Flow<T> {
-        val typeToken: TypeToken<T> = object : TypeToken<T>(javaClass){}
+    fun <T> readObject(key: String, defaultValue: T? = null, type: Class<T>): Flow<T> {
         val defaultValueString = gson.toJson(defaultValue)
-        return readString(key, defaultValueString).map { gson.fromJson(it, typeToken.type) }
+        return readString(key, defaultValueString).map { gson.fromJson(it, type) }
+    }
+
+    inline fun <reified T> readObject(key: String, defaultValue: T? = null): Flow<T> {
+        return readObject(key, defaultValue, T::class.java)
     }
     //endregion
 
