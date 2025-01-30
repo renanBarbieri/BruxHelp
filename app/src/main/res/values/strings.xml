@@ -65,6 +65,7 @@
         <item>Contração da musculatura sem contato dos dentes</item>
         <item>Dentes em contato</item>
         <item>Ranger de dentes</item>
+        <item>Projeção da mandíbula</item>
     </string-array>
     <string name="register_bruxism_pain_switch">Estou sentindo dor</string>
     <string name="register_bruxism_label_pain_level">Grau de dor (0 a 10):</string>
